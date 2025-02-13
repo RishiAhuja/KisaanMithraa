@@ -17,11 +17,35 @@ class UserModel {
   @HiveField(3)
   final DateTime createdAt;
 
+  @HiveField(4)
+  final String? soilType;
+
+  @HiveField(5)
+  final List<String>? crops;
+
+  @HiveField(6)
+  final String? state;
+
+  @HiveField(7)
+  final String? city;
+
+  @HiveField(8)
+  final double? latitude;
+
+  @HiveField(9)
+  final double? longitude;
+
   UserModel({
-    required this.name,
     required this.id,
+    required this.name,
     required this.phoneNumber,
     required this.createdAt,
+    this.soilType,
+    this.crops,
+    this.state,
+    this.city,
+    this.latitude,
+    this.longitude,
   });
 
   factory UserModel.fromMap(Map<String, dynamic> map, String id) {
@@ -39,6 +63,12 @@ class UserModel {
       'name': name,
       'phoneNumber': phoneNumber,
       'createdAt': FieldValue.serverTimestamp(),
+      'soilType': soilType,
+      'crops': crops,
+      'state': state,
+      'city': city,
+      'latitude': latitude,
+      'longitude': longitude,
     };
   }
 }
