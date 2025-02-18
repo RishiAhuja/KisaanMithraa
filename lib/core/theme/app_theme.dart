@@ -5,9 +5,23 @@ import 'app_colors.dart';
 class AppTheme {
   static ThemeData get lightTheme {
     return ThemeData(
+      useMaterial3: true,
       primaryColor: AppColors.primary,
-      scaffoldBackgroundColor: AppColors.background,
-      textTheme: GoogleFonts.plusJakartaSansTextTheme(),
+      colorScheme: ColorScheme.light(
+        primary: AppColors.primary,
+        secondary: AppColors.secondary,
+        tertiary: AppColors.accent,
+        background: AppColors.backgroundLight,
+        surface: AppColors.surface,
+        error: AppColors.error,
+      ),
+      scaffoldBackgroundColor: AppColors.backgroundLight,
+      textTheme: GoogleFonts.plusJakartaSansTextTheme().copyWith(
+          // bodyLarge: TextStyle(color: AppColors.textLight),
+          // bodyMedium: TextStyle(color: AppColors.textLight),
+          // titleLarge: TextStyle(color: AppColors.textLight),
+          // titleMedium: TextStyle(color: AppColors.textLightSecondary),
+          ),
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
           backgroundColor: AppColors.primary,
@@ -17,6 +31,47 @@ class AppTheme {
             borderRadius: BorderRadius.circular(8),
           ),
         ),
+      ),
+      iconTheme: IconThemeData(
+        color: AppColors.primary,
+      ),
+    );
+  }
+
+  static ThemeData get darkTheme {
+    return ThemeData(
+      useMaterial3: true,
+      primaryColor: AppColors.primary,
+      colorScheme: ColorScheme.dark(
+        primary: AppColors.primary,
+        secondary: AppColors.secondary,
+        tertiary: AppColors.accent,
+        surface: AppColors.surfaceDark,
+        error: AppColors.error,
+      ),
+      scaffoldBackgroundColor: AppColors.backgroundDark,
+      textTheme: GoogleFonts.plusJakartaSansTextTheme().copyWith(
+          // bodyLarge: TextStyle(color: AppColors.textDark),
+          // bodyMedium: TextStyle(color: AppColors.textDark),
+          // titleLarge: TextStyle(color: AppColors.textDark),
+          // titleMedium: TextStyle(color: AppColors.textDark),
+          // titleSmall: TextStyle(color: AppColors.textDark),
+          // titleLarge: TextStyle(color: AppColors.textDark),
+          // titleLarge: TextStyle(color: AppColors.textDark),
+          // titleMedium: TextStyle(color: AppColors.textDarkSecondary),
+          ),
+      elevatedButtonTheme: ElevatedButtonThemeData(
+        style: ElevatedButton.styleFrom(
+          backgroundColor: AppColors.primary,
+          foregroundColor: Colors.white,
+          padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 12),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(8),
+          ),
+        ),
+      ),
+      iconTheme: IconThemeData(
+        color: AppColors.primary,
       ),
     );
   }

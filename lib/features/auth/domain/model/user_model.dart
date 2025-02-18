@@ -54,6 +54,12 @@ class UserModel {
       phoneNumber: map['phoneNumber'] ?? '',
       createdAt: (map['createdAt'] as Timestamp).toDate(),
       name: map['name'] ?? '',
+      soilType: map['soilType'],
+      crops: List<String>.from(map['crops'] ?? []),
+      state: map['state'],
+      city: map['city'],
+      latitude: map['latitude']?.toDouble(),
+      longitude: map['longitude']?.toDouble(),
     );
   }
 

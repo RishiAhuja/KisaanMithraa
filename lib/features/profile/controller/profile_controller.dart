@@ -1,10 +1,9 @@
 import 'package:cropconnect/features/auth/domain/model/user_model.dart';
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:geocoding/geocoding.dart';
-import 'package:geolocator/geolocator.dart';
-import '../../../../core/services/hive/hive_storage_service.dart';
+import '../../../core/services/hive/hive_storage_service.dart';
 
 class ProfileController extends GetxController {
   final UserStorageService _storageService;
@@ -23,7 +22,12 @@ class ProfileController extends GetxController {
   final selectedState = Rx<String?>(null);
   final selectedCity = Rx<String?>(null);
 
-  final states = <String>[].obs;
+  final states = <String>[
+    'Maharashtra', 'Karnataka', 'Gujarat', 'Punjab',
+    'Haryana', 'Uttar Pradesh', 'Madhya Pradesh',
+    // Add more states as needed
+  ].obs;
+
   final cities = <String>[].obs;
 
   final RxList<String> selectedCrops = <String>[].obs;
@@ -52,7 +56,6 @@ class ProfileController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    loadStates();
     loadUserData();
   }
 
@@ -60,17 +63,27 @@ class ProfileController extends GetxController {
   void onClose() {
     nameController.dispose();
     phoneController.dispose();
+    soilTypeController.dispose();
     super.onClose();
   }
 
   Future<void> loadUserData() async {
     try {
       isLoading.value = true;
+
       final userData = await _storageService.getUser();
       if (userData != null) {
         user.value = userData;
         nameController.text = userData.name;
         phoneController.text = userData.phoneNumber;
+        soilTypeController.text = userData.soilType ?? '';
+        selectedState.value = userData.state;
+        selectedCity.value = userData.city;
+        selectedCrops.value = userData.crops ?? [];
+
+        if (userData.state != null) {
+          await loadCities(userData.state!);
+        }
       }
     } catch (e) {
       Get.snackbar('Error', 'Failed to load user data');
@@ -79,33 +92,12 @@ class ProfileController extends GetxController {
     }
   }
 
-  Future<void> loadStates() async {
-    states.value = [
-      'Maharashtra',
-      'Karnataka',
-      'Gujarat', /* ... */
-    ];
-  }
-
   Future<void> loadCities(String state) async {
-    cities.value = ['City 1', 'City 2', 'City 3'];
-  }
-
-  Future<Position> _determinePosition() async {
-    bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
-    if (!serviceEnabled) {
-      throw Exception('Location services are disabled.');
-    }
-
-    LocationPermission permission = await Geolocator.checkPermission();
-    if (permission == LocationPermission.denied) {
-      permission = await Geolocator.requestPermission();
-      if (permission == LocationPermission.denied) {
-        throw Exception('Location permissions are denied');
-      }
-    }
-
-    return await Geolocator.getCurrentPosition();
+    // This is a dummy implementation. Replace with actual city data
+    cities.value = [
+      'City 1', 'City 2', 'City 3',
+      // Add more cities based on state
+    ];
   }
 
   Future<void> updateProfile() async {

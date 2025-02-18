@@ -1,5 +1,10 @@
+import 'package:cropconnect/core/theme/app_theme.dart';
 import 'package:cropconnect/features/auth/domain/model/user_model.dart';
 import 'package:cropconnect/features/auth/presentation/screens/otp_screen.dart';
+import 'package:cropconnect/features/community/bindings/community_binding.dart';
+import 'package:cropconnect/features/cooperative/bindings/create_cooperative_binding.dart';
+import 'package:cropconnect/features/cooperative/presentation/screens/create_cooperative_screen.dart';
+import 'package:cropconnect/features/cooperative/presentation/screens/my_cooperatives_screen.dart';
 import 'package:cropconnect/features/home/presentation/bindings/home_bindings.dart';
 import 'package:cropconnect/features/home/presentation/screen/home_screen.dart';
 import 'package:cropconnect/features/profile/screens/profile_screen.dart';
@@ -13,6 +18,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'features/auth/bindings/auth_binding.dart';
 import 'features/auth/presentation/screens/register_screen.dart';
 import 'features/profile/bindings/profile_binding.dart';
+import 'features/community/presentation/screens/community_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -39,10 +45,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetMaterialApp(
       title: 'Your App Name',
-      theme: ThemeData(
-        primarySwatch: Colors.green,
-        scaffoldBackgroundColor: Colors.white,
-      ),
+      theme: AppTheme.lightTheme,
       initialRoute: '/splash',
       getPages: [
         GetPage(
@@ -66,6 +69,21 @@ class MyApp extends StatelessWidget {
           name: '/profile',
           page: () => const ProfileScreen(),
           binding: ProfileBinding(),
+        ),
+        GetPage(
+          name: '/create-cooperative',
+          page: () => const CreateCooperativeScreen(),
+          binding: CreateCooperativeBinding(),
+        ),
+        GetPage(
+          name: '/community',
+          page: () => const CommunityScreen(),
+          binding: CommunityBinding(),
+        ),
+        GetPage(
+          name: '/my-cooperatives',
+          page: () => const MyCooperativesScreen(),
+          // binding: MyCooperativesBinding(),
         ),
       ],
     );
