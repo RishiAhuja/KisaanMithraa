@@ -1,4 +1,6 @@
+import 'package:cropconnect/core/constants/app_constants.dart';
 import 'package:cropconnect/core/services/hive/hive_storage_service.dart';
+import 'package:cropconnect/features/auth/domain/model/user/cooperative_membership_model.dart';
 import 'package:cropconnect/features/auth/domain/model/user/user_model.dart';
 import 'package:cropconnect/features/auth/presentation/controllers/auth_controller.dart';
 import 'package:cropconnect/features/cooperative/domain/models/cooperative_invite_model.dart';
@@ -98,10 +100,11 @@ class CreateCooperativeController extends GetxController {
       return;
     }
     if (!formKey.currentState!.validate()) return;
-    if (selectedMembers.length < 2) {
+    if (selectedMembers.length <
+        AppConstants.minimumCooperativeMemberCount - 1) {
       Get.snackbar(
         'Error',
-        'Please select at least 2 members',
+        'Please select at least ${AppConstants.minimumCooperativeMemberCount - 1} members',
         snackPosition: SnackPosition.BOTTOM,
       );
       return;
@@ -128,7 +131,7 @@ class CreateCooperativeController extends GetxController {
         location: currentUser.value!.city ?? 'Unknown',
         latitude: userLocation.value?.latitude ?? 0,
         longitude: userLocation.value?.longitude ?? 0,
-        cropTypes: uniqueCropTypes, // Remove 'as List<String>'
+        cropTypes: uniqueCropTypes,
         members: [currentUser.value!.id],
         pendingInvites: selectedMembers
             .map((member) => CooperativeInvite(
@@ -138,20 +141,34 @@ class CreateCooperativeController extends GetxController {
                 ))
             .toList(),
         verificationRequirements: VerificationRequirements(
-          minimumMembers: 3,
+          minimumMembers: AppConstants.minimumCooperativeMemberCount,
           acceptedInvites: 0,
         ),
       );
 
       final batch = FirebaseFirestore.instance.batch();
 
-      final coopRef = FirebaseFirestore.instance
-          .collection('cooperatives')
-          .doc(cooperative.id);
+      final coopRef = _firestore.collection('cooperatives').doc(cooperative.id);
       batch.set(coopRef, cooperative.toMap());
 
+      final userRef = _firestore.collection('users').doc(currentUser.value!.id);
+
+      final newCooperativeMembership = CooperativeMembership(
+        cooperativeId: cooperative.id,
+        role: 'admin',
+      );
+
+      final updatedCooperatives = [
+        ...currentUser.value!.cooperatives,
+        newCooperativeMembership,
+      ];
+
+      batch.update(userRef, {
+        'cooperatives': updatedCooperatives.map((x) => x.toMap()).toList(),
+      });
+
       for (final member in selectedMembers) {
-        final notificationRef = FirebaseFirestore.instance
+        final notificationRef = _firestore
             .collection('notifications')
             .doc(member.id)
             .collection('items')
@@ -168,7 +185,25 @@ class CreateCooperativeController extends GetxController {
         batch.set(notificationRef, notification.toMap());
       }
 
+      final updatedUser = UserModel(
+        id: currentUser.value!.id,
+        name: currentUser.value!.name,
+        phoneNumber: currentUser.value!.phoneNumber,
+        createdAt: currentUser.value!.createdAt,
+        soilType: currentUser.value!.soilType,
+        crops: currentUser.value!.crops,
+        state: currentUser.value!.state,
+        city: currentUser.value!.city,
+        latitude: currentUser.value!.latitude,
+        longitude: currentUser.value!.longitude,
+        cooperatives: updatedCooperatives,
+        pendingInvites: currentUser.value!.pendingInvites,
+      );
+
       await batch.commit();
+
+      await _storageService.saveUser(updatedUser);
+      currentUser.value = updatedUser;
 
       Get.snackbar(
         'Success',

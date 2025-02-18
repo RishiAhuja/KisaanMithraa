@@ -49,6 +49,7 @@ dependencies:
   geolocator: ^10.1.0
   flutter_geocoder_alternative:
   timeago: ^3.7.0
+  lucide_icons: 
 
 dev_dependencies:
   flutter_test:

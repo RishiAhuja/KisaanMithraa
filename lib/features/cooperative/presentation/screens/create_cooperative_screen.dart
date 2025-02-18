@@ -1,4 +1,6 @@
 import 'package:cropconnect/core/theme/app_colors.dart';
+import 'package:cropconnect/features/cooperative/presentation/widgets/member_search_dialog.dart';
+import 'package:cropconnect/features/cooperative/presentation/widgets/member_selection_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../controllers/create_cooperative_controller.dart';
@@ -110,7 +112,14 @@ class CreateCooperativeScreen extends GetView<CreateCooperativeController> {
                           : null,
                     ),
                     const SizedBox(height: 24),
-                    _buildMemberSelection(theme),
+                    MemberSelectionWidget(
+                      title: 'Select Members',
+                      selectedMembers: controller.selectedMembers,
+                      onMemberRemoved: (member) =>
+                          controller.selectedMembers.remove(member),
+                      onAddTapped: () => _showMemberSearchDialog(context),
+                      showMinimumText: true,
+                    ),
                     const SizedBox(height: 24),
                     // _buildDropdown(
                     //   theme: theme,
@@ -250,111 +259,14 @@ class CreateCooperativeScreen extends GetView<CreateCooperativeController> {
         ));
   }
 
-  Widget _buildMemberSelection(ThemeData theme) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          'Select Members (minimum 2)',
-          style: theme.textTheme.titleMedium?.copyWith(
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        const SizedBox(height: 16),
-        Container(
-          decoration: BoxDecoration(
-            color: theme.colorScheme.surface,
-            borderRadius: BorderRadius.circular(16),
-            boxShadow: [
-              BoxShadow(
-                color: theme.colorScheme.primary.withOpacity(0.1),
-                blurRadius: 10,
-                offset: const Offset(0, 4),
-              ),
-            ],
-          ),
-          child: Obx(() => ListView.builder(
-                shrinkWrap: true,
-                physics: NeverScrollableScrollPhysics(),
-                itemCount: controller.selectedMembers.length + 1,
-                itemBuilder: (context, index) {
-                  if (index == controller.selectedMembers.length) {
-                    return ListTile(
-                      leading: CircleAvatar(
-                        backgroundColor:
-                            theme.colorScheme.primary.withOpacity(0.1),
-                        child:
-                            Icon(Icons.add, color: theme.colorScheme.primary),
-                      ),
-                      title: Text('Add Member'),
-                      onTap: () => _showMemberSearchDialog(context),
-                    );
-                  }
-
-                  final member = controller.selectedMembers[index];
-                  return ListTile(
-                    leading: CircleAvatar(
-                      backgroundColor:
-                          theme.colorScheme.primary.withOpacity(0.1),
-                      child: Text(member.name[0].toUpperCase()),
-                    ),
-                    title: Text(member.name),
-                    subtitle: Text(member.phoneNumber),
-                    trailing: IconButton(
-                      icon: Icon(Icons.remove_circle_outline),
-                      color: theme.colorScheme.error,
-                      onPressed: () =>
-                          controller.selectedMembers.removeAt(index),
-                    ),
-                  );
-                },
-              )),
-        ),
-      ],
-    );
-  }
-
   void _showMemberSearchDialog(BuildContext context) {
     Get.dialog(
-      Dialog(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(16),
-        ),
-        child: Padding(
-          padding: const EdgeInsets.all(16),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              TextField(
-                decoration: InputDecoration(
-                  hintText: 'Search members...',
-                  prefixIcon: Icon(Icons.search),
-                ),
-                onChanged: (value) => controller.searchMembers(value),
-              ),
-              const SizedBox(height: 16),
-              Obx(() => Expanded(
-                    child: ListView.builder(
-                      itemCount: controller.searchResults.length,
-                      itemBuilder: (context, index) {
-                        final user = controller.searchResults[index];
-                        return ListTile(
-                          leading: CircleAvatar(
-                            child: Text(user.name[0].toUpperCase()),
-                          ),
-                          title: Text(user.name),
-                          subtitle: Text(user.phoneNumber),
-                          onTap: () {
-                            controller.selectedMembers.add(user);
-                            Get.back();
-                          },
-                        );
-                      },
-                    ),
-                  )),
-            ],
-          ),
-        ),
+      MemberSearchDialog(
+        onSearch: controller.searchMembers,
+        searchResults: controller.searchResults,
+        onMemberSelected: (user) {
+          controller.selectedMembers.add(user);
+        },
       ),
     );
   }
