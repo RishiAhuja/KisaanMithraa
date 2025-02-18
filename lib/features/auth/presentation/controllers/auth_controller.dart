@@ -1,4 +1,4 @@
-import 'package:cropconnect/features/auth/domain/model/user_model.dart';
+import 'package:cropconnect/features/auth/domain/model/user/user_model.dart';
 import 'package:cropconnect/utils/app_logger.dart';
 import 'package:get/get.dart';
 import '../../domain/repositories/auth_repo.dart';

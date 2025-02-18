@@ -1,4 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:cropconnect/features/auth/domain/model/user/cooperative_membership_model.dart';
+import 'package:cropconnect/features/auth/domain/model/user/pending_invite_model.dart';
 import 'package:hive/hive.dart';
 
 part 'user_model.g.dart';
@@ -35,6 +37,12 @@ class UserModel {
   @HiveField(9)
   final double? longitude;
 
+  @HiveField(10)
+  final List<CooperativeMembership> cooperatives;
+
+  @HiveField(11)
+  final List<PendingInvite> pendingInvites;
+
   UserModel({
     required this.id,
     required this.name,
@@ -46,6 +54,8 @@ class UserModel {
     this.city,
     this.latitude,
     this.longitude,
+    this.cooperatives = const [],
+    this.pendingInvites = const [],
   });
 
   factory UserModel.fromMap(Map<String, dynamic> map, String id) {
@@ -60,6 +70,14 @@ class UserModel {
       city: map['city'],
       latitude: map['latitude']?.toDouble(),
       longitude: map['longitude']?.toDouble(),
+      cooperatives: map['cooperatives'] != null
+          ? List<CooperativeMembership>.from(
+              map['cooperatives'].map((x) => CooperativeMembership.fromMap(x)))
+          : [],
+      pendingInvites: map['pendingInvites'] != null
+          ? List<PendingInvite>.from(
+              map['pendingInvites'].map((x) => PendingInvite.fromMap(x)))
+          : [],
     );
   }
 
@@ -75,6 +93,8 @@ class UserModel {
       'city': city,
       'latitude': latitude,
       'longitude': longitude,
+      'cooperatives': cooperatives.map((x) => x.toMap()).toList(),
+      'pendingInvites': pendingInvites.map((x) => x.toMap()).toList(),
     };
   }
 }

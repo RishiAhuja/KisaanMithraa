@@ -1,48 +1,53 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:cropconnect/features/cooperative/domain/models/verification_requirements.dart';
+import 'cooperative_invite_model.dart';
 
 class CooperativeModel {
   final String id;
   final String name;
-  final String? description;
+  final String createdBy;
   final DateTime createdAt;
+  final String status; // 'verified' or 'unverified'
+  final String? description;
   final String location;
-  final List<String> cropTypes;
   final double latitude;
   final double longitude;
+  final List<String> cropTypes;
   final List<String> members;
-  final String adminId;
-  final String adminName;
-  final String adminNumber;
+  final List<CooperativeInvite> pendingInvites;
+  final VerificationRequirements verificationRequirements;
 
   CooperativeModel({
-    required this.adminId,
-    required this.adminName,
-    required this.adminNumber,
     required this.id,
     required this.name,
-    this.description,
+    required this.createdBy,
     required this.createdAt,
+    required this.status,
+    this.description,
     required this.location,
-    required this.cropTypes,
     required this.latitude,
     required this.longitude,
+    required this.cropTypes,
     required this.members,
+    required this.pendingInvites,
+    required this.verificationRequirements,
   });
 
   Map<String, dynamic> toMap() {
     return {
       'id': id,
       'name': name,
-      'description': description,
+      'createdBy': createdBy,
       'createdAt': Timestamp.fromDate(createdAt),
+      'status': status,
+      'description': description,
       'location': location,
-      'cropTypes': cropTypes,
       'latitude': latitude,
       'longitude': longitude,
+      'cropTypes': cropTypes,
       'members': members,
-      'adminId': adminId,
-      'adminName': adminName,
-      'adminNumber': adminNumber
+      'pendingInvites': pendingInvites.map((invite) => invite.toMap()).toList(),
+      'verificationRequirements': verificationRequirements.toMap(),
     };
   }
 
@@ -50,16 +55,35 @@ class CooperativeModel {
     return CooperativeModel(
       id: map['id'] ?? '',
       name: map['name'] ?? '',
-      description: map['description'] ?? '',
+      createdBy: map['createdBy'] ?? '',
       createdAt: (map['createdAt'] as Timestamp).toDate(),
+      status: map['status'] ?? 'unverified',
+      description: map['description'],
       location: map['location'] ?? '',
-      cropTypes: List<String>.from(map['cropTypes'] ?? []),
       latitude: map['latitude']?.toDouble() ?? 0.0,
       longitude: map['longitude']?.toDouble() ?? 0.0,
+      cropTypes: List<String>.from(map['cropTypes'] ?? []),
       members: List<String>.from(map['members'] ?? []),
-      adminId: map['adminId'],
-      adminName: map['adminName'],
-      adminNumber: map['adminNumber'],
+      pendingInvites: (map['pendingInvites'] as List<dynamic>?)
+              ?.map((invite) => CooperativeInvite.fromMap(invite))
+              .toList() ??
+          [],
+      verificationRequirements: VerificationRequirements.fromMap(
+        map['verificationRequirements'] ?? {},
+      ),
+    );
+  }
+
+  // Helper method to check if cooperative is verified
+  bool get isVerified => status == 'verified';
+
+  // Helper method to check if a user is a member
+  bool isMember(String userId) => members.contains(userId);
+
+  // Helper method to check if a user has a pending invite
+  bool hasPendingInvite(String userId) {
+    return pendingInvites.any(
+      (invite) => invite.userId == userId && invite.status == 'pending',
     );
   }
 }

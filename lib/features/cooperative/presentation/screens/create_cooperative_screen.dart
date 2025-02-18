@@ -1,3 +1,4 @@
+import 'package:cropconnect/core/theme/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../controllers/create_cooperative_controller.dart';
@@ -109,10 +110,12 @@ class CreateCooperativeScreen extends GetView<CreateCooperativeController> {
                           : null,
                     ),
                     const SizedBox(height: 24),
-                    _buildDropdown(
-                      theme: theme,
-                      icon: Icons.grass_rounded,
-                    ),
+                    _buildMemberSelection(theme),
+                    const SizedBox(height: 24),
+                    // _buildDropdown(
+                    //   theme: theme,
+                    //   icon: Icons.grass_rounded,
+                    // ),
                     const SizedBox(height: 32),
                     _buildCreateButton(theme),
                     const SizedBox(height: 24),
@@ -178,58 +181,6 @@ class CreateCooperativeScreen extends GetView<CreateCooperativeController> {
     );
   }
 
-  Widget _buildDropdown({
-    required ThemeData theme,
-    required IconData icon,
-  }) {
-    return Container(
-      decoration: BoxDecoration(
-        color: theme.colorScheme.surface,
-        borderRadius: BorderRadius.circular(16),
-        boxShadow: [
-          BoxShadow(
-            color: theme.colorScheme.primary.withOpacity(0.1),
-            blurRadius: 10,
-            offset: const Offset(0, 4),
-          ),
-        ],
-      ),
-      child: Obx(() => DropdownButtonFormField<String>(
-            value: controller.selectedCropType.value,
-            decoration: InputDecoration(
-              labelText: 'Primary Crop Type',
-              prefixIcon: Container(
-                margin: const EdgeInsets.all(12),
-                padding: const EdgeInsets.all(8),
-                decoration: BoxDecoration(
-                  color: theme.colorScheme.primary.withOpacity(0.1),
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: Icon(
-                  icon,
-                  color: theme.colorScheme.primary,
-                ),
-              ),
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(16),
-                borderSide: BorderSide.none,
-              ),
-              filled: true,
-              fillColor: theme.colorScheme.surface,
-              contentPadding: const EdgeInsets.all(20),
-            ),
-            items: controller.cropTypes.map((String crop) {
-              return DropdownMenuItem(
-                value: crop,
-                child: Text(crop),
-              );
-            }).toList(),
-            onChanged: (value) => controller.selectedCropType.value = value!,
-            validator: (value) => value == null ? 'Select a crop type' : null,
-          )),
-    );
-  }
-
   Widget _buildCreateButton(ThemeData theme) {
     return Obx(() => Container(
           height: 56,
@@ -282,6 +233,7 @@ class CreateCooperativeScreen extends GetView<CreateCooperativeController> {
                     children: [
                       Icon(
                         Icons.add_business_rounded,
+                        color: AppColors.backgroundLight,
                         size: 24,
                       ),
                       const SizedBox(width: 12),
@@ -296,5 +248,114 @@ class CreateCooperativeScreen extends GetView<CreateCooperativeController> {
                   ),
           ),
         ));
+  }
+
+  Widget _buildMemberSelection(ThemeData theme) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          'Select Members (minimum 2)',
+          style: theme.textTheme.titleMedium?.copyWith(
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        const SizedBox(height: 16),
+        Container(
+          decoration: BoxDecoration(
+            color: theme.colorScheme.surface,
+            borderRadius: BorderRadius.circular(16),
+            boxShadow: [
+              BoxShadow(
+                color: theme.colorScheme.primary.withOpacity(0.1),
+                blurRadius: 10,
+                offset: const Offset(0, 4),
+              ),
+            ],
+          ),
+          child: Obx(() => ListView.builder(
+                shrinkWrap: true,
+                physics: NeverScrollableScrollPhysics(),
+                itemCount: controller.selectedMembers.length + 1,
+                itemBuilder: (context, index) {
+                  if (index == controller.selectedMembers.length) {
+                    return ListTile(
+                      leading: CircleAvatar(
+                        backgroundColor:
+                            theme.colorScheme.primary.withOpacity(0.1),
+                        child:
+                            Icon(Icons.add, color: theme.colorScheme.primary),
+                      ),
+                      title: Text('Add Member'),
+                      onTap: () => _showMemberSearchDialog(context),
+                    );
+                  }
+
+                  final member = controller.selectedMembers[index];
+                  return ListTile(
+                    leading: CircleAvatar(
+                      backgroundColor:
+                          theme.colorScheme.primary.withOpacity(0.1),
+                      child: Text(member.name[0].toUpperCase()),
+                    ),
+                    title: Text(member.name),
+                    subtitle: Text(member.phoneNumber),
+                    trailing: IconButton(
+                      icon: Icon(Icons.remove_circle_outline),
+                      color: theme.colorScheme.error,
+                      onPressed: () =>
+                          controller.selectedMembers.removeAt(index),
+                    ),
+                  );
+                },
+              )),
+        ),
+      ],
+    );
+  }
+
+  void _showMemberSearchDialog(BuildContext context) {
+    Get.dialog(
+      Dialog(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(16),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              TextField(
+                decoration: InputDecoration(
+                  hintText: 'Search members...',
+                  prefixIcon: Icon(Icons.search),
+                ),
+                onChanged: (value) => controller.searchMembers(value),
+              ),
+              const SizedBox(height: 16),
+              Obx(() => Expanded(
+                    child: ListView.builder(
+                      itemCount: controller.searchResults.length,
+                      itemBuilder: (context, index) {
+                        final user = controller.searchResults[index];
+                        return ListTile(
+                          leading: CircleAvatar(
+                            child: Text(user.name[0].toUpperCase()),
+                          ),
+                          title: Text(user.name),
+                          subtitle: Text(user.phoneNumber),
+                          onTap: () {
+                            controller.selectedMembers.add(user);
+                            Get.back();
+                          },
+                        );
+                      },
+                    ),
+                  )),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 }

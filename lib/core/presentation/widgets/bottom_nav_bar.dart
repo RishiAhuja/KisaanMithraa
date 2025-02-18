@@ -9,14 +9,17 @@ class BottomNavBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    // Get the bottom padding to account for system navigation bar
+    final bottomPadding = MediaQuery.of(context).padding.bottom;
 
     return Container(
-      margin: const EdgeInsets.only(
+      margin: EdgeInsets.only(
         left: 16,
         right: 16,
-        bottom: 16,
+        // Add bottom padding for system navigation bar
+        bottom: 16 + bottomPadding,
       ),
-      height: 64, // Reduced height
+      height: 64, // Base height
       decoration: BoxDecoration(
         color: theme.colorScheme.surface,
         borderRadius: BorderRadius.circular(24),
@@ -28,39 +31,38 @@ class BottomNavBar extends StatelessWidget {
           ),
         ],
       ),
-      child: SafeArea(
-        child: Row(
-          children: [
-            _buildNavItem(
-              context: context,
-              index: 0,
-              icon: Icons.home_rounded,
-              label: 'Home',
-              isSelected: currentIndex == 0,
-            ),
-            _buildNavItem(
-              context: context,
-              index: 1,
-              icon: Icons.explore_rounded,
-              label: 'Community',
-              isSelected: currentIndex == 1,
-            ),
-            _buildNavItem(
-              context: context,
-              index: 2,
-              icon: Icons.groups_rounded,
-              label: 'Cooperative',
-              isSelected: currentIndex == 2,
-            ),
-            _buildNavItem(
-              context: context,
-              index: 3,
-              icon: Icons.person_rounded,
-              label: 'Profile',
-              isSelected: currentIndex == 3,
-            ),
-          ],
-        ),
+      // Remove SafeArea since we're handling padding manually
+      child: Row(
+        children: [
+          _buildNavItem(
+            context: context,
+            index: 0,
+            icon: Icons.home_rounded,
+            label: 'Home',
+            isSelected: currentIndex == 0,
+          ),
+          _buildNavItem(
+            context: context,
+            index: 1,
+            icon: Icons.explore_rounded,
+            label: 'Community',
+            isSelected: currentIndex == 1,
+          ),
+          _buildNavItem(
+            context: context,
+            index: 2,
+            icon: Icons.groups_rounded,
+            label: 'Cooperative',
+            isSelected: currentIndex == 2,
+          ),
+          _buildNavItem(
+            context: context,
+            index: 3,
+            icon: Icons.person_rounded,
+            label: 'Profile',
+            isSelected: currentIndex == 3,
+          ),
+        ],
       ),
     );
   }

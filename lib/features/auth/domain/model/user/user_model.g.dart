@@ -27,13 +27,15 @@ class UserModelAdapter extends TypeAdapter<UserModel> {
       city: fields[7] as String?,
       latitude: fields[8] as double?,
       longitude: fields[9] as double?,
+      cooperatives: (fields[10] as List).cast<CooperativeMembership>(),
+      pendingInvites: (fields[11] as List).cast<PendingInvite>(),
     );
   }
 
   @override
   void write(BinaryWriter writer, UserModel obj) {
     writer
-      ..writeByte(10)
+      ..writeByte(12)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
@@ -53,7 +55,11 @@ class UserModelAdapter extends TypeAdapter<UserModel> {
       ..writeByte(8)
       ..write(obj.latitude)
       ..writeByte(9)
-      ..write(obj.longitude);
+      ..write(obj.longitude)
+      ..writeByte(10)
+      ..write(obj.cooperatives)
+      ..writeByte(11)
+      ..write(obj.pendingInvites);
   }
 
   @override

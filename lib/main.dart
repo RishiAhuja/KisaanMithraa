@@ -1,5 +1,5 @@
 import 'package:cropconnect/core/theme/app_theme.dart';
-import 'package:cropconnect/features/auth/domain/model/user_model.dart';
+import 'package:cropconnect/features/auth/domain/model/user/user_model.dart';
 import 'package:cropconnect/features/auth/presentation/screens/otp_screen.dart';
 import 'package:cropconnect/features/community/bindings/community_binding.dart';
 import 'package:cropconnect/features/cooperative/bindings/create_cooperative_binding.dart';
@@ -7,6 +7,8 @@ import 'package:cropconnect/features/cooperative/presentation/screens/create_coo
 import 'package:cropconnect/features/cooperative/presentation/screens/my_cooperatives_screen.dart';
 import 'package:cropconnect/features/home/presentation/bindings/home_bindings.dart';
 import 'package:cropconnect/features/home/presentation/screen/home_screen.dart';
+import 'package:cropconnect/features/notification/presentation/controller/notification_controller.dart';
+import 'package:cropconnect/features/notification/presentation/notifications_screen.dart';
 import 'package:cropconnect/features/profile/screens/profile_screen.dart';
 import 'package:cropconnect/features/splash/presentation/screen/splash.dart';
 import 'package:cropconnect/utils/app_logger.dart';
@@ -84,6 +86,13 @@ class MyApp extends StatelessWidget {
           name: '/my-cooperatives',
           page: () => const MyCooperativesScreen(),
           // binding: MyCooperativesBinding(),
+        ),
+        GetPage(
+          name: '/notifications',
+          page: () => const NotificationsScreen(),
+          binding: BindingsBuilder(() {
+            Get.lazyPut(() => NotificationsController());
+          }),
         ),
       ],
     );

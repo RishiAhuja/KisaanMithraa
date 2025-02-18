@@ -1,5 +1,5 @@
 import 'package:cropconnect/core/presentation/widgets/bottom_nav_bar.dart';
-import 'package:cropconnect/features/auth/domain/model/user_model.dart';
+import 'package:cropconnect/features/auth/domain/model/user/user_model.dart';
 import 'package:cropconnect/features/home/presentation/provider/home_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -34,7 +34,9 @@ class HomeScreen extends GetView<HomeController> {
                 Icons.notifications_active,
                 color: theme.colorScheme.primary,
               ),
-              onPressed: () {},
+              onPressed: () {
+                Get.toNamed('/notifications');
+              },
             ),
           ),
         ],
@@ -200,7 +202,7 @@ class HomeScreen extends GetView<HomeController> {
                       const SizedBox(width: 12),
                       Text(
                         title,
-                        style: theme.textTheme.titleLarge?.copyWith(
+                        style: theme.textTheme.titleMedium?.copyWith(
                           fontWeight: FontWeight.bold,
                           color: theme.colorScheme.primary,
                         ),

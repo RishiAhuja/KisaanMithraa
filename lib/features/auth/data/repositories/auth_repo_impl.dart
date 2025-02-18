@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cropconnect/core/services/hive/hive_storage_service.dart';
 import 'package:cropconnect/features/auth/data/services/auth_service.dart';
-import 'package:cropconnect/features/auth/domain/model/user_model.dart';
+import 'package:cropconnect/features/auth/domain/model/user/user_model.dart';
 import 'package:cropconnect/features/auth/domain/repositories/auth_repo.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:shared_preferences/shared_preferences.dart';

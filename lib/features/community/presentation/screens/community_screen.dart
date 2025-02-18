@@ -1,5 +1,5 @@
 import 'package:cropconnect/core/theme/app_colors.dart';
-import 'package:cropconnect/features/auth/domain/model/user_model.dart';
+import 'package:cropconnect/features/auth/domain/model/user/user_model.dart';
 import 'package:cropconnect/features/auth/presentation/controllers/auth_controller.dart';
 import 'package:cropconnect/features/cooperative/domain/models/cooperative_model.dart';
 import 'package:flutter/material.dart';
@@ -478,7 +478,7 @@ class CommunityScreen extends GetView<CommunityController> {
                 theme,
                 Icons.admin_panel_settings,
                 'Admin',
-                cooperative.adminName,
+                cooperative.createdBy,
               ),
               const SizedBox(height: 32),
 

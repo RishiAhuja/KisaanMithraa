@@ -1,4 +1,4 @@
-import 'package:cropconnect/features/auth/domain/model/user_model.dart';
+import 'package:cropconnect/features/auth/domain/model/user/user_model.dart';
 
 abstract class AuthRepository {
   Future<String> registerWithPhone(String phoneNumber, String name);
