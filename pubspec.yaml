@@ -50,6 +50,7 @@ dependencies:
   flutter_geocoder_alternative:
   timeago: ^3.7.0
   lucide_icons: 
+  intl: ^0.18.1
 
 dev_dependencies:
   flutter_test:

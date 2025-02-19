@@ -76,95 +76,172 @@ class _CooperativeCard extends StatelessWidget {
 
     return Card(
       margin: const EdgeInsets.only(bottom: 16),
-      child: InkWell(
-        onTap: () => Get.toNamed(
-          coopWithRole.role == 'admin'
-              ? '/cooperative-management'
-              : '/cooperative-details',
-          arguments: coopWithRole,
-        ),
-        child: Padding(
-          padding: const EdgeInsets.all(16),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                children: [
-                  Expanded(
-                    child: Text(
-                      coop.name,
-                      style: theme.textTheme.titleLarge,
+      child: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    Expanded(
+                      child: Text(
+                        coop.name,
+                        style: theme.textTheme.titleLarge,
+                      ),
                     ),
-                  ),
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 8,
+                        vertical: 4,
+                      ),
+                      decoration: BoxDecoration(
+                        color: coopWithRole.role == 'admin'
+                            ? theme.colorScheme.primary
+                            : theme.colorScheme.secondary,
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: Text(
+                        coopWithRole.role.toUpperCase(),
+                        style: theme.textTheme.labelSmall?.copyWith(
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  coop.description ?? "",
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                  style: theme.textTheme.bodyMedium,
+                ),
+                const SizedBox(height: 8),
+                Row(
+                  children: [
+                    Icon(
+                      Icons.location_on_outlined,
+                      size: 16,
+                      color: theme.colorScheme.primary,
+                    ),
+                    const SizedBox(width: 4),
+                    Text(
+                      coop.location,
+                      style: theme.textTheme.bodySmall,
+                    ),
+                    const Spacer(),
+                    Text(
+                      '${coop.members.length} members',
+                      style: theme.textTheme.bodySmall,
+                    ),
+                  ],
+                ),
+                if (coop.status == 'unverified') ...[
+                  const SizedBox(height: 8),
                   Container(
                     padding: const EdgeInsets.symmetric(
                       horizontal: 8,
                       vertical: 4,
                     ),
                     decoration: BoxDecoration(
-                      color: coopWithRole.role == 'admin'
-                          ? theme.colorScheme.primary
-                          : theme.colorScheme.secondary,
+                      color: theme.colorScheme.error.withOpacity(0.1),
                       borderRadius: BorderRadius.circular(12),
                     ),
                     child: Text(
-                      coopWithRole.role.toUpperCase(),
+                      'Unverified',
                       style: theme.textTheme.labelSmall?.copyWith(
-                        color: Colors.white,
+                        color: theme.colorScheme.error,
                       ),
                     ),
                   ),
                 ],
-              ),
-              const SizedBox(height: 8),
-              Text(
-                coop.description ?? "",
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
-                style: theme.textTheme.bodyMedium,
-              ),
-              const SizedBox(height: 8),
-              Row(
-                children: [
-                  Icon(
-                    Icons.location_on_outlined,
-                    size: 16,
-                    color: theme.colorScheme.primary,
+              ],
+            ),
+          ),
+          Row(
+            children: [
+              if (coopWithRole.role == 'admin')
+                Expanded(
+                  flex: 1,
+                  child: InkWell(
+                    onTap: () => Get.toNamed(
+                      '/cooperative-management',
+                      arguments: coopWithRole,
+                    ),
+                    child: Container(
+                      padding: const EdgeInsets.all(12),
+                      decoration: BoxDecoration(
+                        border: Border(
+                          top: BorderSide(color: theme.dividerColor),
+                          right: BorderSide(color: theme.dividerColor),
+                        ),
+                      ),
+                      child: Text(
+                        'Manage',
+                        textAlign: TextAlign.center,
+                        style: theme.textTheme.labelLarge?.copyWith(
+                          color: theme.colorScheme.primary,
+                        ),
+                      ),
+                    ),
                   ),
-                  const SizedBox(width: 4),
-                  Text(
-                    coop.location,
-                    style: theme.textTheme.bodySmall,
-                  ),
-                  const Spacer(),
-                  Text(
-                    '${coop.members.length} members',
-                    style: theme.textTheme.bodySmall,
-                  ),
-                ],
-              ),
-              if (coop.status == 'unverified') ...[
-                const SizedBox(height: 8),
-                Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 8,
-                    vertical: 4,
-                  ),
-                  decoration: BoxDecoration(
-                    color: theme.colorScheme.error.withOpacity(0.1),
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: Text(
-                    'Unverified',
-                    style: theme.textTheme.labelSmall?.copyWith(
-                      color: theme.colorScheme.error,
+                )
+              else
+                Expanded(
+                  flex: 1,
+                  child: InkWell(
+                    onTap: () => Get.toNamed(
+                      '/cooperative-details',
+                      arguments: coopWithRole,
+                    ),
+                    child: Container(
+                      padding: const EdgeInsets.all(12),
+                      decoration: BoxDecoration(
+                        border: Border(
+                          top: BorderSide(color: theme.dividerColor),
+                          right: BorderSide(color: theme.dividerColor),
+                        ),
+                      ),
+                      child: Text(
+                        'Details',
+                        textAlign: TextAlign.center,
+                        style: theme.textTheme.labelLarge,
+                      ),
                     ),
                   ),
                 ),
-              ],
+              Expanded(
+                flex: 2,
+                child: InkWell(
+                  onTap: () => Get.toNamed(
+                    '/resource-pool',
+                    arguments: {
+                      'cooperativeId': coop.id,
+                      'cooperativeName': coop.name,
+                    },
+                  ),
+                  child: Container(
+                    padding: const EdgeInsets.all(12),
+                    decoration: BoxDecoration(
+                      border: Border(
+                        top: BorderSide(color: theme.dividerColor),
+                      ),
+                    ),
+                    child: Text(
+                      'Open Marketplace',
+                      textAlign: TextAlign.center,
+                      style: theme.textTheme.labelLarge?.copyWith(
+                        color: theme.colorScheme.primary,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
             ],
           ),
-        ),
+        ],
       ),
     );
   }

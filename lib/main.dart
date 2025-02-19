@@ -15,6 +15,11 @@ import 'package:cropconnect/features/home/presentation/screen/home_screen.dart';
 import 'package:cropconnect/features/notification/presentation/controller/notification_controller.dart';
 import 'package:cropconnect/features/notification/presentation/screen/notifications_screen.dart';
 import 'package:cropconnect/features/profile/screens/profile_screen.dart';
+import 'package:cropconnect/features/resource_pooling/presentation/controller/resource_pooling_controller.dart';
+import 'package:cropconnect/features/resource_pooling/presentation/screens/create_listing_screen.dart';
+import 'package:cropconnect/features/resource_pooling/presentation/screens/listing_details_screen.dart';
+import 'package:cropconnect/features/resource_pooling/presentation/screens/my_listing_details_screen.dart';
+import 'package:cropconnect/features/resource_pooling/presentation/screens/resource_listings_screen.dart';
 import 'package:cropconnect/features/splash/presentation/screen/splash.dart';
 import 'package:cropconnect/firebase_options.dart';
 import 'package:cropconnect/utils/app_logger.dart';
@@ -121,6 +126,30 @@ class MyApp extends StatelessWidget {
           binding: BindingsBuilder(() {
             Get.lazyPut(() => CooperativeDetailsController());
           }),
+        ),
+        GetPage(
+          name: '/resource-pool',
+          page: () => const ResourceListingsScreen(),
+          binding: BindingsBuilder(() {
+            Get.lazyPut(
+              () => ResourcePoolingController(),
+            );
+          }),
+        ),
+        GetPage(
+          name: '/create-listing',
+          page: () => const CreateListingScreen(),
+          // binding: ResourcePoolingBinding(),
+        ),
+        GetPage(
+          name: '/listing-details',
+          page: () => const ListingDetailsScreen(),
+          // binding: ResourcePoolingBinding(),
+        ),
+        GetPage(
+          name: '/my-listing-details',
+          page: () => const MyListingDetailsScreen(),
+          // binding: ResourcePoolingBinding(),
         ),
       ],
     );

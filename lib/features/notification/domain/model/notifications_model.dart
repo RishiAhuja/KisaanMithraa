@@ -3,11 +3,16 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 enum NotificationType {
   cooperativeInvite,
   generalMessage,
+  offerReceived,
+  offerAccepted,
+  offerRejected,
 }
 
 enum NotificationAction {
   acceptInvite,
   declineInvite,
+  viewListing,
+  viewProfile,
   none,
 }
 
@@ -21,8 +26,9 @@ class NotificationModel {
   final DateTime createdAt;
   final bool isRead;
   final NotificationAction action;
+  final Map<String, dynamic>? actionData;
 
-  NotificationModel({
+  const NotificationModel({
     required this.id,
     required this.userId,
     required this.type,
@@ -32,10 +38,12 @@ class NotificationModel {
     required this.createdAt,
     required this.isRead,
     required this.action,
+    this.actionData, // Add this parameter
   });
 
   Map<String, dynamic> toMap() {
     return {
+      'id': id,
       'userId': userId,
       'type': type.name,
       'title': title,
@@ -44,6 +52,7 @@ class NotificationModel {
       'createdAt': Timestamp.fromDate(createdAt),
       'isRead': isRead,
       'action': action.name,
+      'actionData': actionData, // Add this field
     };
   }
 
@@ -64,6 +73,7 @@ class NotificationModel {
         (e) => e.name == map['action'],
         orElse: () => NotificationAction.none,
       ),
+      actionData: map['actionData'] as Map<String, dynamic>?,
     );
   }
 
@@ -115,6 +125,7 @@ class NotificationModel {
     DateTime? createdAt,
     bool? isRead,
     NotificationAction? action,
+    Map<String, dynamic>? actionData,
   }) {
     return NotificationModel(
       id: id ?? this.id,
@@ -126,6 +137,7 @@ class NotificationModel {
       createdAt: createdAt ?? this.createdAt,
       isRead: isRead ?? this.isRead,
       action: action ?? this.action,
+      actionData: actionData ?? this.actionData,
     );
   }
 }

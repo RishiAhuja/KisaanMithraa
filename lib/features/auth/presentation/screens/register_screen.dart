@@ -60,7 +60,6 @@ class RegisterScreen extends GetView<AuthController> {
                     )
                   : const SizedBox()),
               const SizedBox(height: 24),
-              // Obx only for loading button
               Obx(() => ElevatedButton(
                     onPressed: controller.isLoading.value
                         ? null
