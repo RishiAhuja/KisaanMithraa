@@ -22,7 +22,7 @@ class CreateCooperativeScreen extends GetView<CreateCooperativeController> {
         ),
         centerTitle: true,
         elevation: 0,
-        backgroundColor: theme.colorScheme.background,
+        backgroundColor: theme.colorScheme.surface,
         leading: IconButton(
           icon: Icon(
             Icons.arrow_back_ios_new_rounded,

@@ -24,8 +24,7 @@ class ProfileController extends GetxController {
   final selectedCity = Rx<String?>(null);
 
   final states = <String>[
-    'Maharashtra', 'Karnataka', 'Gujarat', 'Punjab',
-    'Haryana', 'Uttar Pradesh', 'Madhya Pradesh',
+    'Uttar Pradhes', 'Bihar', 'Punjab'
     // Add more states as needed
   ].obs;
 
@@ -96,16 +95,11 @@ class ProfileController extends GetxController {
   }
 
   Future<void> loadCities(String state) async {
-    // This is a dummy implementation. Replace with actual city data
-    cities.value = [
-      'City 1', 'City 2', 'City 3',
-      // Add more cities based on state
-    ];
+    cities.value = ['Amritsar', 'Ludhiana', 'Jalandhar'];
   }
 
   Future<Position?> getCurrentLocation() async {
     try {
-      // Check location permission
       LocationPermission permission = await Geolocator.checkPermission();
       if (permission == LocationPermission.denied) {
         permission = await Geolocator.requestPermission();
@@ -121,7 +115,6 @@ class ProfileController extends GetxController {
         return null;
       }
 
-      // Get current position
       return await Geolocator.getCurrentPosition(
           desiredAccuracy: LocationAccuracy.high);
     } catch (e) {

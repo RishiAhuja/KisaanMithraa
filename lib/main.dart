@@ -1,7 +1,10 @@
+import 'package:cropconnect/core/services/locale/locale_service.dart';
 import 'package:cropconnect/core/theme/app_theme.dart';
 import 'package:cropconnect/features/auth/domain/model/user/pending_invite_model.dart';
 import 'package:cropconnect/features/auth/domain/model/user/user_model.dart';
 import 'package:cropconnect/features/auth/presentation/screens/otp_screen.dart';
+import 'package:cropconnect/features/chatbot/presentation/bindings/chatbot_binding.dart';
+import 'package:cropconnect/features/chatbot/presentation/screens/chatbot_screen.dart';
 import 'package:cropconnect/features/community/bindings/community_binding.dart';
 import 'package:cropconnect/features/cooperative/bindings/create_cooperative_binding.dart';
 import 'package:cropconnect/features/cooperative/presentation/controllers/cooperative_management_controller.dart';
@@ -14,6 +17,9 @@ import 'package:cropconnect/features/home/presentation/bindings/home_bindings.da
 import 'package:cropconnect/features/home/presentation/screen/home_screen.dart';
 import 'package:cropconnect/features/notification/presentation/controller/notification_controller.dart';
 import 'package:cropconnect/features/notification/presentation/screen/notifications_screen.dart';
+import 'package:cropconnect/features/onboarding/presentation/controller/nearby_cooperatives_controller.dart';
+import 'package:cropconnect/features/onboarding/presentation/screens/nearby_cooperatives_screen.dart';
+import 'package:cropconnect/features/onboarding/presentation/screens/onboarding_screen.dart';
 import 'package:cropconnect/features/profile/screens/profile_screen.dart';
 import 'package:cropconnect/features/resource_pooling/presentation/controller/resource_pooling_controller.dart';
 import 'package:cropconnect/features/resource_pooling/presentation/screens/create_listing_screen.dart';
@@ -28,9 +34,9 @@ import 'package:get/get.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'features/auth/bindings/auth_binding.dart';
 import 'features/auth/domain/model/user/cooperative_membership_model.dart';
-import 'features/auth/presentation/screens/register_screen.dart';
 import 'features/cooperative/presentation/controllers/cooperative_details_controller.dart';
 import 'features/profile/bindings/profile_binding.dart';
 import 'features/community/presentation/screens/community_screen.dart';
@@ -53,6 +59,7 @@ void main() async {
 
   final binding = AuthBinding();
   binding.dependencies();
+  Get.put(LocaleService());
 
   runApp(const MyApp());
 }
@@ -66,14 +73,16 @@ class MyApp extends StatelessWidget {
       title: 'Your App Name',
       theme: AppTheme.lightTheme,
       initialRoute: '/splash',
+      localizationsDelegates: AppLocalizations.localizationsDelegates,
+      supportedLocales: AppLocalizations.supportedLocales,
       getPages: [
         GetPage(
           name: '/splash',
           page: () => const SplashScreen(),
         ),
         GetPage(
-          name: '/register',
-          page: () => const RegisterScreen(),
+          name: '/onboarding',
+          page: () => LanguageSelectionScreen(),
         ),
         GetPage(
           name: '/otp',
@@ -150,6 +159,23 @@ class MyApp extends StatelessWidget {
           name: '/my-listing-details',
           page: () => const MyListingDetailsScreen(),
           // binding: ResourcePoolingBinding(),
+        ),
+        GetPage(
+          name: '/chatbot',
+          page: () => ChatbotScreen(),
+          binding: ChatbotBinding(),
+        ),
+        GetPage(
+          name: '/nearby-cooperatives',
+          page: () => NearbyCooperativesPage(
+            onBack: () {},
+            onNext: () {
+              Get.toNamed('/home');
+            },
+          ),
+          binding: BindingsBuilder(() {
+            Get.lazyPut(() => NearbyCooperativesController());
+          }),
         ),
       ],
     );

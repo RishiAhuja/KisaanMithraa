@@ -115,6 +115,32 @@ class NotificationModel {
     );
   }
 
+  factory NotificationModel.cooperativeJoinRequest({
+    required String id,
+    required String userId,
+    required String requesterId,
+    required String requesterName,
+    required String cooperativeName,
+    required String cooperativeId,
+  }) {
+    return NotificationModel(
+      id: id,
+      userId: userId,
+      type: NotificationType.cooperativeInvite,
+      title: 'New Join Request',
+      message: '$requesterName wants to join $cooperativeName',
+      createdAt: DateTime.now(),
+      isRead: false,
+      action: NotificationAction.none,
+      actionData: {
+        'requesterId': requesterId,
+        'requesterName': requesterName,
+        'cooperativeId': cooperativeId,
+        'cooperativeName': cooperativeName,
+      },
+    );
+  }
+
   NotificationModel copyWith({
     String? id,
     String? userId,

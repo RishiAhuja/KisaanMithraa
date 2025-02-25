@@ -50,16 +50,7 @@ class AppTheme {
         error: AppColors.error,
       ),
       scaffoldBackgroundColor: AppColors.backgroundDark,
-      textTheme: GoogleFonts.plusJakartaSansTextTheme().copyWith(
-          // bodyLarge: TextStyle(color: AppColors.textDark),
-          // bodyMedium: TextStyle(color: AppColors.textDark),
-          // titleLarge: TextStyle(color: AppColors.textDark),
-          // titleMedium: TextStyle(color: AppColors.textDark),
-          // titleSmall: TextStyle(color: AppColors.textDark),
-          // titleLarge: TextStyle(color: AppColors.textDark),
-          // titleLarge: TextStyle(color: AppColors.textDark),
-          // titleMedium: TextStyle(color: AppColors.textDarkSecondary),
-          ),
+      textTheme: GoogleFonts.plusJakartaSansTextTheme().copyWith(),
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
           backgroundColor: AppColors.primary,

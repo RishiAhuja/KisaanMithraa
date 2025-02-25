@@ -13,7 +13,7 @@ class HomeScreen extends GetView<HomeController> {
 
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: theme.colorScheme.background,
+        backgroundColor: theme.colorScheme.surface,
         elevation: 0,
         title: Text(
           'CropConnect',
@@ -151,6 +151,12 @@ class HomeScreen extends GetView<HomeController> {
         ),
       ),
       bottomNavigationBar: const BottomNavBar(currentIndex: 0),
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: () => Get.toNamed('/chatbot'),
+        label: const Text('Ask Mitra'),
+        icon: const Icon(Icons.chat_bubble_outline),
+        backgroundColor: theme.colorScheme.primary,
+      ),
     );
   }
 

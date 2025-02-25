@@ -9,7 +9,7 @@ class OTPScreen extends GetView<AuthController> {
 
   @override
   Widget build(BuildContext context) {
-    final TextEditingController _pinController = TextEditingController();
+    final TextEditingController pinController = TextEditingController();
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.transparent,
@@ -59,7 +59,7 @@ class OTPScreen extends GetView<AuthController> {
                         : () {
                             // Get the current PIN value and verify it
                             final pin =
-                                _pinController.text; // Add this controller
+                                pinController.text; // Add this controller
                             if (pin.length == 6) {
                               controller.verifyOTP(pin);
                             }

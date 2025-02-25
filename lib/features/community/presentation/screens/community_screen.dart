@@ -2,6 +2,7 @@ import 'package:cropconnect/core/theme/app_colors.dart';
 import 'package:cropconnect/features/auth/domain/model/user/user_model.dart';
 import 'package:cropconnect/features/auth/presentation/controllers/auth_controller.dart';
 import 'package:cropconnect/features/cooperative/domain/models/cooperative_model.dart';
+// import 'package:cropconnect/features/cooperative/presentation/screens/cooperative_map_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../../../core/presentation/widgets/bottom_nav_bar.dart';
@@ -409,7 +410,11 @@ class CommunityScreen extends GetView<CommunityController> {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Header with Cooperative name and icon
+              // ElevatedButton(
+              //   onPressed: () => Get.to(
+              //       () => CooperativeMapScreen(cooperative: cooperative)),
+              //   child: const Text('View on Map'),
+              // ),
               Row(
                 children: [
                   CircleAvatar(
@@ -487,23 +492,35 @@ class CommunityScreen extends GetView<CommunityController> {
                   .contains(Get.find<AuthController>().user.value?.id))
                 SizedBox(
                   width: double.infinity,
-                  child: ElevatedButton(
-                    onPressed: () => {},
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: theme.colorScheme.primary,
-                      padding: const EdgeInsets.symmetric(vertical: 16),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                    ),
-                    child: Text(
-                      'Join Cooperative',
-                      style: theme.textTheme.labelLarge?.copyWith(
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
+                  child: Obx(() => ElevatedButton(
+                        onPressed: controller.isJoiningCoop.value
+                            ? null
+                            : () => controller.requestToJoin(cooperative),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: theme.colorScheme.primary,
+                          padding: const EdgeInsets.symmetric(vertical: 16),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                        ),
+                        child: controller.isJoiningCoop.value
+                            ? const SizedBox(
+                                height: 20,
+                                width: 20,
+                                child: CircularProgressIndicator(
+                                  valueColor: AlwaysStoppedAnimation<Color>(
+                                      Colors.white),
+                                  strokeWidth: 2,
+                                ),
+                              )
+                            : Text(
+                                'Join Cooperative',
+                                style: theme.textTheme.labelLarge?.copyWith(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                      )),
                 ),
             ],
           ),

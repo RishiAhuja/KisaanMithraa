@@ -132,11 +132,10 @@ class _ExpandableSection extends StatelessWidget {
   final bool isOwnListing;
 
   const _ExpandableSection({
-    Key? key,
     required this.title,
     required this.listings,
     required this.isOwnListing,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -196,10 +195,9 @@ class _ListingCard extends StatelessWidget {
   final bool isOwnListing;
 
   const _ListingCard({
-    Key? key,
     required this.listing,
     required this.isOwnListing,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

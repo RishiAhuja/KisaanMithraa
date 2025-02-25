@@ -300,10 +300,9 @@ class _DetailRow extends StatelessWidget {
   final String value;
 
   const _DetailRow({
-    Key? key,
     required this.label,
     required this.value,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
