@@ -13,13 +13,13 @@ class MemberDetailsDialog extends StatelessWidget {
   final VoidCallback? onKickSuccess;
 
   const MemberDetailsDialog({
-    Key? key,
+    super.key,
     required this.member,
     required this.isCurrentUser,
     required this.isAdmin,
     required this.cooperativeId,
     this.onKickSuccess,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

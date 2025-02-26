@@ -8,11 +8,11 @@ class MemberSearchDialog extends StatelessWidget {
   final Function(UserModel) onMemberSelected;
 
   const MemberSearchDialog({
-    Key? key,
+    super.key,
     required this.onSearch,
     required this.searchResults,
     required this.onMemberSelected,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

@@ -11,13 +11,13 @@ class MemberSelectionWidget extends StatelessWidget {
   final bool showMinimumText;
 
   const MemberSelectionWidget({
-    Key? key,
+    super.key,
     required this.title,
     required this.selectedMembers,
     required this.onMemberRemoved,
     required this.onAddTapped,
     this.showMinimumText = false,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

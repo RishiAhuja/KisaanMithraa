@@ -8,9 +8,9 @@ class CooperativeMapScreen extends StatefulWidget {
   final CooperativeModel cooperative;
 
   const CooperativeMapScreen({
-    Key? key,
+    super.key,
     required this.cooperative,
-  }) : super(key: key);
+  });
 
   @override
   State<CooperativeMapScreen> createState() => _CooperativeMapScreenState();

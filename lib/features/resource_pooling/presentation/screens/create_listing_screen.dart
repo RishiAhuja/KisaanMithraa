@@ -41,8 +41,9 @@ class CreateListingScreen extends GetView<ResourcePoolingController> {
                         onChanged: (value) =>
                             controller.listingType.value = value,
                         validator: (value) {
-                          if (value == null)
+                          if (value == null) {
                             return 'Please select a listing type';
+                          }
                           return null;
                         },
                       ),
@@ -61,8 +62,9 @@ class CreateListingScreen extends GetView<ResourcePoolingController> {
                         onChanged: (value) =>
                             controller.transactionType.value = value,
                         validator: (value) {
-                          if (value == null)
+                          if (value == null) {
                             return 'Please select a transaction type';
+                          }
                           return null;
                         },
                       ),
@@ -74,8 +76,9 @@ class CreateListingScreen extends GetView<ResourcePoolingController> {
                           border: OutlineInputBorder(),
                         ),
                         validator: (value) {
-                          if (value?.isEmpty ?? true)
+                          if (value?.isEmpty ?? true) {
                             return 'Please enter a title';
+                          }
                           return null;
                         },
                       ),
@@ -88,8 +91,9 @@ class CreateListingScreen extends GetView<ResourcePoolingController> {
                         ),
                         maxLines: 3,
                         validator: (value) {
-                          if (value?.isEmpty ?? true)
+                          if (value?.isEmpty ?? true) {
                             return 'Please enter a description';
+                          }
                           return null;
                         },
                       ),
@@ -107,8 +111,9 @@ class CreateListingScreen extends GetView<ResourcePoolingController> {
                               keyboardType: TextInputType.number,
                               validator: (value) {
                                 if (value?.isEmpty ?? true) return 'Required';
-                                if (int.tryParse(value!) == null)
+                                if (int.tryParse(value!) == null) {
                                   return 'Invalid number';
+                                }
                                 return null;
                               },
                             ),
@@ -139,8 +144,9 @@ class CreateListingScreen extends GetView<ResourcePoolingController> {
                         keyboardType: TextInputType.number,
                         validator: (value) {
                           if (value?.isEmpty ?? true) return 'Required';
-                          if (double.tryParse(value!) == null)
+                          if (double.tryParse(value!) == null) {
                             return 'Invalid price';
+                          }
                           return null;
                         },
                       ),

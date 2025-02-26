@@ -24,7 +24,7 @@ class ResourceOffer {
     required this.status,
     this.availableFrom,
     this.availableTo,
-  }) : this.id = id ?? const Uuid().v4(); // Generate ID if not provided
+  }) : id = id ?? const Uuid().v4(); // Generate ID if not provided
 
   ResourceOffer copyWith({
     String? id,

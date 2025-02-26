@@ -3,6 +3,7 @@ import 'package:cropconnect/core/presentation/widgets/bottom_nav_bar.dart';
 import 'package:cropconnect/features/profile/controller/profile_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:cropconnect/core/services/locale/locale_service.dart';
 
 class ProfileScreen extends GetView<ProfileController> {
   const ProfileScreen({Key? key}) : super(key: key);
@@ -10,6 +11,7 @@ class ProfileScreen extends GetView<ProfileController> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final localeService = Get.find<LocaleService>();
 
     return Scaffold(
       appBar: AppBar(
@@ -21,7 +23,7 @@ class ProfileScreen extends GetView<ProfileController> {
         ),
         centerTitle: true,
         elevation: 0,
-        backgroundColor: theme.colorScheme.background,
+        backgroundColor: theme.colorScheme.surface,
       ),
       body: Obx(() {
         if (controller.isLoading.value) {
@@ -39,7 +41,6 @@ class ProfileScreen extends GetView<ProfileController> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                // Profile Header
                 Center(
                   child: Column(
                     children: [
@@ -73,7 +74,6 @@ class ProfileScreen extends GetView<ProfileController> {
                 ),
                 const SizedBox(height: 32),
 
-                // Form Fields
                 _buildTextField(
                   controller: controller.nameController,
                   label: 'Name',
@@ -158,6 +158,51 @@ class ProfileScreen extends GetView<ProfileController> {
                     );
                   }).toList(),
                 ),
+                const SizedBox(height: 32),
+
+                // Language Switcher
+                Text(
+                  'Language',
+                  style: theme.textTheme.titleMedium?.copyWith(
+                    fontWeight: FontWeight.bold,
+                    color: theme.colorScheme.primary,
+                  ),
+                ),
+                const SizedBox(height: 12),
+                Obx(() => Container(
+                      decoration: BoxDecoration(
+                        border: Border.all(color: theme.colorScheme.outline),
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: Column(
+                        children: [
+                          _buildLanguageOption(
+                            'English',
+                            'en',
+                            localeService.currentLocale.value,
+                            theme,
+                            onTap: () => localeService.changeLocale('en'),
+                          ),
+                          Divider(height: 1, color: theme.colorScheme.outline),
+                          _buildLanguageOption(
+                            'हिंदी',
+                            'hi',
+                            localeService.currentLocale.value,
+                            theme,
+                            onTap: () => localeService.changeLocale('hi'),
+                          ),
+                          Divider(height: 1, color: theme.colorScheme.outline),
+                          _buildLanguageOption(
+                            'ਪੰਜਾਬੀ',
+                            'pa',
+                            localeService.currentLocale.value,
+                            theme,
+                            onTap: () => localeService.changeLocale('pa'),
+                          ),
+                        ],
+                      ),
+                    )),
+
                 const SizedBox(height: 32),
 
                 // Update Button
@@ -272,6 +317,42 @@ class ProfileScreen extends GetView<ProfileController> {
         );
       }).toList(),
       onChanged: onChanged,
+    );
+  }
+
+  Widget _buildLanguageOption(
+    String label,
+    String code,
+    String currentLocale,
+    ThemeData theme, {
+    required VoidCallback onTap,
+  }) {
+    final isSelected = currentLocale == code;
+
+    return InkWell(
+      onTap: onTap,
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+        color: isSelected ? theme.colorScheme.primary.withOpacity(0.1) : null,
+        child: Row(
+          children: [
+            Text(
+              label,
+              style: theme.textTheme.bodyLarge?.copyWith(
+                color: isSelected ? theme.colorScheme.primary : null,
+                fontWeight: isSelected ? FontWeight.bold : null,
+              ),
+            ),
+            const Spacer(),
+            if (isSelected)
+              Icon(
+                Icons.check_rounded,
+                color: theme.colorScheme.primary,
+                size: 20,
+              ),
+          ],
+        ),
+      ),
     );
   }
 }

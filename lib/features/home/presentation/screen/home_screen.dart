@@ -16,7 +16,7 @@ class HomeScreen extends GetView<HomeController> {
         backgroundColor: theme.colorScheme.surface,
         elevation: 0,
         title: Text(
-          'CropConnect',
+          'Kisan Mitra',
           style: theme.textTheme.titleLarge?.copyWith(
             color: theme.colorScheme.primary,
             fontWeight: FontWeight.bold,

@@ -55,6 +55,10 @@ dependencies:
   confetti:
   flutter_dotenv:
   flutter_svg:
+  speech_to_text:
+  avatar_glow:
+  flutter_tts:
+  permission_handler:
   flutter_localizations:
     sdk: flutter
   google_maps_flutter: ^2.5.3
