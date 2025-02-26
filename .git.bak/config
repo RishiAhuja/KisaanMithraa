@@ -1,0 +1,8 @@
+[core]
+	repositoryformatversion = 0
+	filemode = true
+	bare = false
+	logallrefupdates = true
+[remote "origin"]
+	url = https://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@github.com/RishiAhuja/cropconnect
+	fetch = +refs/heads/*:refs/remotes/origin/*

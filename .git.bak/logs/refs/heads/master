@@ -1,0 +1,11 @@
+0000000000000000000000000000000000000000 6014ffdd47936e2ad8af3dd5d1dbb093c40959b6 RishiAhuja <www.rishiahuja@gmail.com> 1739301253 +0530	commit (initial): app(.): phone registeration, otp verification and hive
+6014ffdd47936e2ad8af3dd5d1dbb093c40959b6 efb1c24138e38a64fc3bb5a29ebebe5e595e20da RishiAhuja <www.rishiahuja@gmail.com> 1739471203 +0530	commit: add(.): profile page + change is user adapter and auth bindings
+efb1c24138e38a64fc3bb5a29ebebe5e595e20da 9276b2ba52ed4d17f4750770047bbed24da23da6 RishiAhuja <www.rishiahuja@gmail.com> 1739841219 +0530	commit: feat(.): community screen
+9276b2ba52ed4d17f4750770047bbed24da23da6 b743979047941b23ce5cb9b845d1f07fc2677736 RishiAhuja <www.rishiahuja@gmail.com> 1739850312 +0530	commit: feat(.): creating cooperatives and notification systems
+b743979047941b23ce5cb9b845d1f07fc2677736 c2b3927a1ba27da7e98ec9f0f9d3b39e8e0605e3 RishiAhuja <www.rishiahuja@gmail.com> 1739873994 +0530	commit: fix(.): notification system, feat(.): cooperative management and detials page
+c2b3927a1ba27da7e98ec9f0f9d3b39e8e0605e3 164458cfe16fd7c00dbfbc873dbbfe2e764759c3 RishiAhuja <www.rishiahuja@gmail.com> 1739965903 +0530	commit: feat(.): rudimentary pooling system
+164458cfe16fd7c00dbfbc873dbbfe2e764759c3 d196b9a0063d5f1035e622442fe4cd0733347a1c RishiAhuja <www.rishiahuja@gmail.com> 1740479932 +0530	commit: feat(.): updated user flow, and chatbot
+d196b9a0063d5f1035e622442fe4cd0733347a1c 15a2439e5ee3377a121f5ec073d929731eb3f3ff RishiAhuja <www.rishiahuja@gmail.com> 1740559526 +0530	commit: dotenv(.): added example env
+15a2439e5ee3377a121f5ec073d929731eb3f3ff d196b9a0063d5f1035e622442fe4cd0733347a1c RishiAhuja <www.rishiahuja@gmail.com> 1740559657 +0530	reset: moving to HEAD~1
+d196b9a0063d5f1035e622442fe4cd0733347a1c 232aa9266d186f267a27e76b784a65fb6cf29def RishiAhuja <www.rishiahuja@gmail.com> 1740559812 +0530	commit: refactor: move API credentials to environment variables
+232aa9266d186f267a27e76b784a65fb6cf29def 5127fd5cecdbac117630bdf254f6a0f58200fb4f RishiAhuja <www.rishiahuja@gmail.com> 1740559973 +0530	commit: refactor: move sensitive data to environment variables
