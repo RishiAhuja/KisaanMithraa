@@ -30,6 +30,7 @@ import 'package:cropconnect/features/splash/presentation/screen/splash.dart';
 import 'package:cropconnect/firebase_options.dart';
 import 'package:cropconnect/utils/app_logger.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:hive_flutter/hive_flutter.dart';
@@ -41,8 +42,9 @@ import 'features/cooperative/presentation/controllers/cooperative_details_contro
 import 'features/profile/bindings/profile_binding.dart';
 import 'features/community/presentation/screens/community_screen.dart';
 
-void main() async {
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await dotenv.load(fileName: ".env");
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
