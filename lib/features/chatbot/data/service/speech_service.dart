@@ -1,8 +1,10 @@
+import 'package:cropconnect/utils/app_logger.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 import 'package:speech_to_text/speech_to_text.dart' as stt;
 import 'dart:async';
 import 'dart:math' as math;
 import 'package:get/get.dart';
+import 'package:cropconnect/core/utils/platform_helper.dart';
 
 class SpeechService extends GetxService {
   // Singleton pattern
@@ -41,11 +43,16 @@ class SpeechService extends GetxService {
   };
 
   // Initialize TTS and STT
-  Future<bool> initializeSpeech() async {
-    if (isInitialized.value) return true;
-
+  Future<void> initializeSpeech() async {
     try {
-      // Initialize speech recognition first
+      // Check if running on web
+      if (PlatformHelper.isWeb) {
+        // Web-specific initialization
+        isInitialized.value = true;
+        return;
+      }
+
+      // Mobile-specific initialization
       await speech.initialize(
         onStatus: (status) {
           if (status == 'notListening') {
@@ -83,11 +90,8 @@ class SpeechService extends GetxService {
 
       _volumeStreamController.add(0.0);
       isInitialized.value = true;
-
-      return true;
     } catch (e) {
-      isInitialized.value = true; // Set to true anyway to unblock the UI
-      return false;
+      AppLogger.error('Error initializing speech service: $e');
     }
   }
 
@@ -168,6 +172,16 @@ class SpeechService extends GetxService {
   // Speech-to-Text functionality with proper error handling
   Future<bool> startListening(Function(String) onResult) async {
     print('SpeechService: startListening called');
+
+    if (PlatformHelper.isWeb) {
+      // Web-specific implementation or show unsupported message
+      Get.snackbar(
+        'Not Supported',
+        'Voice input is not supported in web version',
+        snackPosition: SnackPosition.BOTTOM,
+      );
+      return false;
+    }
 
     if (!isInitialized.value) {
       print('SpeechService: Not initialized, cannot start listening');

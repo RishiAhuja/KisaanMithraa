@@ -4,27 +4,44 @@ import 'dart:io';
 import 'package:path_provider/path_provider.dart';
 
 class AppLogger {
-  static final Logger _logger = Logger(
-    printer: PrettyPrinter(
-      methodCount: 2,
-      errorMethodCount: 8,
-      lineLength: 120,
-      colors: true,
-      printEmojis: true,
-    ),
-  );
-
+  static Logger? _logger;
   static File? _logFile;
 
   static Future<void> initializeLogger() async {
-    final directory = await getApplicationDocumentsDirectory();
-    final logDirectory = Directory('${directory.path}/logs');
-    if (!await logDirectory.exists()) {
-      await logDirectory.create();
-    }
+    if (kIsWeb) {
+      // Web-specific logger initialization
+      _logger = Logger(
+        printer: PrettyPrinter(
+          methodCount: 0,
+          errorMethodCount: 5,
+          lineLength: 50,
+          colors: false,
+          printEmojis: true,
+          printTime: true,
+        ),
+      );
+    } else {
+      // Mobile-specific logger initialization with file output
+      _logger = Logger(
+        printer: PrettyPrinter(
+          methodCount: 2,
+          errorMethodCount: 8,
+          lineLength: 120,
+          colors: true,
+          printEmojis: true,
+          printTime: true,
+        ),
+      );
 
-    final date = DateTime.now().toIso8601String().split('T')[0];
-    _logFile = File('${logDirectory.path}/app_log_$date.log');
+      final directory = await getApplicationDocumentsDirectory();
+      final logDirectory = Directory('${directory.path}/logs');
+      if (!await logDirectory.exists()) {
+        await logDirectory.create();
+      }
+
+      final date = DateTime.now().toIso8601String().split('T')[0];
+      _logFile = File('${logDirectory.path}/app_log_$date.log');
+    }
   }
 
   static Future<void> _writeToFile(String level, dynamic message,
@@ -38,39 +55,38 @@ class AppLogger {
     await _logFile?.writeAsString(logMessage, mode: FileMode.append);
   }
 
-  static Future<void> error(dynamic message,
-      [dynamic error, StackTrace? stackTrace]) async {
-    if (kDebugMode) {
-      _logger.e(message, error: error, stackTrace: stackTrace);
-      await _writeToFile('ERROR', message, error, stackTrace);
+  static void error(String message, [dynamic error, StackTrace? stackTrace]) {
+    _logger?.e(message, error: error, stackTrace: stackTrace);
+    if (!kIsWeb) {
+      _writeToFile('ERROR', message, error, stackTrace);
     }
   }
 
-  static Future<void> info(dynamic message) async {
-    if (kDebugMode) {
-      _logger.i(message);
-      await _writeToFile('INFO', message);
+  static void info(String message) {
+    _logger?.i(message);
+    if (!kIsWeb) {
+      _writeToFile('INFO', message);
     }
   }
 
-  static Future<void> warning(dynamic message) async {
-    if (kDebugMode) {
-      _logger.w(message);
-      await _writeToFile('WARNING', message);
+  static void warning(String message) {
+    _logger?.w(message);
+    if (!kIsWeb) {
+      _writeToFile('WARNING', message);
     }
   }
 
-  static Future<void> debug(dynamic message) async {
-    if (kDebugMode) {
-      _logger.d(message);
-      await _writeToFile('DEBUG', message);
+  static void debug(String message) {
+    _logger?.d(message);
+    if (!kIsWeb) {
+      _writeToFile('DEBUG', message);
     }
   }
 
-  static Future<void> success(dynamic message) async {
-    if (kDebugMode) {
-      _logger.i('✅ $message');
-      await _writeToFile('SUCCESS', '✅ $message');
+  static void success(String message) {
+    _logger?.i('✅ $message');
+    if (!kIsWeb) {
+      _writeToFile('SUCCESS', '✅ $message');
     }
   }
 

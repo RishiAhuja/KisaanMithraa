@@ -59,6 +59,7 @@ dependencies:
   avatar_glow:
   flutter_tts:
   permission_handler:
+  path_provider_platform_interface:
   introduction_screen: ^3.1.12
   flutter_localizations:
     sdk: flutter

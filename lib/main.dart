@@ -52,6 +52,10 @@ Future<void> main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+
   await AppLogger.initializeLogger();
   await Hive.initFlutter();
   Hive.registerAdapter(UserModelAdapter());

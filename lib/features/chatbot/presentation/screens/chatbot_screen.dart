@@ -42,6 +42,7 @@ class ChatbotScreen extends GetView<ChatbotController> {
 
     AppLogger.debug('ChatbotScreen: Starting speech service initialization');
 
+    // Set timeout for initialization
     Future.delayed(const Duration(seconds: 6), () {
       if (!_isServiceReady.value) {
         AppLogger.debug(
@@ -51,21 +52,21 @@ class ChatbotScreen extends GetView<ChatbotController> {
     });
 
     try {
-      final initialized = await _speechService.initializeSpeech();
+      await _speechService.initializeSpeech();
 
-      if (initialized) {
-        print('ChatbotScreen: Speech service initialized successfully');
-
+      // Check if speech service is properly initialized
+      if (_speechService.isInitialized.value) {
+        AppLogger.debug(
+            'ChatbotScreen: Speech service initialized successfully');
         await _speechService.setLanguage(controller.currentLanguage.value);
         _isServiceReady.value = true;
-        AppLogger.debug('ChatbotScreen: Service ready state set to true');
       } else {
         AppLogger.debug(
             'ChatbotScreen: Speech service initialization failed, setting ready anyway');
         _isServiceReady.value = true;
       }
     } catch (e) {
-      print('ChatbotScreen: Error during initialization: $e');
+      AppLogger.error('ChatbotScreen: Error during initialization: $e');
       _isServiceReady.value = true;
     }
   }

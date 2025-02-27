@@ -111,7 +111,7 @@ class CreateCooperativeController extends GetxController {
     }
 
     try {
-      AppLogger.debug(currentUser.value?.id);
+      AppLogger.debug(currentUser.value?.id ?? "null");
       isLoading.value = true;
 
       final uniqueCropTypes = selectedMembers
