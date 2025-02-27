@@ -20,6 +20,19 @@ typedef String MessageIfAbsent(String messageStr, List<dynamic> args);
 class MessageLookup extends MessageLookupByLibrary {
   String get localeName => 'en';
 
+  static String m0(season) => "Best crops for ${season}";
+
+  static String m1(name) => "Welcome ${name}! How can I help you today?";
+
   final messages = _notInlinedMessages(_notInlinedMessages);
-  static Map<String, Function> _notInlinedMessages(_) => <String, Function>{};
+  static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
+    "chatbotEmptyTitle": MessageLookupByLibrary.simpleMessage(
+      "Ask me anything about farming",
+    ),
+    "chatbotInputHint": MessageLookupByLibrary.simpleMessage(
+      "Ask anything about farming...",
+    ),
+    "chatbotSuggestionCrops": m0,
+    "chatbotWelcome": m1,
+  };
 }

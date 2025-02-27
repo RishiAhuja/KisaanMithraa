@@ -1,4 +1,5 @@
 import 'package:cropconnect/core/services/locale/locale_service.dart';
+import 'package:cropconnect/core/theme/app_colors.dart';
 import 'package:cropconnect/features/auth/presentation/screens/register_screen.dart';
 import 'package:cropconnect/features/onboarding/domain/models/crop_model.dart';
 import 'package:cropconnect/features/onboarding/presentation/controller/onboarding_controller.dart';
@@ -135,41 +136,46 @@ class _LanguageSelectionPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Lottie.asset(
-          'assets/animations/mitra_avatar.json',
-          width: 200,
-          height: 200,
-        ),
-        const SizedBox(height: 32),
-        Text(
-          'Choose Your Language',
-          style: Theme.of(context).textTheme.headlineMedium,
-        ),
-        const SizedBox(height: 48),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 24),
-          child: Column(
-            children: [
-              _LanguageCard(
-                title: 'English',
-                subtitle: 'I speak English',
-                icon: '🇬🇧',
-                onTap: () => onLanguageSelected('en'),
+    return SingleChildScrollView(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 24),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Lottie.asset(
+              'assets/animations/mitra_avatar.json',
+              width: 200,
+              height: 200,
+            ),
+            const SizedBox(height: 32),
+            Text(
+              'Choose Your Language',
+              style: Theme.of(context).textTheme.headlineMedium,
+            ),
+            const SizedBox(height: 48),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 24),
+              child: Column(
+                children: [
+                  _LanguageCard(
+                    title: 'English',
+                    subtitle: 'I speak English',
+                    icon: '🇬🇧',
+                    onTap: () => onLanguageSelected('en'),
+                  ),
+                  const SizedBox(height: 16),
+                  _LanguageCard(
+                    title: 'हिंदी',
+                    subtitle: 'मैं हिंदी बोलता/बोलती हूं',
+                    icon: '🇮🇳',
+                    onTap: () => onLanguageSelected('hi'),
+                  ),
+                ],
               ),
-              const SizedBox(height: 16),
-              _LanguageCard(
-                title: 'हिंदी',
-                subtitle: 'मैं हिंदी बोलता/बोलती हूं',
-                icon: '🇮🇳',
-                onTap: () => onLanguageSelected('hi'),
-              ),
-            ],
-          ),
+            ),
+          ],
         ),
-      ],
+      ),
     );
   }
 }
@@ -178,63 +184,119 @@ class _NameInputPage extends StatelessWidget {
   final VoidCallback onBack;
   final VoidCallback onNext;
   final onboardingController = Get.find<OnboardingController>();
+  final _formKey = GlobalKey<FormState>();
 
   _NameInputPage({required this.onBack, required this.onNext});
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Lottie.asset(
-          'assets/animations/mitra_avatar.json',
-          width: 200,
-          height: 200,
-        ),
-        const SizedBox(height: 32),
-        Text(
-          'What should I call you?',
-          style: Theme.of(context).textTheme.headlineMedium,
-        ),
-        const SizedBox(height: 48),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 32),
-          child: TextField(
-            textAlign: TextAlign.center,
-            style: Theme.of(context).textTheme.titleLarge,
-            onChanged: (value) => onboardingController.setName(value),
-            decoration: InputDecoration(
-              hintText: 'Enter your name',
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(16),
-              ),
-            ),
-          ),
-        ),
-        const SizedBox(height: 24),
-        Align(
-          alignment: Alignment.center,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
+    return SingleChildScrollView(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 24),
+        child: Form(
+          key: _formKey,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              TextButton.icon(
-                onPressed: () {
-                  onBack();
-                  onboardingController.resetLanguage();
-                },
-                icon: const Icon(Icons.arrow_back),
-                label: const Text('Go back'),
+              Lottie.asset(
+                'assets/animations/mitra_avatar.json',
+                width: 200,
+                height: 200,
               ),
-              ElevatedButton(
-                onPressed: () {
-                  onboardingController.name.value.isNotEmpty ? onNext() : null;
-                },
-                child: Text('Next'),
+              const SizedBox(height: 32),
+              Text(
+                'What should I call you?',
+                style: Theme.of(context).textTheme.headlineMedium,
               ),
+              const SizedBox(height: 48),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 32),
+                child: TextFormField(
+                  textAlign: TextAlign.center,
+                  style: Theme.of(context).textTheme.titleLarge,
+                  onChanged: (value) => onboardingController.setName(value),
+                  validator: (value) {
+                    if (value == null || value.trim().isEmpty) {
+                      return 'Please enter your name';
+                    }
+                    if (value.trim().length < 2) {
+                      return 'Name must be at least 2 characters';
+                    }
+                    return null;
+                  },
+                  decoration: InputDecoration(
+                    hintText: 'Enter your name',
+                    errorStyle: TextStyle(
+                      color: Theme.of(context).colorScheme.error,
+                      fontSize: 12,
+                    ),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(16),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(16),
+                      borderSide: BorderSide(
+                        color: Theme.of(context).colorScheme.primary,
+                        width: 2,
+                      ),
+                    ),
+                    errorBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(16),
+                      borderSide: BorderSide(
+                        color: Theme.of(context).colorScheme.error,
+                        width: 2,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 24),
+              Align(
+                alignment: Alignment.center,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    TextButton.icon(
+                      onPressed: () {
+                        onBack();
+                        onboardingController.resetLanguage();
+                      },
+                      icon: const Icon(Icons.arrow_back),
+                      label: const Text('Go back'),
+                    ),
+                    Obx(() => ElevatedButton(
+                          onPressed:
+                              onboardingController.name.value.trim().isEmpty
+                                  ? null
+                                  : () {
+                                      if (_formKey.currentState?.validate() ??
+                                          false) {
+                                        onNext();
+                                      }
+                                    },
+                          style: ElevatedButton.styleFrom(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 24,
+                              vertical: 12,
+                            ),
+                          ),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Text('Next'),
+                              const SizedBox(width: 8),
+                              Icon(Icons.arrow_forward,
+                                  size: 16, color: AppColors.backgroundLight),
+                            ],
+                          ),
+                        )),
+                  ],
+                ),
+              )
             ],
           ),
-        )
-      ],
+        ),
+      ),
     );
   }
 }
@@ -250,114 +312,121 @@ class _LocationSelectionPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Lottie.asset(
-          'assets/animations/location.json',
-          width: 200,
-          height: 200,
-        ),
-        const SizedBox(height: 32),
-        Text(
-          'Where are you from?',
-          style: Theme.of(context).textTheme.headlineMedium,
-        ),
-        const SizedBox(height: 48),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 32),
-          child: Column(
-            children: [
-              Container(
-                decoration: BoxDecoration(
-                  border: Border.all(
-                    color: Theme.of(context).primaryColor.withOpacity(0.2),
-                  ),
-                  borderRadius: BorderRadius.circular(16),
-                ),
-                child: Obx(() => DropdownButton<String>(
-                      value: onboardingController.selectedState.value.isEmpty
-                          ? null
-                          : onboardingController.selectedState.value,
-                      hint: Text('Select State'),
-                      isExpanded: true,
-                      underline: SizedBox(),
-                      padding: EdgeInsets.symmetric(horizontal: 16),
-                      borderRadius: BorderRadius.circular(16),
-                      items: onboardingController.stateCities.keys
-                          .map((String state) {
-                        return DropdownMenuItem<String>(
-                          value: state,
-                          child: Text(state),
-                        );
-                      }).toList(),
-                      onChanged: (String? newValue) {
-                        if (newValue != null) {
-                          onboardingController.setState(newValue);
-                        }
-                      },
-                    )),
-              ),
-              const SizedBox(height: 16),
-              Obx(() => Container(
+    return SingleChildScrollView(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 24),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Lottie.asset(
+              'assets/animations/location.json',
+              width: 200,
+              height: 200,
+            ),
+            const SizedBox(height: 32),
+            Text(
+              'Where are you from?',
+              style: Theme.of(context).textTheme.headlineMedium,
+            ),
+            const SizedBox(height: 48),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 32),
+              child: Column(
+                children: [
+                  Container(
                     decoration: BoxDecoration(
                       border: Border.all(
                         color: Theme.of(context).primaryColor.withOpacity(0.2),
                       ),
                       borderRadius: BorderRadius.circular(16),
                     ),
-                    child: DropdownButton<String>(
-                      value: onboardingController.selectedCity.value.isEmpty
-                          ? null
-                          : onboardingController.selectedCity.value,
-                      hint: Text('Select City'),
-                      isExpanded: true,
-                      underline: SizedBox(),
-                      padding: EdgeInsets.symmetric(horizontal: 16),
-                      borderRadius: BorderRadius.circular(16),
-                      items: onboardingController
-                          .getCitiesForState(
-                              onboardingController.selectedState.value)
-                          .map((String city) {
-                        return DropdownMenuItem<String>(
-                          value: city,
-                          child: Text(city),
-                        );
-                      }).toList(),
-                      onChanged:
-                          onboardingController.selectedState.value.isEmpty
-                              ? null
-                              : (String? newValue) {
-                                  if (newValue != null) {
-                                    onboardingController.setCity(newValue);
-                                  }
-                                },
-                    ),
-                  )),
-              const SizedBox(height: 32),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  TextButton.icon(
-                    onPressed: onBack,
-                    icon: const Icon(Icons.arrow_back),
-                    label: const Text('Change Name'),
+                    child: Obx(() => DropdownButton<String>(
+                          value:
+                              onboardingController.selectedState.value.isEmpty
+                                  ? null
+                                  : onboardingController.selectedState.value,
+                          hint: Text('Select State'),
+                          isExpanded: true,
+                          underline: SizedBox(),
+                          padding: EdgeInsets.symmetric(horizontal: 16),
+                          borderRadius: BorderRadius.circular(16),
+                          items: onboardingController.stateCities.keys
+                              .map((String state) {
+                            return DropdownMenuItem<String>(
+                              value: state,
+                              child: Text(state),
+                            );
+                          }).toList(),
+                          onChanged: (String? newValue) {
+                            if (newValue != null) {
+                              onboardingController.setState(newValue);
+                            }
+                          },
+                        )),
                   ),
-                  Obx(() => ElevatedButton(
-                        onPressed: onboardingController
-                                    .selectedState.value.isNotEmpty &&
-                                onboardingController
-                                    .selectedCity.value.isNotEmpty
-                            ? onNext
-                            : null,
-                        child: Text('Next'),
+                  const SizedBox(height: 16),
+                  Obx(() => Container(
+                        decoration: BoxDecoration(
+                          border: Border.all(
+                            color:
+                                Theme.of(context).primaryColor.withOpacity(0.2),
+                          ),
+                          borderRadius: BorderRadius.circular(16),
+                        ),
+                        child: DropdownButton<String>(
+                          value: onboardingController.selectedCity.value.isEmpty
+                              ? null
+                              : onboardingController.selectedCity.value,
+                          hint: Text('Select City'),
+                          isExpanded: true,
+                          underline: SizedBox(),
+                          padding: EdgeInsets.symmetric(horizontal: 16),
+                          borderRadius: BorderRadius.circular(16),
+                          items: onboardingController
+                              .getCitiesForState(
+                                  onboardingController.selectedState.value)
+                              .map((String city) {
+                            return DropdownMenuItem<String>(
+                              value: city,
+                              child: Text(city),
+                            );
+                          }).toList(),
+                          onChanged:
+                              onboardingController.selectedState.value.isEmpty
+                                  ? null
+                                  : (String? newValue) {
+                                      if (newValue != null) {
+                                        onboardingController.setCity(newValue);
+                                      }
+                                    },
+                        ),
                       )),
+                  const SizedBox(height: 32),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      TextButton.icon(
+                        onPressed: onBack,
+                        icon: const Icon(Icons.arrow_back),
+                        label: const Text('Change Name'),
+                      ),
+                      Obx(() => ElevatedButton(
+                            onPressed: onboardingController
+                                        .selectedState.value.isNotEmpty &&
+                                    onboardingController
+                                        .selectedCity.value.isNotEmpty
+                                ? onNext
+                                : null,
+                            child: Text('Next'),
+                          )),
+                    ],
+                  ),
                 ],
               ),
-            ],
-          ),
+            ),
+          ],
         ),
-      ],
+      ),
     );
   }
 }
@@ -374,75 +443,80 @@ class _CropSelectionPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Lottie.asset(
-          'assets/animations/mitra_avatar.json',
-          width: 200,
-          height: 200,
-        ),
-        const SizedBox(height: 32),
-        Text(
-          'What crops do you grow?',
-          style: Theme.of(context).textTheme.headlineMedium,
-        ),
-        const SizedBox(height: 16),
-        Text(
-          'Select all that apply',
-          style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                color: Colors.grey[600],
-              ),
-        ),
-        const SizedBox(height: 32),
-        Expanded(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 24),
-            child: GridView.builder(
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 3,
-                childAspectRatio: 1,
-                crossAxisSpacing: 16,
-                mainAxisSpacing: 16,
-              ),
-              itemCount: onboardingController.availableCrops.length,
-              itemBuilder: (context, index) {
-                final crop = onboardingController.availableCrops[index];
-                return Obx(() {
-                  final isSelected =
-                      onboardingController.selectedCrops.contains(crop.id);
-                  return _CropCard(
-                    crop: crop,
-                    isSelected: isSelected,
-                    onTap: () {
-                      print(onboardingController.selectedCrops);
-                      onboardingController.toggleCropSelection(crop.id);
-                    },
-                  );
-                });
-              },
+    return SingleChildScrollView(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 24),
+        child: Column(
+          children: [
+            Lottie.asset(
+              'assets/animations/mitra_avatar.json',
+              width: 200,
+              height: 200,
             ),
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsets.all(24),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              TextButton.icon(
-                onPressed: onBack,
-                icon: const Icon(Icons.arrow_back),
-                label: const Text('Change Location'),
+            const SizedBox(height: 32),
+            Text(
+              'What crops do you grow?',
+              style: Theme.of(context).textTheme.headlineMedium,
+            ),
+            const SizedBox(height: 16),
+            Text(
+              'Select all that apply',
+              style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                    color: Colors.grey[600],
+                  ),
+            ),
+            const SizedBox(height: 32),
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              height: MediaQuery.of(context).size.height * 0.4,
+              child: GridView.builder(
+                physics: const NeverScrollableScrollPhysics(),
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 3,
+                  childAspectRatio: 1,
+                  crossAxisSpacing: 16,
+                  mainAxisSpacing: 16,
+                ),
+                itemCount: onboardingController.availableCrops.length,
+                itemBuilder: (context, index) {
+                  final crop = onboardingController.availableCrops[index];
+                  return Obx(() {
+                    final isSelected =
+                        onboardingController.selectedCrops.contains(crop.id);
+                    return _CropCard(
+                      crop: crop,
+                      isSelected: isSelected,
+                      onTap: () {
+                        print(onboardingController.selectedCrops);
+                        onboardingController.toggleCropSelection(crop.id);
+                      },
+                    );
+                  });
+                },
               ),
-              Obx(() => ElevatedButton(
-                    onPressed: onboardingController.selectedCrops.isNotEmpty
-                        ? onNext
-                        : null,
-                    child: Text('Next'),
-                  )),
-            ],
-          ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(24),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  TextButton.icon(
+                    onPressed: onBack,
+                    icon: const Icon(Icons.arrow_back),
+                    label: const Text('Change Location'),
+                  ),
+                  Obx(() => ElevatedButton(
+                        onPressed: onboardingController.selectedCrops.isNotEmpty
+                            ? onNext
+                            : null,
+                        child: Text('Next'),
+                      )),
+                ],
+              ),
+            ),
+          ],
         ),
-      ],
+      ),
     );
   }
 }

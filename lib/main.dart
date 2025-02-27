@@ -2,7 +2,9 @@ import 'package:cropconnect/core/services/locale/locale_service.dart';
 import 'package:cropconnect/core/theme/app_theme.dart';
 import 'package:cropconnect/features/auth/domain/model/user/pending_invite_model.dart';
 import 'package:cropconnect/features/auth/domain/model/user/user_model.dart';
+import 'package:cropconnect/features/auth/presentation/screens/auth_choice_screen.dart';
 import 'package:cropconnect/features/auth/presentation/screens/otp_screen.dart';
+import 'package:cropconnect/features/auth/presentation/screens/register_screen.dart';
 import 'package:cropconnect/features/chatbot/presentation/bindings/chatbot_binding.dart';
 import 'package:cropconnect/features/chatbot/presentation/screens/chatbot_screen.dart';
 import 'package:cropconnect/features/community/bindings/community_binding.dart';
@@ -15,6 +17,7 @@ import 'package:cropconnect/features/cooperative/presentation/screens/create_coo
 import 'package:cropconnect/features/cooperative/presentation/screens/my_cooperatives_screen.dart';
 import 'package:cropconnect/features/home/presentation/bindings/home_bindings.dart';
 import 'package:cropconnect/features/home/presentation/screen/home_screen.dart';
+import 'package:cropconnect/features/intro/presentation/screens/intro_screen.dart';
 import 'package:cropconnect/features/notification/presentation/controller/notification_controller.dart';
 import 'package:cropconnect/features/notification/presentation/screen/notifications_screen.dart';
 import 'package:cropconnect/features/onboarding/presentation/controller/nearby_cooperatives_controller.dart';
@@ -82,9 +85,14 @@ class MyApp extends StatelessWidget {
           name: '/splash',
           page: () => const SplashScreen(),
         ),
+        GetPage(name: '/auth-choice', page: () => AuthChoiceScreen()),
         GetPage(
           name: '/onboarding',
           page: () => LanguageSelectionScreen(),
+        ),
+        GetPage(
+          name: '/register',
+          page: () => Scaffold(body: const RegisterScreen()),
         ),
         GetPage(
           name: '/otp',
@@ -95,6 +103,7 @@ class MyApp extends StatelessWidget {
           page: () => const HomeScreen(),
           binding: HomeBinding(),
         ),
+        GetPage(name: '/intro', page: () => IntroScreen()),
         GetPage(
           name: '/profile',
           page: () => const ProfileScreen(),

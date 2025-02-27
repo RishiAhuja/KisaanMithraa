@@ -59,6 +59,7 @@ dependencies:
   avatar_glow:
   flutter_tts:
   permission_handler:
+  introduction_screen: ^3.1.12
   flutter_localizations:
     sdk: flutter
   google_maps_flutter: ^2.5.3

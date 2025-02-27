@@ -5,11 +5,11 @@ import '../controllers/auth_controller.dart';
 import '../widgets/custom_text_field.dart';
 
 class RegisterScreen extends GetView<AuthController> {
-  final VoidCallback onBack;
+  final VoidCallback? onBack;
 
   const RegisterScreen({
     Key? key,
-    required this.onBack,
+    this.onBack,
   }) : super(key: key);
 
   @override
@@ -130,7 +130,8 @@ class RegisterScreen extends GetView<AuthController> {
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
                           children: [
                             TextButton.icon(
-                              onPressed: onBack,
+                              onPressed:
+                                  onBack ?? () => Get.toNamed('/auth-choice'),
                               icon: const Icon(Icons.arrow_back),
                               label: const Text('Go Back'),
                             ),

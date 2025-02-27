@@ -212,13 +212,10 @@ class ChatbotScreen extends GetView<ChatbotController> {
 
     AppLogger.debug('Starting speech recognition');
 
-    // Update UI state first for immediate feedback
     controller.isListeningToSpeech.value = true;
     HapticFeedback.mediumImpact();
 
     try {
-      // Call startListening but don't fail the UI based on its result
-      // since the callback might still work even if the initial return is false
       await _speechService.startListening((recognizedText) {
         AppLogger.debug('Recognized text: $recognizedText');
 
@@ -238,12 +235,8 @@ class ChatbotScreen extends GetView<ChatbotController> {
           );
         }
 
-        // Always update UI state after recognition completes
         controller.isListeningToSpeech.value = false;
       });
-
-      // Don't show an error if it still might work
-      // The UI will be updated by the callback if recognition succeeds
     } catch (e) {
       AppLogger.debug('Error in speech recognition: $e');
       controller.isListeningToSpeech.value = false;
@@ -401,13 +394,13 @@ class ChatbotScreen extends GetView<ChatbotController> {
                   color: Colors.transparent,
                   child: InkWell(
                     borderRadius: BorderRadius.circular(24),
-                    onTap: (isEmpty || isLoading)
-                        ? null
-                        : () {
-                            HapticFeedback.mediumImpact();
-                            controller.sendMessage(_textController.text);
-                            _textController.clear();
-                          },
+                    onTap: () {
+                      if (!isEmpty && !isLoading) {
+                        HapticFeedback.mediumImpact();
+                        controller.sendMessage(_textController.text);
+                        _textController.clear();
+                      }
+                    },
                     child: Center(
                       child: AnimatedSwitcher(
                         duration: const Duration(milliseconds: 200),

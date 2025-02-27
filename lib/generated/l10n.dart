@@ -54,6 +54,46 @@ class S {
   static S? maybeOf(BuildContext context) {
     return Localizations.of<S>(context, S);
   }
+
+  /// `Welcome {name}! How can I help you today?`
+  String chatbotWelcome(String name) {
+    return Intl.message(
+      'Welcome $name! How can I help you today?',
+      name: 'chatbotWelcome',
+      desc: 'Welcome message in chatbot with user name',
+      args: [name],
+    );
+  }
+
+  /// `Ask anything about farming...`
+  String get chatbotInputHint {
+    return Intl.message(
+      'Ask anything about farming...',
+      name: 'chatbotInputHint',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Ask me anything about farming`
+  String get chatbotEmptyTitle {
+    return Intl.message(
+      'Ask me anything about farming',
+      name: 'chatbotEmptyTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Best crops for {season}`
+  String chatbotSuggestionCrops(String season) {
+    return Intl.message(
+      'Best crops for $season',
+      name: 'chatbotSuggestionCrops',
+      desc: '',
+      args: [season],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

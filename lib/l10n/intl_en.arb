@@ -1,1 +1,23 @@
-{}
+{
+    "chatbotWelcome": "Welcome {name}! How can I help you today?",
+    "@chatbotWelcome": {
+        "description": "Welcome message in chatbot with user name",
+        "placeholders": {
+            "name": {
+                "type": "String",
+                "example": "John"
+            }
+        }
+    },
+    "chatbotInputHint": "Ask anything about farming...",
+    "chatbotEmptyTitle": "Ask me anything about farming",
+    "chatbotSuggestionCrops": "Best crops for {season}",
+    "@chatbotSuggestionCrops": {
+        "placeholders": {
+            "season": {
+                "type": "String",
+                "example": "summer"
+            }
+        }
+    }
+}

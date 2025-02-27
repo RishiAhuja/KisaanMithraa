@@ -8,8 +8,6 @@ class MitraHelperService extends GetxController {
   Future<void> showMessage(String message) async {
     isVisible.value = true;
     isTyping.value = true;
-
-    // Simulate typing effect
     currentMessage.value = '';
     for (int i = 0; i < message.length; i++) {
       currentMessage.value += message[i];

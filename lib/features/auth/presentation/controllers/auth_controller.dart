@@ -64,12 +64,12 @@ class AuthController extends GetxController {
         return true;
       } else {
         AppLogger.info('User is not logged in, navigating to register screen');
-        await Get.offAllNamed('/onboarding');
+        await Get.offAllNamed('/intro');
         return false;
       }
     } catch (e) {
       AppLogger.error('Failed to initialize auth state', e);
-      await Get.offAllNamed('/onboarding');
+      await Get.offAllNamed('/intro');
       return false;
     }
   }
