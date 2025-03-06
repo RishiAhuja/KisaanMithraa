@@ -3,6 +3,7 @@ import 'package:cropconnect/features/auth/domain/model/user/user_model.dart';
 import 'package:cropconnect/features/home/presentation/provider/home_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class HomeScreen extends GetView<HomeController> {
   const HomeScreen({Key? key}) : super(key: key);
@@ -10,13 +11,14 @@ class HomeScreen extends GetView<HomeController> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final appLocalizations = AppLocalizations.of(context)!;
 
     return Scaffold(
       appBar: AppBar(
         backgroundColor: theme.colorScheme.surface,
         elevation: 0,
         title: Text(
-          'Kisan Mitra',
+          appLocalizations.appTitle, // Use localized string
           style: theme.textTheme.titleLarge?.copyWith(
             color: theme.colorScheme.primary,
             fontWeight: FontWeight.bold,
@@ -92,7 +94,7 @@ class HomeScreen extends GetView<HomeController> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    'Welcome back,',
+                                    appLocalizations.welcome,
                                     style:
                                         theme.textTheme.titleMedium?.copyWith(
                                       color: Colors.white.withOpacity(0.9),
@@ -117,17 +119,18 @@ class HomeScreen extends GetView<HomeController> {
                   const SizedBox(height: 24),
 
                   // Create Cooperative Button
-                  _buildCreateCooperativeButton(theme),
+                  _buildCreateCooperativeButton(theme, appLocalizations),
                   const SizedBox(height: 24),
 
                   // Personal Information Card
                   _buildInfoCard(
                     context,
-                    title: 'Personal Information',
+                    title: appLocalizations.personalInfo,
                     icon: Icons.person_outline_rounded,
                     items: {
-                      'Phone': user.phoneNumber,
-                      'Member since': user.createdAt.toString().split(' ')[0],
+                      appLocalizations.phone: user.phoneNumber,
+                      appLocalizations.memberSince:
+                          user.createdAt.toString().split(' ')[0],
                     },
                   ),
                   const SizedBox(height: 16),
@@ -135,12 +138,13 @@ class HomeScreen extends GetView<HomeController> {
                   // Farm Details Card
                   _buildInfoCard(
                     context,
-                    title: 'Farm Details',
+                    title: appLocalizations.farmDetails,
                     icon: Icons.grass_outlined,
                     items: {
-                      'Soil Type': user.soilType ?? 'Not specified',
-                      'Location': _formatLocation(user),
-                      'Crops': _formatCrops(user.crops),
+                      appLocalizations.soilType:
+                          user.soilType ?? appLocalizations.notSpecified,
+                      appLocalizations.location: _formatLocation(user),
+                      appLocalizations.crops: _formatCrops(user.crops),
                     },
                   ),
                   const SizedBox(height: 24),
@@ -153,7 +157,7 @@ class HomeScreen extends GetView<HomeController> {
       bottomNavigationBar: const BottomNavBar(currentIndex: 0),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () => Get.toNamed('/chatbot'),
-        label: const Text('Ask Mitra'),
+        label: Text(appLocalizations.askMitra),
         icon: const Icon(Icons.chat_bubble_outline),
         backgroundColor: theme.colorScheme.primary,
       ),
@@ -249,7 +253,8 @@ class HomeScreen extends GetView<HomeController> {
     );
   }
 
-  Widget _buildCreateCooperativeButton(ThemeData theme) {
+  Widget _buildCreateCooperativeButton(
+      ThemeData theme, AppLocalizations appLocalizations) {
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(16),
@@ -295,7 +300,7 @@ class HomeScreen extends GetView<HomeController> {
                 ),
                 const SizedBox(width: 12),
                 Text(
-                  'Create Cooperative',
+                  appLocalizations.createCooperative,
                   style: theme.textTheme.titleMedium?.copyWith(
                     color: Colors.white,
                     fontWeight: FontWeight.bold,

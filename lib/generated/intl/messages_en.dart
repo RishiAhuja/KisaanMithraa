@@ -20,19 +20,60 @@ typedef String MessageIfAbsent(String messageStr, List<dynamic> args);
 class MessageLookup extends MessageLookupByLibrary {
   String get localeName => 'en';
 
-  static String m0(season) => "Best crops for ${season}";
-
-  static String m1(name) => "Welcome ${name}! How can I help you today?";
-
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
-    "chatbotEmptyTitle": MessageLookupByLibrary.simpleMessage(
+    "appTitle": MessageLookupByLibrary.simpleMessage("Kisan Mitra"),
+    "askAnything": MessageLookupByLibrary.simpleMessage(
       "Ask me anything about farming",
     ),
-    "chatbotInputHint": MessageLookupByLibrary.simpleMessage(
+    "askFarmingQuestion": MessageLookupByLibrary.simpleMessage(
       "Ask anything about farming...",
     ),
-    "chatbotSuggestionCrops": m0,
-    "chatbotWelcome": m1,
+    "askMitra": MessageLookupByLibrary.simpleMessage("Ask Mitra"),
+    "bestCrops": MessageLookupByLibrary.simpleMessage(
+      "Best crops for this season",
+    ),
+    "bestCropsQuestion": MessageLookupByLibrary.simpleMessage(
+      "What are the best crops to plant this season?",
+    ),
+    "createCooperative": MessageLookupByLibrary.simpleMessage(
+      "Create Cooperative",
+    ),
+    "crops": MessageLookupByLibrary.simpleMessage("Crops"),
+    "farmDetails": MessageLookupByLibrary.simpleMessage("Farm Details"),
+    "initializing": MessageLookupByLibrary.simpleMessage("Initializing..."),
+    "location": MessageLookupByLibrary.simpleMessage("Location"),
+    "locationNotSet": MessageLookupByLibrary.simpleMessage("Location not set"),
+    "memberSince": MessageLookupByLibrary.simpleMessage("Member since"),
+    "noCrops": MessageLookupByLibrary.simpleMessage("No crops specified"),
+    "notSpecified": MessageLookupByLibrary.simpleMessage("Not specified"),
+    "organicFarming": MessageLookupByLibrary.simpleMessage("Organic farming"),
+    "organicFarmingQuestion": MessageLookupByLibrary.simpleMessage(
+      "Tips for organic farming?",
+    ),
+    "personalInfo": MessageLookupByLibrary.simpleMessage(
+      "Personal Information",
+    ),
+    "pestControl": MessageLookupByLibrary.simpleMessage("Pest control tips"),
+    "pestControlQuestion": MessageLookupByLibrary.simpleMessage(
+      "How can I deal with common pests?",
+    ),
+    "phone": MessageLookupByLibrary.simpleMessage("Phone"),
+    "recognized": MessageLookupByLibrary.simpleMessage("Recognized: \""),
+    "soilType": MessageLookupByLibrary.simpleMessage("Soil Type"),
+    "speechError": MessageLookupByLibrary.simpleMessage(
+      "Speech recognition error: ",
+    ),
+    "speechInitializing": MessageLookupByLibrary.simpleMessage(
+      "Speech recognition is initializing. Please wait...",
+    ),
+    "startSpeaking": MessageLookupByLibrary.simpleMessage("Start Speaking"),
+    "waterConservation": MessageLookupByLibrary.simpleMessage(
+      "Water conservation",
+    ),
+    "waterConservationQuestion": MessageLookupByLibrary.simpleMessage(
+      "How can I conserve water?",
+    ),
+    "welcome": MessageLookupByLibrary.simpleMessage("Welcome back,"),
   };
 }

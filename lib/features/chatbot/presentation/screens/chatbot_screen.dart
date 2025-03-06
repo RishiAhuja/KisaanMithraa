@@ -10,6 +10,7 @@ import 'package:get/get.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 // ignore: must_be_immutable
 class ChatbotScreen extends GetView<ChatbotController> {
@@ -54,7 +55,6 @@ class ChatbotScreen extends GetView<ChatbotController> {
     try {
       await _speechService.initializeSpeech();
 
-      // Check if speech service is properly initialized
       if (_speechService.isInitialized.value) {
         AppLogger.debug(
             'ChatbotScreen: Speech service initialized successfully');
@@ -83,9 +83,11 @@ class ChatbotScreen extends GetView<ChatbotController> {
 
   @override
   Widget build(BuildContext context) {
+    final appLocalizations = AppLocalizations.of(context);
+
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Kisan Mitra'),
+        title: Text(appLocalizations?.appTitle ?? 'Kisan Mitra'),
         elevation: 0,
         actions: [
           Obx(() {
@@ -161,6 +163,8 @@ class ChatbotScreen extends GetView<ChatbotController> {
   }
 
   Widget _buildEmptyState(BuildContext context) {
+    final appLocalizations = AppLocalizations.of(context);
+
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -172,7 +176,7 @@ class ChatbotScreen extends GetView<ChatbotController> {
           ),
           const SizedBox(height: 16),
           Text(
-            'Ask me anything about farming',
+            appLocalizations?.askAnything ?? 'Ask me anything about farming',
             style: Theme.of(context).textTheme.titleMedium?.copyWith(
                   color:
                       Theme.of(context).colorScheme.onSurface.withOpacity(0.7),
@@ -182,8 +186,8 @@ class ChatbotScreen extends GetView<ChatbotController> {
           Obx(() => ElevatedButton.icon(
                 icon: Icon(Icons.mic, color: AppColors.backgroundLight),
                 label: Text(_isServiceReady.value
-                    ? 'Start Speaking'
-                    : 'Initializing...'),
+                    ? appLocalizations?.startSpeaking ?? 'Start Speaking'
+                    : appLocalizations?.initializing ?? 'Initializing...'),
                 onPressed: _isServiceReady.value
                     ? () => _startSpeechRecognition(context)
                     : null,
@@ -201,11 +205,14 @@ class ChatbotScreen extends GetView<ChatbotController> {
   }
 
   void _startSpeechRecognition(BuildContext context) async {
+    final appLocalizations = AppLocalizations.of(context);
+
     if (!_isServiceReady.value) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Speech recognition is initializing. Please wait...'),
-          duration: Duration(seconds: 2),
+        SnackBar(
+          content: Text(appLocalizations?.speechInitializing ??
+              'Speech recognition is initializing. Please wait...'),
+          duration: const Duration(seconds: 2),
         ),
       );
       return;
@@ -226,7 +233,8 @@ class ChatbotScreen extends GetView<ChatbotController> {
           // Show a brief confirmation toast
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content: Text('Recognized: "$recognizedText"'),
+              content: Text(
+                  '${appLocalizations?.recognized ?? 'Recognized: "'}"$recognizedText"'),
               duration: const Duration(seconds: 2),
               behavior: SnackBarBehavior.floating,
               shape: RoundedRectangleBorder(
@@ -244,7 +252,9 @@ class ChatbotScreen extends GetView<ChatbotController> {
 
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text('Speech recognition error: ${e.toString()}'),
+          content: Text(
+              (appLocalizations?.speechError ?? 'Speech recognition error: ') +
+                  '${e.toString()}'),
           duration: const Duration(seconds: 3),
         ),
       );
@@ -252,6 +262,8 @@ class ChatbotScreen extends GetView<ChatbotController> {
   }
 
   Widget _buildSuggestionsBar(BuildContext context) {
+    final appLocalizations = AppLocalizations.of(context);
+
     return Container(
       height: 40,
       margin: const EdgeInsets.symmetric(horizontal: 16),
@@ -260,27 +272,35 @@ class ChatbotScreen extends GetView<ChatbotController> {
         scrollDirection: Axis.horizontal,
         children: [
           _SuggestionChip(
-            label: 'Best crops for this season',
+            label: appLocalizations?.bestCrops ?? 'Best crops for this season',
             onTap: () => _handleSuggestion(
-                'What are the best crops to plant this season?', context),
+                appLocalizations?.bestCropsQuestion ??
+                    'What are the best crops to plant this season?',
+                context),
           ),
           const SizedBox(width: 8),
           _SuggestionChip(
-            label: 'Pest control tips',
-            onTap: () =>
-                _handleSuggestion('How can I deal with common pests?', context),
+            label: appLocalizations?.pestControl ?? 'Pest control tips',
+            onTap: () => _handleSuggestion(
+                appLocalizations?.pestControlQuestion ??
+                    'How can I deal with common pests?',
+                context),
           ),
           const SizedBox(width: 8),
           _SuggestionChip(
-            label: 'Water conservation',
-            onTap: () =>
-                _handleSuggestion('How can I conserve water?', context),
+            label: appLocalizations?.waterConservation ?? 'Water conservation',
+            onTap: () => _handleSuggestion(
+                appLocalizations?.waterConservationQuestion ??
+                    'How can I conserve water?',
+                context),
           ),
           const SizedBox(width: 8),
           _SuggestionChip(
-            label: 'Organic farming',
-            onTap: () =>
-                _handleSuggestion('Tips for organic farming?', context),
+            label: appLocalizations?.organicFarming ?? 'Organic farming',
+            onTap: () => _handleSuggestion(
+                appLocalizations?.organicFarmingQuestion ??
+                    'Tips for organic farming?',
+                context),
           ),
         ],
       ),
@@ -288,6 +308,8 @@ class ChatbotScreen extends GetView<ChatbotController> {
   }
 
   Widget _buildInputField(BuildContext context) {
+    final appLocalizations = AppLocalizations.of(context);
+
     return Container(
       margin: const EdgeInsets.all(12),
       decoration: BoxDecoration(
@@ -347,7 +369,8 @@ class ChatbotScreen extends GetView<ChatbotController> {
                   ),
                   decoration: InputDecoration(
                     isDense: true,
-                    hintText: 'Ask anything about farming...',
+                    hintText: appLocalizations?.askFarmingQuestion ??
+                        'Ask anything about farming...',
                     hintStyle: TextStyle(
                       color: Colors.grey.shade400,
                       fontWeight: FontWeight.w400,
@@ -396,10 +419,13 @@ class ChatbotScreen extends GetView<ChatbotController> {
                   child: InkWell(
                     borderRadius: BorderRadius.circular(24),
                     onTap: () {
-                      if (!isEmpty && !isLoading) {
+                      final text = _textController.text.trim();
+                      if (text.isNotEmpty && !isLoading) {
                         HapticFeedback.mediumImpact();
-                        controller.sendMessage(_textController.text);
+                        controller.sendMessage(text);
                         _textController.clear();
+                        // Request focus to dismiss keyboard
+                        FocusScope.of(context).unfocus();
                       }
                     },
                     child: Center(

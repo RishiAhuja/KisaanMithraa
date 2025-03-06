@@ -55,43 +55,258 @@ class S {
     return Localizations.of<S>(context, S);
   }
 
-  /// `Welcome {name}! How can I help you today?`
-  String chatbotWelcome(String name) {
+  /// `Kisan Mitra`
+  String get appTitle {
+    return Intl.message('Kisan Mitra', name: 'appTitle', desc: '', args: []);
+  }
+
+  /// `Welcome back,`
+  String get welcome {
+    return Intl.message('Welcome back,', name: 'welcome', desc: '', args: []);
+  }
+
+  /// `Create Cooperative`
+  String get createCooperative {
     return Intl.message(
-      'Welcome $name! How can I help you today?',
-      name: 'chatbotWelcome',
-      desc: 'Welcome message in chatbot with user name',
-      args: [name],
+      'Create Cooperative',
+      name: 'createCooperative',
+      desc: '',
+      args: [],
     );
   }
 
-  /// `Ask anything about farming...`
-  String get chatbotInputHint {
+  /// `Personal Information`
+  String get personalInfo {
     return Intl.message(
-      'Ask anything about farming...',
-      name: 'chatbotInputHint',
+      'Personal Information',
+      name: 'personalInfo',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Farm Details`
+  String get farmDetails {
+    return Intl.message(
+      'Farm Details',
+      name: 'farmDetails',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Ask Mitra`
+  String get askMitra {
+    return Intl.message('Ask Mitra', name: 'askMitra', desc: '', args: []);
+  }
+
+  /// `Soil Type`
+  String get soilType {
+    return Intl.message('Soil Type', name: 'soilType', desc: '', args: []);
+  }
+
+  /// `Location`
+  String get location {
+    return Intl.message('Location', name: 'location', desc: '', args: []);
+  }
+
+  /// `Crops`
+  String get crops {
+    return Intl.message('Crops', name: 'crops', desc: '', args: []);
+  }
+
+  /// `Phone`
+  String get phone {
+    return Intl.message('Phone', name: 'phone', desc: '', args: []);
+  }
+
+  /// `Member since`
+  String get memberSince {
+    return Intl.message(
+      'Member since',
+      name: 'memberSince',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Location not set`
+  String get locationNotSet {
+    return Intl.message(
+      'Location not set',
+      name: 'locationNotSet',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No crops specified`
+  String get noCrops {
+    return Intl.message(
+      'No crops specified',
+      name: 'noCrops',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Not specified`
+  String get notSpecified {
+    return Intl.message(
+      'Not specified',
+      name: 'notSpecified',
       desc: '',
       args: [],
     );
   }
 
   /// `Ask me anything about farming`
-  String get chatbotEmptyTitle {
+  String get askAnything {
     return Intl.message(
       'Ask me anything about farming',
-      name: 'chatbotEmptyTitle',
+      name: 'askAnything',
       desc: '',
       args: [],
     );
   }
 
-  /// `Best crops for {season}`
-  String chatbotSuggestionCrops(String season) {
+  /// `Start Speaking`
+  String get startSpeaking {
     return Intl.message(
-      'Best crops for $season',
-      name: 'chatbotSuggestionCrops',
+      'Start Speaking',
+      name: 'startSpeaking',
       desc: '',
-      args: [season],
+      args: [],
+    );
+  }
+
+  /// `Initializing...`
+  String get initializing {
+    return Intl.message(
+      'Initializing...',
+      name: 'initializing',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Best crops for this season`
+  String get bestCrops {
+    return Intl.message(
+      'Best crops for this season',
+      name: 'bestCrops',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `What are the best crops to plant this season?`
+  String get bestCropsQuestion {
+    return Intl.message(
+      'What are the best crops to plant this season?',
+      name: 'bestCropsQuestion',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Pest control tips`
+  String get pestControl {
+    return Intl.message(
+      'Pest control tips',
+      name: 'pestControl',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `How can I deal with common pests?`
+  String get pestControlQuestion {
+    return Intl.message(
+      'How can I deal with common pests?',
+      name: 'pestControlQuestion',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Water conservation`
+  String get waterConservation {
+    return Intl.message(
+      'Water conservation',
+      name: 'waterConservation',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `How can I conserve water?`
+  String get waterConservationQuestion {
+    return Intl.message(
+      'How can I conserve water?',
+      name: 'waterConservationQuestion',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Organic farming`
+  String get organicFarming {
+    return Intl.message(
+      'Organic farming',
+      name: 'organicFarming',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Tips for organic farming?`
+  String get organicFarmingQuestion {
+    return Intl.message(
+      'Tips for organic farming?',
+      name: 'organicFarmingQuestion',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Ask anything about farming...`
+  String get askFarmingQuestion {
+    return Intl.message(
+      'Ask anything about farming...',
+      name: 'askFarmingQuestion',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Speech recognition is initializing. Please wait...`
+  String get speechInitializing {
+    return Intl.message(
+      'Speech recognition is initializing. Please wait...',
+      name: 'speechInitializing',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Recognized: "`
+  String get recognized {
+    return Intl.message(
+      'Recognized: "',
+      name: 'recognized',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Speech recognition error: `
+  String get speechError {
+    return Intl.message(
+      'Speech recognition error: ',
+      name: 'speechError',
+      desc: '',
+      args: [],
     );
   }
 }

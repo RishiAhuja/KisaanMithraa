@@ -39,6 +39,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'features/auth/bindings/auth_binding.dart';
 import 'features/auth/domain/model/user/cooperative_membership_model.dart';
 import 'features/cooperative/presentation/controllers/cooperative_details_controller.dart';
@@ -47,6 +48,7 @@ import 'features/community/presentation/screens/community_screen.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
   await dotenv.load(fileName: ".env");
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
@@ -63,8 +65,8 @@ Future<void> main() async {
   Hive.registerAdapter(PendingInviteAdapter());
   await Hive.openBox<UserModel>('users');
 
-  await Get.putAsync<SharedPreferences>(() => SharedPreferences.getInstance(),
-      permanent: true);
+  final sharedPreferences = await SharedPreferences.getInstance();
+  Get.put<SharedPreferences>(sharedPreferences, permanent: true);
 
   final binding = AuthBinding();
   binding.dependencies();
@@ -78,121 +80,133 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GetMaterialApp(
-      title: 'Your App Name',
-      theme: AppTheme.lightTheme,
-      initialRoute: '/splash',
-      localizationsDelegates: AppLocalizations.localizationsDelegates,
-      supportedLocales: AppLocalizations.supportedLocales,
-      getPages: [
-        GetPage(
-          name: '/splash',
-          page: () => const SplashScreen(),
-        ),
-        GetPage(name: '/auth-choice', page: () => AuthChoiceScreen()),
-        GetPage(
-          name: '/onboarding',
-          page: () => LanguageSelectionScreen(),
-        ),
-        GetPage(
-          name: '/register',
-          page: () => Scaffold(body: const RegisterScreen()),
-        ),
-        GetPage(
-          name: '/otp',
-          page: () => const OTPScreen(),
-        ),
-        GetPage(
-          name: '/home',
-          page: () => const HomeScreen(),
-          binding: HomeBinding(),
-        ),
-        GetPage(name: '/intro', page: () => IntroScreen()),
-        GetPage(
-          name: '/profile',
-          page: () => const ProfileScreen(),
-          binding: ProfileBinding(),
-        ),
-        GetPage(
-          name: '/create-cooperative',
-          page: () => const CreateCooperativeScreen(),
-          binding: CreateCooperativeBinding(),
-        ),
-        GetPage(
-          name: '/community',
-          page: () => const CommunityScreen(),
-          binding: CommunityBinding(),
-        ),
-        GetPage(
-          name: '/my-cooperatives',
-          page: () => const MyCooperativesScreen(),
-          binding: BindingsBuilder(() {
-            Get.lazyPut(() => MyCooperativesController());
-          }),
-        ),
-        GetPage(
-          name: '/notifications',
-          page: () => const NotificationsScreen(),
-          binding: BindingsBuilder(() {
-            Get.lazyPut(() => NotificationsController());
-          }),
-        ),
-        GetPage(
-          name: '/cooperative-management',
-          page: () => const CooperativeManagementScreen(),
-          binding: BindingsBuilder(() {
-            Get.lazyPut(() => CooperativeManagementController());
-          }),
-        ),
-        GetPage(
-          name: '/cooperative-details',
-          page: () => const CooperativeDetailsScreen(),
-          binding: BindingsBuilder(() {
-            Get.lazyPut(() => CooperativeDetailsController());
-          }),
-        ),
-        GetPage(
-          name: '/resource-pool',
-          page: () => const ResourceListingsScreen(),
-          binding: BindingsBuilder(() {
-            Get.lazyPut(
-              () => ResourcePoolingController(),
-            );
-          }),
-        ),
-        GetPage(
-          name: '/create-listing',
-          page: () => const CreateListingScreen(),
-          // binding: ResourcePoolingBinding(),
-        ),
-        GetPage(
-          name: '/listing-details',
-          page: () => const ListingDetailsScreen(),
-          // binding: ResourcePoolingBinding(),
-        ),
-        GetPage(
-          name: '/my-listing-details',
-          page: () => const MyListingDetailsScreen(),
-          // binding: ResourcePoolingBinding(),
-        ),
-        GetPage(
-          name: '/chatbot',
-          page: () => ChatbotScreen(),
-          binding: ChatbotBinding(),
-        ),
-        GetPage(
-          name: '/nearby-cooperatives',
-          page: () => NearbyCooperativesPage(
-            onBack: () {},
-            onNext: () {
-              Get.toNamed('/home');
-            },
+    final localeService = Get.find<LocaleService>();
+
+    return GetX<LocaleService>(
+      builder: (_) => GetMaterialApp(
+        title: 'Kisan Mitra',
+        theme: AppTheme.lightTheme,
+        darkTheme: AppTheme.darkTheme,
+        themeMode: ThemeMode.light,
+        locale: localeService.locale,
+        supportedLocales: localeService.supportedLocales,
+        localizationsDelegates: const [
+          AppLocalizations.delegate,
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate,
+        ],
+        initialRoute: '/splash',
+        getPages: [
+          GetPage(
+            name: '/splash',
+            page: () => const SplashScreen(),
           ),
-          binding: BindingsBuilder(() {
-            Get.lazyPut(() => NearbyCooperativesController());
-          }),
-        ),
-      ],
+          GetPage(name: '/auth-choice', page: () => AuthChoiceScreen()),
+          GetPage(
+            name: '/onboarding',
+            page: () => LanguageSelectionScreen(),
+          ),
+          GetPage(
+            name: '/register',
+            page: () => Scaffold(body: const RegisterScreen()),
+          ),
+          GetPage(
+            name: '/otp',
+            page: () => const OTPScreen(),
+          ),
+          GetPage(
+            name: '/home',
+            page: () => const HomeScreen(),
+            binding: HomeBinding(),
+          ),
+          GetPage(name: '/intro', page: () => IntroScreen()),
+          GetPage(
+            name: '/profile',
+            page: () => const ProfileScreen(),
+            binding: ProfileBinding(),
+          ),
+          GetPage(
+            name: '/create-cooperative',
+            page: () => const CreateCooperativeScreen(),
+            binding: CreateCooperativeBinding(),
+          ),
+          GetPage(
+            name: '/community',
+            page: () => const CommunityScreen(),
+            binding: CommunityBinding(),
+          ),
+          GetPage(
+            name: '/my-cooperatives',
+            page: () => const MyCooperativesScreen(),
+            binding: BindingsBuilder(() {
+              Get.lazyPut(() => MyCooperativesController());
+            }),
+          ),
+          GetPage(
+            name: '/notifications',
+            page: () => const NotificationsScreen(),
+            binding: BindingsBuilder(() {
+              Get.lazyPut(() => NotificationsController());
+            }),
+          ),
+          GetPage(
+            name: '/cooperative-management',
+            page: () => const CooperativeManagementScreen(),
+            binding: BindingsBuilder(() {
+              Get.lazyPut(() => CooperativeManagementController());
+            }),
+          ),
+          GetPage(
+            name: '/cooperative-details',
+            page: () => const CooperativeDetailsScreen(),
+            binding: BindingsBuilder(() {
+              Get.lazyPut(() => CooperativeDetailsController());
+            }),
+          ),
+          GetPage(
+            name: '/resource-pool',
+            page: () => const ResourceListingsScreen(),
+            binding: BindingsBuilder(() {
+              Get.lazyPut(
+                () => ResourcePoolingController(),
+              );
+            }),
+          ),
+          GetPage(
+            name: '/create-listing',
+            page: () => const CreateListingScreen(),
+            // binding: ResourcePoolingBinding(),
+          ),
+          GetPage(
+            name: '/listing-details',
+            page: () => const ListingDetailsScreen(),
+            // binding: ResourcePoolingBinding(),
+          ),
+          GetPage(
+            name: '/my-listing-details',
+            page: () => const MyListingDetailsScreen(),
+            // binding: ResourcePoolingBinding(),
+          ),
+          GetPage(
+            name: '/chatbot',
+            page: () => ChatbotScreen(),
+            binding: ChatbotBinding(),
+          ),
+          GetPage(
+            name: '/nearby-cooperatives',
+            page: () => NearbyCooperativesPage(
+              onBack: () {},
+              onNext: () {
+                Get.toNamed('/home');
+              },
+            ),
+            binding: BindingsBuilder(() {
+              Get.lazyPut(() => NearbyCooperativesController());
+            }),
+          ),
+        ],
+      ),
     );
   }
 }

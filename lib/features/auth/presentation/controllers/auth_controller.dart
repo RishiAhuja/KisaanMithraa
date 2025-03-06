@@ -8,7 +8,9 @@ import 'package:cropconnect/utils/app_logger.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 import '../../domain/repositories/auth_repo.dart';
+import '../../data/services/auth_service.dart';
 
 class AuthController extends GetxController {
   final AuthRepository _authRepository;
@@ -16,6 +18,7 @@ class AuthController extends GetxController {
   final _firestore = FirebaseFirestore.instance;
   final _storageService = Get.find<UserStorageService>();
   final _auth = FirebaseAuth.instance;
+  late final FirebaseAuthService authService;
   final phoneNumberController = TextEditingController();
   final phoneNumber = ''.obs;
   final isLoading = false.obs;
@@ -34,6 +37,7 @@ class AuthController extends GetxController {
   @override
   void onInit() {
     super.onInit();
+    authService = FirebaseAuthService();
     phoneNumberController.addListener(() {
       phoneNumber.value = phoneNumberController.text;
     });
@@ -42,6 +46,10 @@ class AuthController extends GetxController {
   @override
   void onClose() {
     phoneNumberController.dispose();
+    // Dispose reCAPTCHA if on web
+    // if (kIsWeb) {
+    //   authService.dispose();
+    // }
     super.onClose();
   }
 
@@ -77,34 +85,73 @@ class AuthController extends GetxController {
   Future<void> registerWithPhone() async {
     try {
       isLoading.value = true;
+      error.value = null;
 
       if (phoneNumber.value.isEmpty) {
         error.value = 'Please enter a phone number';
+        isLoading.value = false;
         return;
       }
 
-      await _auth.verifyPhoneNumber(
-        phoneNumber: '+91${phoneNumber.value}',
-        verificationCompleted: (credential) async {
-          await _handleVerificationCompleted(credential);
-        },
-        verificationFailed: (e) {
-          error.value = 'Verification failed: ${e.message}';
-          isLoading.value = false;
-        },
-        codeSent: (String verId, int? resendToken) {
-          verificationId.value = verId;
-          Get.toNamed('/otp');
-          isLoading.value = false;
-        },
-        codeAutoRetrievalTimeout: (String verId) {
-          verificationId.value = verId;
-          isLoading.value = false;
-        },
-      );
+      // Format phone number with India country code
+      final formattedPhoneNumber = '+91${phoneNumber.value}';
+
+      // For web platform, ensure reCAPTCHA is properly set up
+      if (kIsWeb) {
+        AppLogger.debug('Web platform detected, showing reCAPTCHA');
+        // WebRecaptcha.showRecaptcha();
+
+        // // Check if reCAPTCHA is available
+        // if (!WebRecaptcha.isRecaptchaAvailable()) {
+        //   error.value = 'reCAPTCHA is not properly initialized';
+        //   isLoading.value = false;
+        //   return;
+        // }
+
+        // try {
+        //   // Use the enhanced web-specific auth service
+        //   final verId = await authService.verifyPhone(formattedPhoneNumber);
+        //   verificationId.value = verId;
+        //   _verificationId = verId;
+
+        //   // Hide reCAPTCHA after verification
+        //   WebRecaptcha.hideRecaptcha();
+
+        //   Get.toNamed('/otp');
+        // } catch (e) {
+        //   AppLogger.error('Web phone verification failed', e);
+        //   error.value = 'Verification failed: ${e.toString()}';
+
+        //   // If error occurs, reset reCAPTCHA
+        //   WebRecaptcha.resetRecaptcha();
+        // }
+      } else {
+        // Original mobile-specific implementation
+        await _auth.verifyPhoneNumber(
+          phoneNumber: formattedPhoneNumber,
+          timeout: const Duration(seconds: 60),
+          verificationCompleted: (credential) async {
+            await _handleVerificationCompleted(credential);
+          },
+          verificationFailed: (e) {
+            error.value = 'Verification failed: ${e.message}';
+            isLoading.value = false;
+          },
+          codeSent: (String verId, int? resendToken) {
+            verificationId.value = verId;
+            _verificationId = verId;
+            Get.toNamed('/otp');
+          },
+          codeAutoRetrievalTimeout: (String verId) {
+            verificationId.value = verId;
+            _verificationId = verId;
+          },
+        );
+      }
     } catch (e) {
-      AppLogger.error(e.toString());
+      AppLogger.error('Error in registerWithPhone: ${e.toString()}');
       error.value = e.toString();
+    } finally {
       isLoading.value = false;
     }
   }
@@ -121,12 +168,23 @@ class AuthController extends GetxController {
         throw Exception('Verification ID not found');
       }
 
-      final credential = PhoneAuthProvider.credential(
-        verificationId: verificationId.value,
-        smsCode: otp,
-      );
-
-      await _handleVerificationCompleted(credential);
+      if (kIsWeb) {
+        // Use the enhanced web auth service for OTP verification
+        final userCredential =
+            await authService.verifyOTP(verificationId.value, otp);
+        if (userCredential.user != null) {
+          await _handleVerifiedUser(userCredential.user!);
+        } else {
+          throw Exception('Failed to get user after OTP verification');
+        }
+      } else {
+        // Original implementation
+        final credential = PhoneAuthProvider.credential(
+          verificationId: verificationId.value,
+          smsCode: otp,
+        );
+        await _handleVerificationCompleted(credential);
+      }
     } catch (e) {
       AppLogger.error('Error verifying OTP: $e');
       error.value = e.toString();
@@ -146,56 +204,61 @@ class AuthController extends GetxController {
         throw Exception('Firebase user not found');
       }
 
-      AppLogger.debug('Querying for existing user');
-
-      final userDoc =
-          await _firestore.collection('users').doc(firebaseUser.uid).get();
-
-      UserModel user;
-
-      if (userDoc.exists) {
-        user = UserModel.fromMap(userDoc.data()!, userDoc.id);
-        AppLogger.info('Existing user logged in: ${user.name}');
-      } else {
-        final currentLocation = await _profileController.getCurrentLocation();
-        user = UserModel(
-          id: firebaseUser.uid,
-          name: _onboardingController.name.value,
-          phoneNumber: phoneNumber.value,
-          createdAt: DateTime.now(),
-          cooperatives: [],
-          pendingInvites: [],
-          city: _onboardingController.selectedCity.value,
-          state: _onboardingController.selectedState.value,
-          crops: _onboardingController.selectedCrops.toList(),
-          latitude: currentLocation?.latitude,
-          longitude: currentLocation?.longitude,
-        );
-        await _firestore.collection('users').doc(user.id).set(user.toMap());
-
-        AppLogger.info('New user created: ${user.name}');
-      }
-
-      await _storageService.setHasLoggedIn(true);
-      await _storageService.saveUser(user);
-      AppLogger.debug('User saved to storage');
-      name.value = '';
-      phoneNumber.value = '';
-      _verificationId = null;
-
-      if (userDoc.exists) {
-        Get.offAllNamed('/home');
-      } else {
-        AppLogger.info('Navigating to jpin a coop screen');
-        await Get.delete<NearbyCooperativesController>(force: true);
-        Get.put(NearbyCooperativesController());
-        Get.offAllNamed('/nearby-cooperatives');
-      }
+      await _handleVerifiedUser(firebaseUser);
     } catch (e) {
       AppLogger.error('Error in verification: $e');
       error.value = e.toString();
     } finally {
       isLoading.value = false;
+    }
+  }
+
+  // Extracted common user handling logic to avoid code duplication
+  Future<void> _handleVerifiedUser(User firebaseUser) async {
+    AppLogger.debug('Querying for existing user');
+
+    final userDoc =
+        await _firestore.collection('users').doc(firebaseUser.uid).get();
+
+    UserModel user;
+
+    if (userDoc.exists) {
+      user = UserModel.fromMap(userDoc.data()!, userDoc.id);
+      AppLogger.info('Existing user logged in: ${user.name}');
+    } else {
+      final currentLocation = await _profileController.getCurrentLocation();
+      user = UserModel(
+        id: firebaseUser.uid,
+        name: _onboardingController.name.value,
+        phoneNumber: phoneNumber.value,
+        createdAt: DateTime.now(),
+        cooperatives: [],
+        pendingInvites: [],
+        city: _onboardingController.selectedCity.value,
+        state: _onboardingController.selectedState.value,
+        crops: _onboardingController.selectedCrops.toList(),
+        latitude: currentLocation?.latitude,
+        longitude: currentLocation?.longitude,
+      );
+      await _firestore.collection('users').doc(user.id).set(user.toMap());
+
+      AppLogger.info('New user created: ${user.name}');
+    }
+
+    await _storageService.setHasLoggedIn(true);
+    await _storageService.saveUser(user);
+    AppLogger.debug('User saved to storage');
+    name.value = '';
+    phoneNumber.value = '';
+    _verificationId = null;
+
+    if (userDoc.exists) {
+      Get.offAllNamed('/home');
+    } else {
+      AppLogger.info('Navigating to join a coop screen');
+      await Get.delete<NearbyCooperativesController>(force: true);
+      Get.put(NearbyCooperativesController());
+      Get.offAllNamed('/nearby-cooperatives');
     }
   }
 

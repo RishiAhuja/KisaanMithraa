@@ -2,9 +2,11 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'dart:async';
 import 'package:cropconnect/utils/app_logger.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 
 class FirebaseAuthService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
+  // RecaptchaVerifier? _recaptchaVerifier;
 
   User? get currentUser => _auth.currentUser;
 
@@ -13,30 +15,68 @@ class FirebaseAuthService {
     Completer<String> completer = Completer<String>();
 
     try {
-      await _auth.verifyPhoneNumber(
-        phoneNumber: phoneNumber,
-        timeout: const Duration(seconds: 60),
-        verificationCompleted: (PhoneAuthCredential credential) async {
-          AppLogger.success('Auto verification completed for: $phoneNumber');
-          await _auth.signInWithCredential(credential);
-        },
-        verificationFailed: (FirebaseAuthException e) {
-          AppLogger.error('Phone verification failed', e, e.stackTrace);
-          completer.completeError(e);
-        },
-        codeSent: (String verificationId, int? resendToken) {
-          AppLogger.success(
-              'Verification code sent successfully to: $phoneNumber');
-          completer.complete(verificationId);
-        },
-        codeAutoRetrievalTimeout: (String verificationId) {
-          if (!completer.isCompleted) {
-            AppLogger.warning('Auto retrieval timeout for: $phoneNumber');
+      if (kIsWeb) {
+        // For web platform, use the pre-configured reCAPTCHA from index.html
+        AppLogger.debug('Using web implementation for phone verification');
+
+        // // Access the window.recaptchaVerifier that was set up in index.html
+        // final recaptchaVerifier = js.context.hasProperty('recaptchaVerifier')
+        //     ? js.context['recaptchaVerifier']
+        //     : null;
+
+        // if (recaptchaVerifier == null) {
+        //   AppLogger.error('reCAPTCHA verifier not found in window object');
+        //   throw Exception('reCAPTCHA configuration missing');
+        // }
+
+        // await _auth.verifyPhoneNumber(
+        //   phoneNumber: phoneNumber,
+        //   verificationCompleted: (PhoneAuthCredential credential) async {
+        //     AppLogger.success('Auto verification completed for: $phoneNumber');
+        //     await _auth.signInWithCredential(credential);
+        //   },
+        //   verificationFailed: (FirebaseAuthException e) {
+        //     AppLogger.error('Phone verification failed', e, e.stackTrace);
+        //     completer.completeError(e);
+        //   },
+        //   codeSent: (String verificationId, int? resendToken) {
+        //     AppLogger.success('Verification code sent to: $phoneNumber');
+        //     completer.complete(verificationId);
+        //   },
+        //   codeAutoRetrievalTimeout: (String verificationId) {
+        //     if (!completer.isCompleted) {
+        //       AppLogger.warning('Auto retrieval timeout for: $phoneNumber');
+        //       completer.complete(verificationId);
+        //     }
+        //   },
+        // );
+      } else {
+        // Mobile-specific implementation (existing code)
+        await _auth.verifyPhoneNumber(
+          phoneNumber: phoneNumber,
+          timeout: const Duration(seconds: 60),
+          verificationCompleted: (PhoneAuthCredential credential) async {
+            AppLogger.success('Auto verification completed for: $phoneNumber');
+            await _auth.signInWithCredential(credential);
+          },
+          verificationFailed: (FirebaseAuthException e) {
+            AppLogger.error('Phone verification failed', e, e.stackTrace);
+            completer.completeError(e);
+          },
+          codeSent: (String verificationId, int? resendToken) {
+            AppLogger.success(
+                'Verification code sent successfully to: $phoneNumber');
             completer.complete(verificationId);
-          }
-        },
-        forceResendingToken: null,
-      );
+          },
+          codeAutoRetrievalTimeout: (String verificationId) {
+            if (!completer.isCompleted) {
+              AppLogger.warning('Auto retrieval timeout for: $phoneNumber');
+              completer.complete(verificationId);
+            }
+          },
+          forceResendingToken: null,
+        );
+      }
 
       final result = await completer.future;
       AppLogger.debug('Phone verification process completed');

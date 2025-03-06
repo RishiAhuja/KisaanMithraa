@@ -2,23 +2,23 @@
 <html>
 <head>
   <base href="$FLUTTER_BASE_HREF">
-
   <meta charset="UTF-8">
   <meta content="IE=Edge" http-equiv="X-UA-Compatible">
   <meta name="description" content="A new Flutter project.">
-
   <!-- iOS meta tags & icons -->
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
   <meta name="apple-mobile-web-app-title" content="cropconnect">
   <link rel="apple-touch-icon" href="icons/Icon-192.png">
-
   <!-- Favicon -->
   <link rel="icon" type="image/png" href="favicon.png"/>
-
   <title>cropconnect</title>
   <link rel="manifest" href="manifest.json">
-
+  <!-- Firebase Configuration -->
+  <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-auth-compat.js"></script>
+  <!-- reCAPTCHA -->
+  <script src="https://www.google.com/recaptcha/api.js"></script>
   <script>
     var serviceWorkerVersion = null;
     var scriptLoaded = false;
@@ -32,7 +32,6 @@
       scriptTag.type = 'application/javascript';
       document.body.append(scriptTag);
     }
-
     // Add support for web features
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', function () {
@@ -40,11 +39,54 @@
       });
     }
   </script>
+  <style>
+    #recaptcha-container {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      z-index: 1000;
+      background-color: white;
+      padding: 10px;
+      border-radius: 5px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.2);
+    }
+  </style>
 </head>
 <body>
+  <!-- Add this div for reCAPTCHA with better visibility -->
+  <div id="recaptcha-container"></div>
   <script src="flutter_bootstrap.js" async></script>
   <script>
     window.addEventListener('load', function(ev) {
+      // Initialize Firebase
+      var firebaseConfig = {
+        apiKey: "AIzaSyA-19BHK0m5QW3ISM83iZ40LnHygHQhi24",
+        projectId: "cropconnect-ba639",
+        storageBucket: "cropconnect-ba639.firebasestorage.app",
+        messagingSenderId: "995979342290",
+        appId: "1:995979342290:web:c5e7ad562333189878180b",
+        authDomain: "cropconnect-ba639.firebaseapp.com"
+      };
+      
+      // Initialize Firebase
+      firebase.initializeApp(firebaseConfig);
+      
+      // Configure reCAPTCHA verifier
+      window.recaptchaVerifier = new firebase.auth.RecaptchaVerifier('recaptcha-container', {
+        'size': 'normal',
+        'callback': function(response) {
+          console.log("reCAPTCHA verified successfully");
+        },
+        'expired-callback': function() {
+          console.log("reCAPTCHA expired");
+        }
+      });
+      
+      // Render the reCAPTCHA to be ready when needed
+      window.recaptchaVerifier.render().then(function(widgetId) {
+        window.recaptchaWidgetId = widgetId;
+      });
+      
       // Download main.dart.js
       _flutter.loader.loadEntrypoint({
         serviceWorker: {

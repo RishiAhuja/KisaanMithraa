@@ -32,38 +32,43 @@ dependencies:
     sdk: flutter
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
-  cupertino_icons: ^1.0.8
-  google_fonts: null
-  firebase_auth: ^5.4.2
-  firebase_core: ^3.11.0
-  cloud_firestore: ^5.6.3
-  get: ^4.6.6
-  pinput: ^5.0.1
-  logger: null
-  firebase_auth_mocks: null
-  hive: ^2.2.3
-  hive_flutter: ^1.1.0
-  shared_preferences: null
-  geocoding: ^2.1.1
-  geolocator: ^10.1.0
-  flutter_geocoder_alternative: null
-  timeago: ^3.7.0
-  lucide_icons: null
-  intl: ^0.19.0
-  lottie:
-  flutter_markdown:
+  cupertino_icons:
+  google_fonts: 
+  firebase_auth: 
+  firebase_core: 
+  cloud_firestore: 
+  get:
+  pinput: 
+  logger: 
+  firebase_auth_mocks: 
+  hive: 
+  hive_flutter: 
+  shared_preferences: 
+  geocoding: 
+  geolocator: 
+  flutter_geocoder_alternative: 
+  timeago: 
+  lucide_icons: 
+  intl:
+  lottie: 
+  flutter_markdown: 
   confetti:
-  flutter_dotenv:
+  flutter_dotenv: 
   flutter_svg:
-  speech_to_text:
+  speech_to_text: 
   avatar_glow:
-  flutter_tts:
+  flutter_tts: 
   permission_handler:
   path_provider_platform_interface:
-  introduction_screen: ^3.1.12
+  firebase_auth_platform_interface:
+  introduction_screen: 
+  universal_html:
   flutter_localizations:
     sdk: flutter
-  google_maps_flutter: ^2.5.3
+  google_maps_flutter:
+  firebase_auth_web:
+  flutter_web_plugins:
+    sdk: flutter
 
 dev_dependencies:
   flutter_test:

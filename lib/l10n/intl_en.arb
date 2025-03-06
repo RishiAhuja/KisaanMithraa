@@ -1,23 +1,32 @@
 {
-    "chatbotWelcome": "Welcome {name}! How can I help you today?",
-    "@chatbotWelcome": {
-        "description": "Welcome message in chatbot with user name",
-        "placeholders": {
-            "name": {
-                "type": "String",
-                "example": "John"
-            }
-        }
-    },
-    "chatbotInputHint": "Ask anything about farming...",
-    "chatbotEmptyTitle": "Ask me anything about farming",
-    "chatbotSuggestionCrops": "Best crops for {season}",
-    "@chatbotSuggestionCrops": {
-        "placeholders": {
-            "season": {
-                "type": "String",
-                "example": "summer"
-            }
-        }
-    }
-}
+    "@@locale": "en",
+    "appTitle": "Kisan Mitra",
+    "welcome": "Welcome back,",
+    "createCooperative": "Create Cooperative",
+    "personalInfo": "Personal Information",
+    "farmDetails": "Farm Details",
+    "askMitra": "Ask Mitra",
+    "soilType": "Soil Type",
+    "location": "Location",
+    "crops": "Crops",
+    "phone": "Phone",
+    "memberSince": "Member since",
+    "locationNotSet": "Location not set",
+    "noCrops": "No crops specified",
+    "notSpecified": "Not specified",
+    "askAnything": "Ask me anything about farming",
+    "startSpeaking": "Start Speaking",
+    "initializing": "Initializing...",
+    "bestCrops": "Best crops for this season",
+    "bestCropsQuestion": "What are the best crops to plant this season?",
+    "pestControl": "Pest control tips",
+    "pestControlQuestion": "How can I deal with common pests?",
+    "waterConservation": "Water conservation",
+    "waterConservationQuestion": "How can I conserve water?",
+    "organicFarming": "Organic farming",
+    "organicFarmingQuestion": "Tips for organic farming?",
+    "askFarmingQuestion": "Ask anything about farming...",
+    "speechInitializing": "Speech recognition is initializing. Please wait...",
+    "recognized": "Recognized: \"",
+    "speechError": "Speech recognition error: "
+  }

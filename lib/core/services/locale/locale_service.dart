@@ -7,6 +7,11 @@ class LocaleService extends GetxService {
   final _prefs = Get.find<SharedPreferences>();
   final RxString currentLocale = 'en'.obs;
 
+  final List<Locale> supportedLocales = const [
+    Locale('en'),
+    Locale('hi'),
+  ];
+
   @override
   void onInit() {
     super.onInit();
@@ -18,4 +23,7 @@ class LocaleService extends GetxService {
     await _prefs.setString(_kLocaleKey, languageCode);
     await Get.updateLocale(Locale(languageCode));
   }
+
+  // New helper method to get the current locale object
+  Locale get locale => Locale(currentLocale.value);
 }
