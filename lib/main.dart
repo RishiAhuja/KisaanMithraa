@@ -84,6 +84,7 @@ class MyApp extends StatelessWidget {
 
     return GetX<LocaleService>(
       builder: (_) => GetMaterialApp(
+        debugShowCheckedModeBanner: false,
         title: 'Kisan Mitra',
         theme: AppTheme.lightTheme,
         darkTheme: AppTheme.darkTheme,

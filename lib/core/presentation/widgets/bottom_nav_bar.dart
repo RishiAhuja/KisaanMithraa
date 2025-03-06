@@ -9,58 +9,58 @@ class BottomNavBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    // Get the bottom padding to account for system navigation bar
     final bottomPadding = MediaQuery.of(context).padding.bottom;
 
     return Container(
-      margin: EdgeInsets.only(
-        left: 16,
-        right: 16,
-        // Add bottom padding for system navigation bar
-        bottom: 16 + bottomPadding,
-      ),
-      height: 64, // Base height
+      width: double.infinity,
+      height: 64 + bottomPadding, // Base height plus bottom padding
+      padding: EdgeInsets.only(bottom: bottomPadding),
       decoration: BoxDecoration(
         color: theme.colorScheme.surface,
-        borderRadius: BorderRadius.circular(24),
-        boxShadow: [
-          BoxShadow(
-            color: theme.colorScheme.primary.withOpacity(0.1),
-            blurRadius: 20,
-            offset: const Offset(0, 5),
-          ),
-        ],
+        // boxShadow: [
+        //   BoxShadow(
+        //     color: theme.colorScheme.primary.withOpacity(0.1),
+        //     blurRadius: 10,
+        //     offset: const Offset(0, -2),
+        //   ),
+        // ],
       ),
-      // Remove SafeArea since we're handling padding manually
       child: Row(
         children: [
           _buildNavItem(
             context: context,
             index: 0,
-            icon: Icons.home_rounded,
+            icon: Icons.home,
             label: 'Home',
             isSelected: currentIndex == 0,
           ),
           _buildNavItem(
             context: context,
             index: 1,
-            icon: Icons.explore_rounded,
+            icon: Icons.group,
             label: 'Community',
             isSelected: currentIndex == 1,
           ),
           _buildNavItem(
             context: context,
             index: 2,
-            icon: Icons.groups_rounded,
-            label: 'Cooperative',
+            icon: Icons.storefront,
+            label: 'AgriMart',
             isSelected: currentIndex == 2,
           ),
           _buildNavItem(
             context: context,
             index: 3,
-            icon: Icons.person_rounded,
-            label: 'Profile',
+            icon: Icons.smart_toy,
+            label: 'AgriAssist',
             isSelected: currentIndex == 3,
+          ),
+          _buildNavItem(
+            context: context,
+            index: 4,
+            icon: Icons.support,
+            label: 'AgriHelp',
+            isSelected: currentIndex == 4,
           ),
         ],
       ),
@@ -84,25 +84,25 @@ class BottomNavBar extends StatelessWidget {
               Get.offAllNamed('/home');
               break;
             case 1:
-              Get.offAllNamed('/community');
-              break;
-            case 2:
               Get.offAllNamed('/my-cooperatives');
               break;
+            case 2:
+              // AgriMart - leave empty for now
+              break;
             case 3:
-              Get.offAllNamed('/profile');
+              Get.offAllNamed('/chatbot');
+              break;
+            case 4:
+              // AgriHelp - leave empty for now
               break;
           }
         },
         child: AnimatedContainer(
           duration: const Duration(milliseconds: 200),
-          margin: const EdgeInsets.symmetric(
-              horizontal: 4, vertical: 4), // Reduced margins
-          padding: const EdgeInsets.symmetric(vertical: 4), // Reduced padding
+          margin: const EdgeInsets.symmetric(horizontal: 2, vertical: 4),
+          padding: const EdgeInsets.symmetric(vertical: 4),
           decoration: BoxDecoration(
-            color: isSelected
-                ? theme.colorScheme.primary.withOpacity(0.1)
-                : Colors.transparent,
+            color: Colors.transparent,
             borderRadius: BorderRadius.circular(16),
           ),
           child: Column(
@@ -114,9 +114,9 @@ class BottomNavBar extends StatelessWidget {
                 color: isSelected
                     ? theme.colorScheme.primary
                     : theme.colorScheme.onSurface.withOpacity(0.6),
-                size: 24, // Reduced icon size
+                size: 22, // Slightly reduced icon size for 5 items
               ),
-              const SizedBox(height: 2), // Reduced spacing
+              const SizedBox(height: 2),
               Text(
                 label,
                 textAlign: TextAlign.center,

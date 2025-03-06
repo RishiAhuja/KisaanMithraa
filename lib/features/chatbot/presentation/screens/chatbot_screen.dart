@@ -1,3 +1,4 @@
+import 'package:cropconnect/core/presentation/widgets/bottom_nav_bar.dart';
 import 'package:cropconnect/core/theme/app_colors.dart';
 import 'package:cropconnect/features/chatbot/data/service/speech_service.dart';
 import 'package:cropconnect/features/chatbot/domain/models/chat_message_model.dart';
@@ -43,7 +44,6 @@ class ChatbotScreen extends GetView<ChatbotController> {
 
     AppLogger.debug('ChatbotScreen: Starting speech service initialization');
 
-    // Set timeout for initialization
     Future.delayed(const Duration(seconds: 6), () {
       if (!_isServiceReady.value) {
         AppLogger.debug(
@@ -86,6 +86,8 @@ class ChatbotScreen extends GetView<ChatbotController> {
     final appLocalizations = AppLocalizations.of(context);
 
     return Scaffold(
+      bottomNavigationBar: const BottomNavBar(currentIndex: 3),
+      extendBody: true,
       appBar: AppBar(
         title: Text(appLocalizations?.appTitle ?? 'Kisan Mitra'),
         elevation: 0,
@@ -143,6 +145,7 @@ class ChatbotScreen extends GetView<ChatbotController> {
               ),
               _buildSuggestionsBar(context),
               _buildInputField(context),
+              const SizedBox(height: 60),
             ],
           ),
           Obx(() => Positioned.fill(
@@ -253,8 +256,7 @@ class ChatbotScreen extends GetView<ChatbotController> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(
-              (appLocalizations?.speechError ?? 'Speech recognition error: ') +
-                  '${e.toString()}'),
+              '${appLocalizations?.speechError ?? 'Speech recognition error: '}${e.toString()}'),
           duration: const Duration(seconds: 3),
         ),
       );

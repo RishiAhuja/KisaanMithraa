@@ -63,6 +63,7 @@ dependencies:
   firebase_auth_platform_interface:
   introduction_screen: 
   universal_html:
+  flutter_lucide:
   flutter_localizations:
     sdk: flutter
   google_maps_flutter:
