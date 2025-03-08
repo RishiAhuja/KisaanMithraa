@@ -1,4 +1,6 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cropconnect/core/presentation/widgets/bottom_nav_bar.dart';
+import 'package:cropconnect/core/services/debug/debug_service.dart';
 import 'package:cropconnect/core/theme/app_colors.dart';
 // import 'package:cropconnect/features/auth/domain/model/user/user_model.dart';
 import 'package:cropconnect/features/home/presentation/provider/home_provider.dart';
@@ -13,7 +15,9 @@ class HomeScreen extends GetView<HomeController> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    // final appLocalizations = AppLocalizations.of(context)!;
+    // final appLocalizations = AppLocalizations.of(conAutoSizeText)!;
+    final debugService = Get.find<DebugService>();
+    int debugTapCount = 0;
 
     return Scaffold(
         backgroundColor: theme.colorScheme.primary,
@@ -32,7 +36,7 @@ class HomeScreen extends GetView<HomeController> {
 
             return NestedScrollView(
               headerSliverBuilder:
-                  (BuildContext context, bool innerBoxIsScrolled) {
+                  (BuildContext conAutoSizeText, bool innerBoxIsScrolled) {
                 return [
                   SliverAppBar(
                     expandedHeight: 300.0,
@@ -58,7 +62,7 @@ class HomeScreen extends GetView<HomeController> {
                                 ),
                               ),
                               const SizedBox(width: 12),
-                              Text(
+                              AutoSizeText(
                                 "Farmer's Friend",
                                 style: theme.textTheme.titleLarge?.copyWith(
                                   color: Colors.white,
@@ -68,8 +72,44 @@ class HomeScreen extends GetView<HomeController> {
                             ],
                           ),
                           Row(
+                            mainAxisSize: MainAxisSize
+                                .min, // Keep row as small as possible
                             children: [
+                              Obx(() => debugService.isDebugMode.value
+                                  ? IconButton(
+                                      padding:
+                                          EdgeInsets.zero, // Remove padding
+                                      constraints: BoxConstraints(
+                                        minWidth: 36, // Reduced minimum width
+                                        minHeight: 36, // Reduced minimum height
+                                      ),
+                                      icon: Icon(Icons.bug_report,
+                                          color: Colors.amber),
+                                      tooltip: 'Debug Tools',
+                                      onPressed: () => Get.toNamed('/debug'),
+                                    )
+                                  : GestureDetector(
+                                      onTap: () {
+                                        debugTapCount++;
+                                        if (debugTapCount >= 5) {
+                                          debugTapCount = 0;
+                                          debugService.toggleDebugMode();
+                                        }
+                                      },
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Icon(
+                                          Icons.more_vert,
+                                          color: Colors.transparent,
+                                        ),
+                                      ),
+                                    )),
                               IconButton(
+                                padding: EdgeInsets.zero, // Remove padding
+                                constraints: BoxConstraints(
+                                  minWidth: 36, // Reduced minimum width
+                                  minHeight: 36, // Reduced minimum height
+                                ),
                                 icon: Icon(
                                   Icons.notifications_outlined,
                                   color: Colors.white,
@@ -79,6 +119,11 @@ class HomeScreen extends GetView<HomeController> {
                                 },
                               ),
                               IconButton(
+                                padding: EdgeInsets.zero,
+                                constraints: BoxConstraints(
+                                  minWidth: 36,
+                                  minHeight: 36,
+                                ),
                                 icon: Icon(
                                   Icons.person_rounded,
                                   color: Colors.white,
@@ -124,11 +169,10 @@ class HomeScreen extends GetView<HomeController> {
                                           mainAxisAlignment:
                                               MainAxisAlignment.spaceBetween,
                                           children: [
-                                            Text(
+                                            AutoSizeText(
                                               'Hello ${user.name.split(' ')[0]}, today\'s farming updates!',
                                               style: TextStyle(
                                                 color: Colors.white,
-                                                fontSize: 16,
                                                 fontWeight: FontWeight.w500,
                                               ),
                                             ),
@@ -169,7 +213,7 @@ class HomeScreen extends GetView<HomeController> {
                                                           CrossAxisAlignment
                                                               .start,
                                                       children: [
-                                                        Text(
+                                                        AutoSizeText(
                                                           '32°C',
                                                           style: TextStyle(
                                                             fontSize: 28,
@@ -178,7 +222,7 @@ class HomeScreen extends GetView<HomeController> {
                                                             color: Colors.white,
                                                           ),
                                                         ),
-                                                        Text(
+                                                        AutoSizeText(
                                                           '${user.city}, ${user.state}',
                                                           style: TextStyle(
                                                             color: Colors.white
@@ -205,11 +249,14 @@ class HomeScreen extends GetView<HomeController> {
                                                         ),
                                                         const SizedBox(
                                                             width: 4),
-                                                        Text(
+                                                        AutoSizeText(
                                                           '68% Humidity',
-                                                          style: TextStyle(
+                                                          maxLines: 1,
+                                                          minFontSize: 10,
+                                                          style: theme.textTheme
+                                                              .bodyMedium
+                                                              ?.copyWith(
                                                             color: Colors.white,
-                                                            fontSize: 14,
                                                           ),
                                                         ),
                                                       ],
@@ -224,7 +271,7 @@ class HomeScreen extends GetView<HomeController> {
                                                         ),
                                                         const SizedBox(
                                                             width: 4),
-                                                        Text(
+                                                        AutoSizeText(
                                                           '30% Rain',
                                                           style: TextStyle(
                                                             color: Colors.white,
@@ -256,7 +303,7 @@ class HomeScreen extends GetView<HomeController> {
                                                   ),
                                                   const SizedBox(width: 8),
                                                   Expanded(
-                                                    child: Text(
+                                                    child: AutoSizeText(
                                                       'AI Tip: Evening is optimal for crop irrigation today',
                                                       style: TextStyle(
                                                         color: Colors.white,
@@ -278,8 +325,7 @@ class HomeScreen extends GetView<HomeController> {
                             ),
                           ),
                           titlePadding: EdgeInsets.zero,
-                          title:
-                              Container(), // Empty container for title when collapsed
+                          title: Container(),
                         ),
                       ],
                     ),
@@ -313,8 +359,8 @@ class HomeScreen extends GetView<HomeController> {
         ));
   }
 
-  Widget _buildPriorityAlerts(BuildContext context) {
-    final theme = Theme.of(context);
+  Widget _buildPriorityAlerts(BuildContext conAutoSizeText) {
+    final theme = Theme.of(conAutoSizeText);
 
     return Container(
       margin: EdgeInsets.all(16),
@@ -342,7 +388,7 @@ class HomeScreen extends GetView<HomeController> {
                     color: Colors.amber,
                   ),
                   SizedBox(width: 8),
-                  Text(
+                  AutoSizeText(
                     'Priority Alerts',
                     style: theme.textTheme.titleMedium?.copyWith(
                       fontWeight: FontWeight.bold,
@@ -354,7 +400,7 @@ class HomeScreen extends GetView<HomeController> {
                 onPressed: () {},
                 child: Row(
                   children: [
-                    Text('View all'),
+                    AutoSizeText('View all'),
                     Icon(Icons.arrow_forward, size: 16),
                   ],
                 ),
@@ -390,7 +436,7 @@ class HomeScreen extends GetView<HomeController> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
+                      AutoSizeText(
                         'Heavy rain expected in next 3 days, secure your wheat crop',
                         style: TextStyle(
                           fontWeight: FontWeight.w600,
@@ -404,7 +450,7 @@ class HomeScreen extends GetView<HomeController> {
                           color: Colors.orange[50],
                           borderRadius: BorderRadius.circular(16),
                         ),
-                        child: Text(
+                        child: AutoSizeText(
                           'View Tips',
                           style: TextStyle(
                             color: Colors.orange[800],
@@ -445,7 +491,7 @@ class HomeScreen extends GetView<HomeController> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
+                      AutoSizeText(
                         'PM Kisan Scheme last date March 15th!',
                         style: TextStyle(
                           fontWeight: FontWeight.w600,
@@ -459,7 +505,7 @@ class HomeScreen extends GetView<HomeController> {
                           color: Colors.green[50],
                           borderRadius: BorderRadius.circular(16),
                         ),
-                        child: Text(
+                        child: AutoSizeText(
                           'Apply Now',
                           style: TextStyle(
                             color: Colors.green[700],
@@ -478,30 +524,28 @@ class HomeScreen extends GetView<HomeController> {
     );
   }
 
-  Widget _buildMarketPricesSection(BuildContext context) {
-    final theme = Theme.of(context);
+  Widget _buildMarketPricesSection(BuildContext conAutoSizeText) {
+    final theme = Theme.of(conAutoSizeText);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
           padding: const EdgeInsets.fromLTRB(16, 8, 16, 16),
-          child: Text(
+          child: AutoSizeText(
             'Market Prices',
             style: theme.textTheme.titleLarge?.copyWith(
               fontWeight: FontWeight.bold,
             ),
           ),
         ),
-
-        // Market price cards in horizontal scrolling
         SingleChildScrollView(
           scrollDirection: Axis.horizontal,
           padding: EdgeInsets.symmetric(horizontal: 8),
           child: Row(
             children: [
               _buildCropPriceCard(
-                context,
+                conAutoSizeText,
                 crop: 'Wheat',
                 price: '₹2,340',
                 change: '+₹120',
@@ -509,7 +553,7 @@ class HomeScreen extends GetView<HomeController> {
                 icon: '🌾',
               ),
               _buildCropPriceCard(
-                context,
+                conAutoSizeText,
                 crop: 'Corn',
                 price: '₹1,890',
                 change: '-₹45',
@@ -517,7 +561,7 @@ class HomeScreen extends GetView<HomeController> {
                 icon: '🌽',
               ),
               _buildCropPriceCard(
-                context,
+                conAutoSizeText,
                 crop: 'Potato',
                 price: '₹1,450',
                 change: '+₹85',
@@ -525,7 +569,7 @@ class HomeScreen extends GetView<HomeController> {
                 icon: '🥔',
               ),
               _buildCropPriceCard(
-                context,
+                conAutoSizeText,
                 crop: 'Rice',
                 price: '₹2,100',
                 change: '+₹95',
@@ -540,13 +584,15 @@ class HomeScreen extends GetView<HomeController> {
   }
 
   Widget _buildCropPriceCard(
-    BuildContext context, {
+    BuildContext conAutoSizeText, {
     required String crop,
     required String price,
     required String change,
     required bool isPositive,
     required String icon,
   }) {
+    final theme = Theme.of(conAutoSizeText);
+
     return Container(
       width: 150,
       margin: EdgeInsets.symmetric(horizontal: 8),
@@ -571,13 +617,13 @@ class HomeScreen extends GetView<HomeController> {
               color: Colors.amber[50],
               borderRadius: BorderRadius.circular(12),
             ),
-            child: Text(
+            child: AutoSizeText(
               icon,
               style: TextStyle(fontSize: 24),
             ),
           ),
           SizedBox(height: 12),
-          Text(
+          AutoSizeText(
             crop,
             style: TextStyle(
               fontWeight: FontWeight.bold,
@@ -585,26 +631,32 @@ class HomeScreen extends GetView<HomeController> {
             ),
           ),
           SizedBox(height: 4),
-          Text(
+          AutoSizeText(
             'Per Quintal',
-            style: TextStyle(
-              color: Colors.grey[600],
-              fontSize: 12,
+            maxLines: 1,
+            minFontSize: 10,
+            style: theme.textTheme.bodySmall?.copyWith(
+              color: theme.colorScheme.onSurfaceVariant,
             ),
           ),
           SizedBox(height: 8),
-          Text(
+          AutoSizeText(
             price,
-            style: TextStyle(
+            maxLines: 1,
+            minFontSize: 14,
+            style: theme.textTheme.headlineSmall?.copyWith(
               fontWeight: FontWeight.bold,
-              fontSize: 20,
             ),
           ),
           SizedBox(height: 4),
-          Text(
+          AutoSizeText(
             change,
-            style: TextStyle(
-              color: isPositive ? Colors.green[700] : Colors.red[700],
+            maxLines: 1,
+            minFontSize: 12,
+            style: theme.textTheme.bodySmall?.copyWith(
+              color: isPositive
+                  ? theme.colorScheme.tertiary
+                  : theme.colorScheme.error,
               fontWeight: FontWeight.bold,
             ),
           ),
@@ -613,23 +665,21 @@ class HomeScreen extends GetView<HomeController> {
     );
   }
 
-  Widget _buildFeaturesSection(BuildContext context) {
-    final theme = Theme.of(context);
+  Widget _buildFeaturesSection(BuildContext conAutoSizeText) {
+    final theme = Theme.of(conAutoSizeText);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
           padding: const EdgeInsets.fromLTRB(16, 24, 16, 16),
-          child: Text(
+          child: AutoSizeText(
             'Features',
             style: theme.textTheme.titleLarge?.copyWith(
               fontWeight: FontWeight.bold,
             ),
           ),
         ),
-
-        // Feature cards in grid
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 12),
           child: GridView.count(
@@ -638,17 +688,17 @@ class HomeScreen extends GetView<HomeController> {
             physics: NeverScrollableScrollPhysics(),
             childAspectRatio: 0.9,
             children: [
-              _buildFeatureCard(context,
+              _buildFeatureCard(conAutoSizeText,
                   icon: Icons.group, title: 'Farmer Groups'),
-              _buildFeatureCard(context,
+              _buildFeatureCard(conAutoSizeText,
                   icon: Icons.insert_chart, title: 'Market Rates'),
-              _buildFeatureCard(context,
+              _buildFeatureCard(conAutoSizeText,
                   icon: Icons.menu_book, title: 'Farming Guide'),
-              _buildFeatureCard(context,
+              _buildFeatureCard(conAutoSizeText,
                   icon: Icons.local_shipping, title: 'Transport'),
-              _buildFeatureCard(context,
+              _buildFeatureCard(conAutoSizeText,
                   icon: Icons.account_balance_wallet, title: 'Loans'),
-              _buildFeatureCard(context,
+              _buildFeatureCard(conAutoSizeText,
                   icon: Icons.water_drop, title: 'Weather'),
             ],
           ),
@@ -657,8 +707,10 @@ class HomeScreen extends GetView<HomeController> {
     );
   }
 
-  Widget _buildFeatureCard(BuildContext context,
+  Widget _buildFeatureCard(BuildContext conAutoSizeText,
       {required IconData icon, required String title}) {
+    final theme = Theme.of(conAutoSizeText);
+
     return Card(
       elevation: 0,
       shape: RoundedRectangleBorder(
@@ -685,13 +737,11 @@ class HomeScreen extends GetView<HomeController> {
                 ),
               ),
               SizedBox(height: 12),
-              Text(
+              AutoSizeText(
                 title,
+                maxLines: 2,
                 textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontWeight: FontWeight.w500,
-                  fontSize: 13,
-                ),
+                style: theme.textTheme.labelMedium,
               ),
             ],
           ),
@@ -725,3 +775,5 @@ class HomeScreen extends GetView<HomeController> {
   //   return crops.join(', ');
   // }
 }
+
+// Add at class level

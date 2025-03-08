@@ -1,3 +1,5 @@
+import 'package:cropconnect/core/debug/presentation/debug_screen.dart';
+import 'package:cropconnect/core/services/debug/debug_service.dart';
 import 'package:cropconnect/core/services/locale/locale_service.dart';
 import 'package:cropconnect/core/theme/app_theme.dart';
 import 'package:cropconnect/features/auth/domain/model/user/pending_invite_model.dart';
@@ -71,7 +73,7 @@ Future<void> main() async {
   final binding = AuthBinding();
   binding.dependencies();
   Get.put(LocaleService());
-
+  Get.put(DebugService(), permanent: true);
   runApp(const MyApp());
 }
 
@@ -142,6 +144,15 @@ class MyApp extends StatelessWidget {
             page: () => const MyCooperativesScreen(),
             binding: BindingsBuilder(() {
               Get.lazyPut(() => MyCooperativesController());
+            }),
+          ),
+          GetPage(
+            name: '/debug',
+            page: () => const DebugScreen(),
+            binding: BindingsBuilder(() {
+              Get.lazyPut(
+                () => DebugService(),
+              );
             }),
           ),
           GetPage(

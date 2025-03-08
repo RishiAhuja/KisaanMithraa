@@ -4,6 +4,7 @@ import 'package:cropconnect/core/services/hive/hive_storage_service.dart';
 import 'package:cropconnect/features/auth/domain/model/user/cooperative_membership_model.dart';
 import 'package:cropconnect/features/auth/domain/model/user/user_model.dart';
 import 'package:cropconnect/features/notification/domain/model/notifications_model.dart';
+import 'package:cropconnect/utils/app_logger.dart';
 import 'package:get/get.dart';
 
 class NotificationsController extends GetxController {
@@ -36,9 +37,14 @@ class NotificationsController extends GetxController {
           .orderBy('createdAt', descending: true)
           .get();
 
+      AppLogger.info('notfications: ${snapshot.docs.length}');
+
       notifications.value = snapshot.docs
           .map((doc) => NotificationModel.fromMap(doc.id, doc.data()))
           .toList();
+
+      AppLogger.info("notfications: $notifications");
+      AppLogger.info("userId: ${user.id}");
     } catch (e) {
       Get.snackbar('Error', 'Failed to load notifications');
     } finally {
