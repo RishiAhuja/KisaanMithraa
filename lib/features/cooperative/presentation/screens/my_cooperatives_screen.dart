@@ -19,7 +19,10 @@ class MyCooperativesScreen extends GetView<MyCooperativesController> {
       initialIndex: 0,
       child: Scaffold(
         appBar: AppBar(
-          title: const Text('Cooperatives'),
+          title: Text(
+            'Cooperatives',
+            style: theme.textTheme.bodyLarge?.copyWith(color: Colors.black),
+          ),
           backgroundColor: Colors.white,
           actions: [
             IconButton(
@@ -31,7 +34,6 @@ class MyCooperativesScreen extends GetView<MyCooperativesController> {
           ],
           bottom: TabBar(
             onTap: (index) {
-              // When switching to "My Cooperatives" tab
               if (index == 0) {
                 controller.refreshMyCooperatives();
               }
