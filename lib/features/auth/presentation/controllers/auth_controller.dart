@@ -46,7 +46,6 @@ class AuthController extends GetxController {
   @override
   void onClose() {
     phoneNumberController.dispose();
-    // Dispose reCAPTCHA if on web
     // if (kIsWeb) {
     //   authService.dispose();
     // }
@@ -93,15 +92,12 @@ class AuthController extends GetxController {
         return;
       }
 
-      // Format phone number with India country code
       final formattedPhoneNumber = '+91${phoneNumber.value}';
 
-      // For web platform, ensure reCAPTCHA is properly set up
       if (kIsWeb) {
         AppLogger.debug('Web platform detected, showing reCAPTCHA');
         // WebRecaptcha.showRecaptcha();
 
-        // // Check if reCAPTCHA is available
         // if (!WebRecaptcha.isRecaptchaAvailable()) {
         //   error.value = 'reCAPTCHA is not properly initialized';
         //   isLoading.value = false;
@@ -109,12 +105,10 @@ class AuthController extends GetxController {
         // }
 
         // try {
-        //   // Use the enhanced web-specific auth service
         //   final verId = await authService.verifyPhone(formattedPhoneNumber);
         //   verificationId.value = verId;
         //   _verificationId = verId;
 
-        //   // Hide reCAPTCHA after verification
         //   WebRecaptcha.hideRecaptcha();
 
         //   Get.toNamed('/otp');
@@ -122,11 +116,9 @@ class AuthController extends GetxController {
         //   AppLogger.error('Web phone verification failed', e);
         //   error.value = 'Verification failed: ${e.toString()}';
 
-        //   // If error occurs, reset reCAPTCHA
         //   WebRecaptcha.resetRecaptcha();
         // }
       } else {
-        // Original mobile-specific implementation
         await _auth.verifyPhoneNumber(
           phoneNumber: formattedPhoneNumber,
           timeout: const Duration(seconds: 60),
@@ -169,7 +161,6 @@ class AuthController extends GetxController {
       }
 
       if (kIsWeb) {
-        // Use the enhanced web auth service for OTP verification
         final userCredential =
             await authService.verifyOTP(verificationId.value, otp);
         if (userCredential.user != null) {
@@ -178,7 +169,6 @@ class AuthController extends GetxController {
           throw Exception('Failed to get user after OTP verification');
         }
       } else {
-        // Original implementation
         final credential = PhoneAuthProvider.credential(
           verificationId: verificationId.value,
           smsCode: otp,
@@ -213,7 +203,6 @@ class AuthController extends GetxController {
     }
   }
 
-  // Extracted common user handling logic to avoid code duplication
   Future<void> _handleVerifiedUser(User firebaseUser) async {
     AppLogger.debug('Querying for existing user');
 

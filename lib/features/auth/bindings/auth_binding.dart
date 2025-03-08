@@ -4,6 +4,7 @@ import 'package:cropconnect/features/auth/data/repositories/auth_repo_impl.dart'
 import 'package:cropconnect/features/auth/data/services/auth_service.dart';
 import 'package:cropconnect/features/auth/domain/repositories/auth_repo.dart';
 import 'package:cropconnect/features/auth/presentation/controllers/auth_controller.dart';
+import 'package:cropconnect/features/auth/presentation/controllers/debug_auth_controller.dart';
 import 'package:cropconnect/features/onboarding/presentation/controller/onboarding_controller.dart';
 import 'package:cropconnect/features/profile/controller/profile_controller.dart';
 import 'package:cropconnect/utils/app_logger.dart';
@@ -46,6 +47,8 @@ class AuthBinding extends Bindings {
         AuthController(authRepo),
         permanent: true,
       );
+
+      Get.put(DebugAuthController());
     } catch (e, stackTrace) {
       AppLogger.error('Error in AuthBinding: $e');
       debugPrint(stackTrace.toString());

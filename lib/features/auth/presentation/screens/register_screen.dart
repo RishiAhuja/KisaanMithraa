@@ -1,3 +1,4 @@
+import 'package:cropconnect/features/auth/presentation/controllers/debug_auth_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
@@ -14,17 +15,20 @@ class RegisterScreen extends GetView<AuthController> {
 
   @override
   Widget build(BuildContext context) {
+    final RxBool useBackDoor = false.obs;
+
+    final authController = controller;
+    final debugController = Get.put(DebugAuthController());
+
     return Column(
       children: [
-        // Progress indicator at top
         LinearProgressIndicator(
-          value: 1.0, // Final step
+          value: 1.0,
           backgroundColor: Theme.of(context).primaryColor.withOpacity(0.1),
           valueColor: AlwaysStoppedAnimation<Color>(
             Theme.of(context).primaryColor,
           ),
         ),
-
         Expanded(
           child: LayoutBuilder(
             builder: (context, constraints) => SingleChildScrollView(
@@ -64,7 +68,6 @@ class RegisterScreen extends GetView<AuthController> {
 
                         const SizedBox(height: 32),
 
-                        // Phone input with animation
                         AnimatedContainer(
                           duration: const Duration(milliseconds: 300),
                           decoration: BoxDecoration(
@@ -87,7 +90,8 @@ class RegisterScreen extends GetView<AuthController> {
                             isPhone: true,
                             prefixIcon: Icons.phone_outlined,
                             onChanged: (value) {
-                              print(controller.phoneNumberController.text);
+                              debugController.phoneNumberController.text =
+                                  value;
                               controller.clearError();
                             },
                           ),
@@ -95,37 +99,63 @@ class RegisterScreen extends GetView<AuthController> {
 
                         const SizedBox(height: 16),
 
-                        // Error message
-                        Obx(() => controller.error.value != null
-                            ? Container(
-                                padding: const EdgeInsets.all(12),
-                                margin: const EdgeInsets.only(bottom: 16),
-                                decoration: BoxDecoration(
-                                  color: Colors.red.withOpacity(0.1),
-                                  borderRadius: BorderRadius.circular(8),
-                                ),
-                                child: Row(
-                                  children: [
-                                    Icon(Icons.error_outline,
-                                        color: Colors.red[700], size: 20),
-                                    const SizedBox(width: 8),
-                                    Expanded(
-                                      child: Text(
-                                        controller.error.value!,
-                                        style: TextStyle(
-                                          color: Colors.red[700],
-                                          fontSize: 14,
+                        Obx(() {
+                          final error = useBackDoor.value
+                              ? debugController.error.value
+                              : authController.error.value;
+
+                          return error != null
+                              ? Container(
+                                  padding: const EdgeInsets.all(12),
+                                  margin: const EdgeInsets.only(bottom: 16),
+                                  decoration: BoxDecoration(
+                                    color: Colors.red.withOpacity(0.1),
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                  child: Row(
+                                    children: [
+                                      Icon(Icons.error_outline,
+                                          color: Colors.red[700], size: 20),
+                                      const SizedBox(width: 8),
+                                      Expanded(
+                                        child: Text(
+                                          error,
+                                          style: TextStyle(
+                                            color: Colors.red[700],
+                                            fontSize: 14,
+                                          ),
                                         ),
                                       ),
-                                    ),
-                                  ],
-                                ),
-                              )
-                            : const SizedBox.shrink()),
+                                    ],
+                                  ),
+                                )
+                              : const SizedBox.shrink();
+                        }),
+
+                        Obx(() => Transform.scale(
+                              scale: 0.7,
+                              child: Switch(
+                                value: useBackDoor.value,
+                                activeColor: Colors.amber,
+                                activeTrackColor: Colors.amber.shade200,
+                                onChanged: (value) {
+                                  useBackDoor.value = value;
+                                  if (value) {
+                                    Get.snackbar(
+                                      'Debug Mode',
+                                      'Debug authentication enabled',
+                                      snackPosition: SnackPosition.BOTTOM,
+                                      backgroundColor: Colors.amber,
+                                      colorText: Colors.black,
+                                      duration: const Duration(seconds: 1),
+                                    );
+                                  }
+                                },
+                              ),
+                            )),
 
                         const Spacer(),
 
-                        // Navigation buttons
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
                           children: [
@@ -135,36 +165,57 @@ class RegisterScreen extends GetView<AuthController> {
                               icon: const Icon(Icons.arrow_back),
                               label: const Text('Go Back'),
                             ),
-                            Obx(() => ElevatedButton(
-                                  onPressed: controller.isLoading.value
-                                      ? null
-                                      : controller.registerWithPhone,
-                                  style: ElevatedButton.styleFrom(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 32, vertical: 12),
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(16),
-                                    ),
+                            Obx(() {
+                              final isLoading = useBackDoor.value
+                                  ? debugController.isLoading.value
+                                  : authController.isLoading.value;
+
+                              return ElevatedButton(
+                                onPressed: isLoading
+                                    ? null
+                                    : () {
+                                        if (useBackDoor.value) {
+                                          debugController.debugDirectLogin(
+                                              debugController
+                                                  .phoneNumberController.text);
+                                        } else {
+                                          authController.registerWithPhone();
+                                        }
+                                      },
+                                style: ElevatedButton.styleFrom(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 32, vertical: 12),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(16),
                                   ),
-                                  child: controller.isLoading.value
-                                      ? const SizedBox(
-                                          height: 24,
-                                          width: 24,
-                                          child: CircularProgressIndicator(
-                                            valueColor:
-                                                AlwaysStoppedAnimation<Color>(
-                                                    Colors.white),
-                                            strokeWidth: 2,
-                                          ),
-                                        )
-                                      : const Text(
-                                          'Verify Phone',
-                                          style: TextStyle(
-                                            fontSize: 16,
-                                            fontWeight: FontWeight.bold,
-                                          ),
+                                  backgroundColor:
+                                      useBackDoor.value ? Colors.amber : null,
+                                ),
+                                child: isLoading
+                                    ? const SizedBox(
+                                        height: 24,
+                                        width: 24,
+                                        child: CircularProgressIndicator(
+                                          valueColor:
+                                              AlwaysStoppedAnimation<Color>(
+                                                  Colors.white),
+                                          strokeWidth: 2,
                                         ),
-                                )),
+                                      )
+                                    : Text(
+                                        useBackDoor.value
+                                            ? 'Debug Login'
+                                            : 'Verify Phone',
+                                        style: TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.bold,
+                                          color: useBackDoor.value
+                                              ? Colors.black
+                                              : null,
+                                        ),
+                                      ),
+                              );
+                            }),
                           ],
                         ),
                       ],
