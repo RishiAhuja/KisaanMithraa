@@ -56,6 +56,8 @@ dependencies:
   flutter_dotenv: 
   flutter_svg:
   faker:
+  url_launcher:
+  cached_network_image:
   speech_to_text: 
   avatar_glow:
   auto_size_text:

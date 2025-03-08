@@ -142,7 +142,7 @@ class DebugService extends GetxController {
           final phoneNumber =
               List.generate(10, (_) => Random().nextInt(10).toString()).join();
 
-          final userId = _uuid.v4();
+          final userId = 'debug-${_uuid.v4()}';
 
           final user = UserModel(
             id: userId,
@@ -218,11 +218,9 @@ class DebugService extends GetxController {
         return null;
       }
 
-      // Get or create creator
       UserModel creator;
       List<UserModel> members = List.from(users);
 
-      // If a creator ID is specified, try to get that user
       if (creatorId != null) {
         try {
           final creatorDoc =
@@ -231,49 +229,38 @@ class DebugService extends GetxController {
             creator = UserModel.fromMap(creatorDoc.data()!, creatorDoc.id);
             AppLogger.debug('[DEBUG] Using specified creator: ${creator.name}');
           } else {
-            // Creator not found, use first generated user
             creator = members.removeAt(0);
             AppLogger.debug(
                 '[DEBUG] Specified creator not found, using generated user');
           }
         } catch (e) {
-          // Error getting creator, use first generated user
           creator = members.removeAt(0);
           AppLogger.error('[DEBUG] Error getting specified creator: $e');
         }
       } else {
-        // No creator specified, use first generated user
         creator = members.removeAt(0);
         AppLogger.debug('[DEBUG] Using first generated user as creator');
       }
 
-      // Get unique crops from all users
       final allCrops = <String>{};
 
-      // Add creator's crops
       if (creator.crops != null && creator.crops!.isNotEmpty) {
         allCrops.addAll(creator.crops!);
       }
 
-      // Add members' crops
       for (final member in members) {
         if (member.crops != null && member.crops!.isNotEmpty) {
           allCrops.addAll(member.crops!);
         }
       }
 
-      // Ensure we have at least one crop
       if (allCrops.isEmpty) {
         allCrops.add('Wheat');
       }
 
-      // Build member ID list
       final allMemberIds = [creator.id, ...members.map((u) => u.id)];
+      final cooperativeId = 'debug-${DateTime.now().millisecondsSinceEpoch}';
 
-      // Prepare cooperative data with minimal fields to reduce chance of errors
-      final cooperativeId = DateTime.now().millisecondsSinceEpoch.toString();
-
-      // Use a map directly instead of the model constructor to ensure field names match exactly
       final cooperativeData = {
         'id': cooperativeId,
         'name': name,
@@ -304,24 +291,31 @@ class DebugService extends GetxController {
         AppLogger.debug('[DEBUG] Cooperative document saved');
       } catch (firestoreError) {
         AppLogger.error('[DEBUG] Error saving cooperative: $firestoreError');
-        throw firestoreError; // Re-throw to exit the method
+        rethrow;
       }
 
-      // Update users' cooperative list
       AppLogger.debug(
-          '[DEBUG] Updating user documents with cooperative reference');
+          '[DEBUG] Updating user documents with cooperative membership');
+
       for (final userId in allMemberIds) {
         try {
+          String role = (userId == creator.id) ? 'admin' : 'member';
+
+          final membership = {
+            'cooperativeId': cooperativeId,
+            'role': role,
+          };
+
           await _firestore.collection('users').doc(userId).update({
-            'cooperatives': FieldValue.arrayUnion([cooperativeId]),
+            'cooperatives': FieldValue.arrayUnion([membership]),
           });
+
+          AppLogger.debug('[DEBUG] Updated user $userId with role: $role');
         } catch (e) {
           AppLogger.warning('[DEBUG] Failed to update user $userId: $e');
-          // Continue with other users
         }
       }
 
-      // Create the model to return
       final cooperative = CooperativeModel(
         id: cooperativeId,
         name: name,
@@ -410,7 +404,61 @@ class DebugService extends GetxController {
       if (result != true) return;
 
       isGeneratingData.value = true;
-      AppLogger.debug('[DEBUG] Cleared all debug data');
+      AppLogger.debug('[DEBUG] Starting debug data cleanup');
+
+      // First, find all debug users
+      try {
+        final usersSnapshot = await _firestore
+            .collection('users')
+            .where(FieldPath.documentId, isGreaterThanOrEqualTo: 'debug-')
+            .where(FieldPath.documentId, isLessThan: 'debug-\uf8ff')
+            .get();
+
+        AppLogger.debug(
+            '[DEBUG] Found ${usersSnapshot.docs.length} debug users to delete');
+
+        // Delete each user document
+        int deletedUsers = 0;
+        for (var doc in usersSnapshot.docs) {
+          try {
+            await _firestore.collection('users').doc(doc.id).delete();
+            deletedUsers++;
+          } catch (e) {
+            AppLogger.error('[DEBUG] Failed to delete user ${doc.id}: $e');
+          }
+        }
+        AppLogger.debug('[DEBUG] Successfully deleted $deletedUsers users');
+      } catch (e) {
+        AppLogger.error('[DEBUG] Error while deleting debug users: $e');
+      }
+
+      // Then find and delete all debug cooperatives
+      try {
+        final cooperativesSnapshot = await _firestore
+            .collection('cooperatives')
+            .where(FieldPath.documentId, isGreaterThanOrEqualTo: 'debug-')
+            .where(FieldPath.documentId, isLessThan: 'debug-\uf8ff')
+            .get();
+
+        AppLogger.debug(
+            '[DEBUG] Found ${cooperativesSnapshot.docs.length} debug cooperatives to delete');
+
+        // Delete each cooperative document
+        int deletedCooperatives = 0;
+        for (var doc in cooperativesSnapshot.docs) {
+          try {
+            await _firestore.collection('cooperatives').doc(doc.id).delete();
+            deletedCooperatives++;
+          } catch (e) {
+            AppLogger.error(
+                '[DEBUG] Failed to delete cooperative ${doc.id}: $e');
+          }
+        }
+        AppLogger.debug(
+            '[DEBUG] Successfully deleted $deletedCooperatives cooperatives');
+      } catch (e) {
+        AppLogger.error('[DEBUG] Error while deleting debug cooperatives: $e');
+      }
 
       Get.snackbar(
         'Debug Data Cleared',
@@ -418,6 +466,7 @@ class DebugService extends GetxController {
         backgroundColor: Colors.green,
         colorText: Colors.white,
         snackPosition: SnackPosition.BOTTOM,
+        duration: const Duration(seconds: 2),
       );
     } catch (e) {
       AppLogger.error('[DEBUG] Error clearing debug data: $e');

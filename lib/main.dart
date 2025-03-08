@@ -17,6 +17,7 @@ import 'package:cropconnect/features/cooperative/presentation/screens/cooperativ
 import 'package:cropconnect/features/cooperative/presentation/screens/cooperative_management_screen.dart';
 import 'package:cropconnect/features/cooperative/presentation/screens/create_cooperative_screen.dart';
 import 'package:cropconnect/features/cooperative/presentation/screens/my_cooperatives_screen.dart';
+import 'package:cropconnect/features/cooperative/presentation/screens/search_cooperatives_screen.dart';
 import 'package:cropconnect/features/home/presentation/bindings/home_bindings.dart';
 import 'package:cropconnect/features/home/presentation/screen/home_screen.dart';
 import 'package:cropconnect/features/intro/presentation/screens/intro_screen.dart';
@@ -174,6 +175,13 @@ class MyApp extends StatelessWidget {
             page: () => const CooperativeDetailsScreen(),
             binding: BindingsBuilder(() {
               Get.lazyPut(() => CooperativeDetailsController());
+            }),
+          ),
+          GetPage(
+            name: '/search-cooperatives',
+            page: () => const SearchCooperativesScreen(),
+            binding: BindingsBuilder(() {
+              Get.lazyPut(() => Get.find<MyCooperativesController>());
             }),
           ),
           GetPage(
