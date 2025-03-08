@@ -46,8 +46,7 @@ class MemberSelectionWidget extends StatelessWidget {
             ],
           ),
           child: Obx(() {
-            final members =
-                selectedMembers.toList(); // Create local copy for ListView
+            final members = selectedMembers.toList();
             return ListView.builder(
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
@@ -60,7 +59,10 @@ class MemberSelectionWidget extends StatelessWidget {
                           theme.colorScheme.primary.withOpacity(0.1),
                       child: Icon(Icons.add, color: theme.colorScheme.primary),
                     ),
-                    title: const Text('Add Member'),
+                    title: Text(
+                      'Add Member',
+                      style: theme.textTheme.bodySmall,
+                    ),
                     onTap: onAddTapped,
                   );
                 }
