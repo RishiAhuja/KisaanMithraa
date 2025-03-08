@@ -5,6 +5,10 @@
 	<key>NSMicrophoneUsageDescription</key>
 	<string>This app needs microphone access to enable speech recognition</string>
 	<key>NSSpeechRecognitionUsageDescription</key>
+	<key>LSApplicationQueriesSchemes</key>
+	<array>
+  	<string>tel</string>
+	</array>
 	<string>This app uses speech recognition to convert your speech to text</string>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>

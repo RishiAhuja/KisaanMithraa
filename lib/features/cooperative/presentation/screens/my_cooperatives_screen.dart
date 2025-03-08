@@ -14,272 +14,292 @@ class MyCooperativesScreen extends GetView<MyCooperativesController> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('My Cooperatives'),
-        backgroundColor: Colors.white,
-        actions: [
-          // Add search button
-          IconButton(
-            icon: const Icon(Icons.search),
-            onPressed: () {
-              // Implement search functionality
-              Get.toNamed('/search-cooperatives');
-            },
-          ),
-        ],
-      ),
-      body: Column(
-        children: [
-          // Map section with rounded corners
-          Padding(
-            padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
-            child: Container(
-              height: 180, // Fixed height for map
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(20),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withOpacity(0.1),
-                    blurRadius: 10,
-                    offset: const Offset(0, 5),
-                  ),
-                ],
-              ),
-              clipBehavior: Clip.antiAlias, // Important for rounded corners
-              child: Stack(
-                children: [
-                  // Map widget
-                  Obx(() {
-                    return GoogleMap(
-                      initialCameraPosition: CameraPosition(
-                        target: LatLng(
-                          controller.userLocation.value!.latitude,
-                          controller.userLocation.value!.longitude,
-                        ),
-                        zoom: 11,
-                      ),
-                      markers: _buildMarkers(),
-                      circles: _buildCircles(),
-                      myLocationEnabled: true,
-                      zoomControlsEnabled: false, // Hide zoom controls
-                      compassEnabled: false, // Hide compass
-                      mapToolbarEnabled: false, // Hide map toolbar
-                      liteModeEnabled: false, // For better performance
-                    );
-                  }),
-
-                  // Map overlay with gradient and text
-                  Positioned(
-                    bottom: 0,
-                    left: 0,
-                    right: 0,
-                    child: Container(
-                      padding: const EdgeInsets.all(12),
-                      decoration: BoxDecoration(
-                        gradient: LinearGradient(
-                          begin: Alignment.bottomCenter,
-                          end: Alignment.topCenter,
-                          colors: [
-                            Colors.black.withOpacity(0.7),
-                            Colors.transparent,
-                          ],
-                        ),
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            'Cooperatives Near You',
-                            style: theme.textTheme.titleSmall?.copyWith(
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          InkWell(
-                            onTap: () {
-                              Get.toNamed('/explore-cooperatives');
-                            },
-                            child: Container(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 12,
-                                vertical: 6,
-                              ),
-                              decoration: BoxDecoration(
-                                color: theme.colorScheme.primary,
-                                borderRadius: BorderRadius.circular(20),
-                              ),
-                              child: Text(
-                                'View All',
-                                style: theme.textTheme.labelSmall?.copyWith(
-                                  color: Colors.white,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-
-          const SizedBox(height: 16),
-
-          // My cooperatives section
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: Align(
-              alignment: Alignment.centerLeft,
-              child: Text(
-                'My Cooperatives',
-                style: theme.textTheme.titleLarge,
-              ),
-            ),
-          ),
-
-          Expanded(
-            child: StreamBuilder<List<CooperativeWithRole>>(
-              stream: controller.cooperativesStream,
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const Center(child: CircularProgressIndicator());
-                }
-
-                if (snapshot.hasError) {
-                  return Center(child: Text('Error: ${snapshot.error}'));
-                }
-
-                final cooperatives = snapshot.data ?? [];
-
-                if (cooperatives.isEmpty) {
-                  // Replace your current empty state with this:
-                  return Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        // Empty state message
-                        Text(
-                          'You haven\'t joined any cooperatives yet',
-                          style: theme.textTheme.titleMedium,
-                        ),
-
-                        const SizedBox(height: 8),
-
-                        // Suggestion text
-                        Text(
-                          'Join a nearby cooperative or start your own',
-                          style: theme.textTheme.bodyMedium?.copyWith(
-                            color: Colors.grey[600],
-                          ),
-                        ),
-
-                        const SizedBox(height: 16),
-
-                        // Nearby cooperatives section
-                        Obx(() {
-                          final nearbyCoops = controller.nearbyCooperatives;
-
-                          if (nearbyCoops.isEmpty) {
-                            return Center(
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  const SizedBox(height: 20),
-                                  Text(
-                                    'No nearby cooperatives found',
-                                    style: theme.textTheme.bodyMedium,
-                                  ),
-                                  const SizedBox(height: 20),
-                                ],
-                              ),
-                            );
-                          }
-
-                          return Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                'Nearby Cooperatives',
-                                style: theme.textTheme.titleMedium,
-                              ),
-                              const SizedBox(height: 12),
-                              // Actually use the _NearbyCooperativeCard here
-                              ...nearbyCoops
-                                  .take(2)
-                                  .map((coop) => _NearbyCooperativeCard(
-                                        cooperative: coop,
-                                        onTap: () => Get.toNamed(
-                                            '/cooperative-details',
-                                            arguments: {
-                                              'cooperativeId': coop.id,
-                                            }),
-                                        controller: controller,
-                                      )),
-                              if (nearbyCoops.length > 2)
-                                Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      vertical: 12.0),
-                                  child: TextButton(
-                                    onPressed: () =>
-                                        Get.toNamed('/explore-cooperatives'),
-                                    style: TextButton.styleFrom(
-                                      foregroundColor:
-                                          theme.colorScheme.primary,
-                                    ),
-                                    child: Text(
-                                        'See ${nearbyCoops.length - 2} more nearby'),
-                                  ),
-                                ),
-                            ],
-                          );
-                        }),
-
-                        const Spacer(),
-
-                        // Create Cooperative Button
-                        Align(
-                          alignment: Alignment.centerRight,
-                          child: OutlinedButton.icon(
-                            onPressed: () => Get.toNamed('/create-cooperative'),
-                            icon: const Icon(Icons.add, size: 16),
-                            label: const Text('Create your own cooperative'),
-                            style: OutlinedButton.styleFrom(
-                              foregroundColor: theme.colorScheme.primary,
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 12, vertical: 8),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(8),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  );
-                }
-
-                return ListView.builder(
-                  padding: const EdgeInsets.all(16),
-                  itemCount: cooperatives.length,
-                  itemBuilder: (context, index) {
-                    final coopWithRole = cooperatives[index];
-                    return _CooperativeCard(coopWithRole: coopWithRole);
-                  },
-                );
+    return DefaultTabController(
+      length: 2,
+      initialIndex: 0,
+      child: Scaffold(
+        appBar: AppBar(
+          title: const Text('Cooperatives'),
+          backgroundColor: Colors.white,
+          actions: [
+            IconButton(
+              icon: const Icon(Icons.search),
+              onPressed: () {
+                Get.toNamed('/search-cooperatives');
               },
             ),
+          ],
+          bottom: TabBar(
+            onTap: (index) {
+              // When switching to "My Cooperatives" tab
+              if (index == 0) {
+                controller.refreshMyCooperatives();
+              }
+            },
+            labelColor: theme.colorScheme.primary,
+            unselectedLabelColor: theme.colorScheme.onSurface.withOpacity(0.7),
+            indicatorColor: theme.colorScheme.primary,
+            tabs: const [
+              Tab(text: 'My Cooperatives'),
+              Tab(text: 'Suggested Nearby'),
+            ],
           ),
-        ],
+        ),
+        body: TabBarView(
+          physics: ClampingScrollPhysics(), // More responsive scrolling
+          children: [
+            _buildMyCooperativesTab(theme, context),
+            _buildSuggestedCooperativesTab(theme),
+          ],
+        ),
+        floatingActionButton: FloatingActionButton.extended(
+          onPressed: () => Get.toNamed('/create-cooperative'),
+          icon: Icon(Icons.add, color: Colors.white),
+          label: Text('Create New', style: TextStyle(color: Colors.white)),
+          backgroundColor: theme.colorScheme.primary,
+        ),
+        bottomNavigationBar: const BottomNavBar(currentIndex: 1),
       ),
-      bottomNavigationBar: const BottomNavBar(currentIndex: 1),
     );
   }
 
-  // Method to build map markers
+  Widget _buildMyCooperativesTab(ThemeData theme, BuildContext context) {
+    return Obx(() {
+      // Check if we have data already cached
+      if (controller.dataLoaded.value && !controller.isLoading.value) {
+        final cooperatives = controller.cooperatives;
+        if (cooperatives.isEmpty) {
+          // Empty state - show message and provide a way to explore
+          return Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(
+                  Icons.group_outlined,
+                  size: 64,
+                  color: theme.colorScheme.primary.withOpacity(0.5),
+                ),
+                const SizedBox(height: 16),
+                Text(
+                  'You haven\'t joined any cooperatives yet',
+                  style: theme.textTheme.titleMedium,
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  'Check out suggested cooperatives near you',
+                  style: theme.textTheme.bodyMedium?.copyWith(
+                    color: Colors.grey[600],
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: 24),
+                OutlinedButton.icon(
+                  onPressed: () {
+                    final tabController = DefaultTabController.of(context);
+                    try {
+                      tabController.animateTo(1);
+                    } catch (e) {}
+                  },
+                  icon: const Icon(Icons.explore, size: 18),
+                  label: const Text('Explore Nearby Cooperatives'),
+                  style: OutlinedButton.styleFrom(
+                    foregroundColor: theme.colorScheme.primary,
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 16, vertical: 12),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          );
+        }
+
+        // Show the list of cooperatives
+        return ListView.builder(
+          padding: const EdgeInsets.all(16),
+          itemCount: cooperatives.length,
+          itemBuilder: (context, index) {
+            final coopWithRole = cooperatives[index];
+            return _CooperativeCard(coopWithRole: coopWithRole);
+          },
+        );
+      }
+
+      // Loading state
+      return Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            CircularProgressIndicator(),
+            SizedBox(height: 16),
+            Text(
+              'Loading your cooperatives...',
+              style: theme.textTheme.bodyLarge,
+            ),
+          ],
+        ),
+      );
+    });
+  }
+
+  Widget _buildSuggestedCooperativesTab(ThemeData theme) {
+    return Column(
+      children: [
+        Padding(
+          padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
+          child: Container(
+            height: 180,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(20),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.1),
+                  blurRadius: 10,
+                  offset: const Offset(0, 5),
+                ),
+              ],
+            ),
+            clipBehavior: Clip.antiAlias,
+            child: Stack(
+              children: [
+                Obx(() {
+                  if (controller.userLocation.value == null) {
+                    return const Center(
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          CircularProgressIndicator(),
+                          SizedBox(height: 8),
+                          Text("Getting location...")
+                        ],
+                      ),
+                    );
+                  }
+
+                  return GoogleMap(
+                    initialCameraPosition: CameraPosition(
+                      target: LatLng(
+                        controller.userLocation.value!.latitude,
+                        controller.userLocation.value!.longitude,
+                      ),
+                      zoom: 11,
+                    ),
+                    markers: _buildMarkers(),
+                    circles: _buildCircles(),
+                    myLocationEnabled: true,
+                    zoomControlsEnabled: false,
+                    compassEnabled: false,
+                    mapToolbarEnabled: false,
+                    liteModeEnabled: false,
+                  );
+                }),
+                Positioned(
+                  bottom: 0,
+                  left: 0,
+                  right: 0,
+                  child: Container(
+                    padding: const EdgeInsets.all(12),
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        begin: Alignment.bottomCenter,
+                        end: Alignment.topCenter,
+                        colors: [
+                          Colors.black.withOpacity(0.7),
+                          Colors.transparent,
+                        ],
+                      ),
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          'Cooperatives Near You',
+                          style: theme.textTheme.titleSmall?.copyWith(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        Obx(() => Text(
+                              '${controller.nearbyCooperatives.length} Found',
+                              style: theme.textTheme.bodySmall?.copyWith(
+                                color: Colors.white,
+                              ),
+                            )),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+
+        const SizedBox(height: 16),
+
+        // Nearby cooperatives list
+        Expanded(
+          child: Obx(() {
+            final nearbyCoops = controller.nearbyCooperatives;
+
+            if (nearbyCoops.isEmpty) {
+              return Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const SizedBox(height: 20),
+                    Icon(
+                      Icons.location_off,
+                      size: 64,
+                      color: theme.colorScheme.error.withOpacity(0.5),
+                    ),
+                    const SizedBox(height: 16),
+                    Text(
+                      'No nearby cooperatives found',
+                      style: theme.textTheme.titleMedium,
+                    ),
+                    const SizedBox(height: 8),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 32),
+                      child: Text(
+                        'There are no cooperatives within 5km of your current location',
+                        textAlign: TextAlign.center,
+                        style: theme.textTheme.bodyMedium?.copyWith(
+                          color: Colors.grey[600],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              );
+            }
+
+            return ListView.builder(
+              padding: const EdgeInsets.all(16),
+              itemCount: nearbyCoops.length,
+              itemBuilder: (context, index) {
+                final coop = nearbyCoops[index];
+                return _NearbyCooperativeCard(
+                  cooperative: coop,
+                  onTap: () => Get.toNamed(
+                    '/cooperative-details',
+                    arguments: CooperativeWithRole(
+                      cooperative: coop,
+                      role: 'viewer',
+                    ),
+                  ),
+                  controller: controller,
+                );
+              },
+            );
+          }),
+        ),
+      ],
+    );
+  }
+
   Set<Marker> _buildMarkers() {
     return controller.nearbyCooperatives.map((coop) {
       return Marker(
@@ -288,32 +308,35 @@ class MyCooperativesScreen extends GetView<MyCooperativesController> {
         infoWindow: InfoWindow(
           title: coop.name,
           snippet: '${coop.members.length} members',
-          onTap: () => Get.toNamed('/cooperative-details', arguments: {
-            'cooperativeId': coop.id,
-          }),
+          onTap: () => Get.toNamed('/cooperative-details',
+              arguments: CooperativeWithRole(
+                cooperative: coop,
+                role: 'viewer',
+              )),
         ),
       );
     }).toSet();
   }
 
-  // Method to build map circles
   Set<Circle> _buildCircles() {
     return {
-      Circle(
-        circleId: const CircleId('userRadius'),
-        center: LatLng(
-          controller.userLocation.value!.latitude,
-          controller.userLocation.value!.longitude,
+      if (controller.userLocation.value != null)
+        Circle(
+          circleId: const CircleId('userRadius'),
+          center: LatLng(
+            controller.userLocation.value!.latitude,
+            controller.userLocation.value!.longitude,
+          ),
+          radius: 5000, // 5km radius
+          fillColor: Colors.blue.withOpacity(0.1),
+          strokeColor: Colors.blue,
+          strokeWidth: 1,
         ),
-        radius: 5000, // 5km radius
-        fillColor: Colors.blue.withOpacity(0.1),
-        strokeColor: Colors.blue,
-        strokeWidth: 1,
-      ),
     };
   }
 }
 
+// Keep your existing card widgets
 class _CooperativeCard extends StatelessWidget {
   final CooperativeWithRole coopWithRole;
 
@@ -541,7 +564,9 @@ class _NearbyCooperativeCard extends StatelessWidget {
                 ),
                 child: Center(
                   child: Text(
-                    cooperative.name[0].toUpperCase(),
+                    cooperative.name.isNotEmpty
+                        ? cooperative.name[0].toUpperCase()
+                        : '?',
                     style: theme.textTheme.titleLarge?.copyWith(
                       color: theme.colorScheme.primary,
                     ),
@@ -608,11 +633,27 @@ class _NearbyCooperativeCard extends StatelessWidget {
                   ],
                 ),
               ),
-              // Arrow icon
-              Icon(
-                Icons.arrow_forward_ios,
-                size: 16,
-                color: Colors.grey[400],
+              // Join button
+              ElevatedButton(
+                onPressed: () {
+                  Get.toNamed(
+                    '/cooperative-details',
+                    arguments: CooperativeWithRole(
+                      cooperative: cooperative,
+                      role: 'viewer',
+                    ),
+                  );
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: theme.colorScheme.primary,
+                  foregroundColor: Colors.white,
+                  padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                  minimumSize: Size(60, 32),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(16),
+                  ),
+                ),
+                child: Text('Join'),
               ),
             ],
           ),

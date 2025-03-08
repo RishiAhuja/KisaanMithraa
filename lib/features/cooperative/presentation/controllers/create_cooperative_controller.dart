@@ -2,7 +2,6 @@ import 'package:cropconnect/core/constants/app_constants.dart';
 import 'package:cropconnect/core/services/hive/hive_storage_service.dart';
 import 'package:cropconnect/features/auth/domain/model/user/cooperative_membership_model.dart';
 import 'package:cropconnect/features/auth/domain/model/user/user_model.dart';
-import 'package:cropconnect/features/auth/presentation/controllers/auth_controller.dart';
 import 'package:cropconnect/features/cooperative/domain/models/cooperative_invite_model.dart';
 import 'package:cropconnect/features/cooperative/domain/models/verification_requirements.dart';
 import 'package:cropconnect/utils/app_logger.dart';
@@ -13,6 +12,12 @@ import 'package:geolocator/geolocator.dart';
 import '../../domain/models/cooperative_model.dart';
 import 'package:cropconnect/features/notification/domain/model/notifications_model.dart';
 
+// Add these imports at the top
+import 'dart:io';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:path/path.dart' as path;
+
 class CreateCooperativeController extends GetxController {
   final FirebaseFirestore _firestore;
   final _storageService = Get.find<UserStorageService>();
@@ -22,7 +27,6 @@ class CreateCooperativeController extends GetxController {
   final descriptionController = TextEditingController();
   final isLoading = false.obs;
 
-  // New fields
   final selectedMembers = <UserModel>[].obs;
   final userLocation = Rxn<Position>();
   final currentUser = Rxn<UserModel>();
@@ -38,8 +42,12 @@ class CreateCooperativeController extends GetxController {
     'Fruits',
   ];
 
-  // Add these new fields
   final searchResults = <UserModel>[].obs;
+
+  final Rxn<File> selectedImage = Rxn<File>();
+  final isUploadingImage = false.obs;
+  final ImagePicker _imagePicker = ImagePicker();
+  final FirebaseStorage _storage = FirebaseStorage.instance;
 
   CreateCooperativeController(this._firestore);
 
@@ -114,6 +122,11 @@ class CreateCooperativeController extends GetxController {
       AppLogger.debug(currentUser.value?.id ?? "null");
       isLoading.value = true;
 
+      String? bannerUrl;
+      if (selectedImage.value != null) {
+        bannerUrl = await uploadImage();
+      }
+
       final uniqueCropTypes = selectedMembers
           .expand((member) => member.crops ?? [])
           .where((crop) => crop != null)
@@ -133,6 +146,7 @@ class CreateCooperativeController extends GetxController {
         longitude: userLocation.value?.longitude ?? 0,
         cropTypes: uniqueCropTypes,
         members: [currentUser.value!.id],
+        bannerUrl: bannerUrl,
         pendingInvites: selectedMembers
             .map((member) => CooperativeInvite(
                   userId: member.id,
@@ -225,47 +239,39 @@ class CreateCooperativeController extends GetxController {
   }
 
   Future<void> searchMembers(String query) async {
-    if (query.isEmpty) {
-      searchResults.clear();
-      return;
-    }
-
     try {
-      final currentUserId = Get.find<AuthController>().user.value?.id;
-      final excludeIds = [
-        ...selectedMembers.map((m) => m.id),
-        if (currentUserId != null) currentUserId
-      ];
-
-      String phoneQuery = query;
-      if (query.length == 10 && RegExp(r'^\d+$').hasMatch(query)) {
-        phoneQuery = '+91$query';
+      if (query.isEmpty) {
+        searchResults.clear();
+        return;
       }
 
-      final queryLower = query.toLowerCase();
+      // Clean and prepare query strings
+      final queryLower = query.toLowerCase().trim();
 
-      final nameSnapshot = await _firestore
-          .collection('users')
-          .orderBy('name')
-          .startAt([queryLower]).endAt(['$queryLower\uf8ff']).get();
+      // Make phone number search more flexible
+      String phoneQuery = query.replaceAll(RegExp(r'[^\d]'), '');
+      if (phoneQuery.length == 10 && !phoneQuery.startsWith('91')) {
+        // Try both with and without country code
+        phoneQuery = phoneQuery;
+      }
 
-      final phoneSnapshot = await _firestore
-          .collection('users')
-          .where('phoneNumber', isEqualTo: phoneQuery)
-          .get();
+      // IDs to exclude from search results
+      final currentUserId = currentUser.value?.id;
+      final excludeIds = [
+        ...selectedMembers.map((m) => m.id),
+        if (currentUserId != null) currentUserId,
+      ];
 
-      final allDocs = {...nameSnapshot.docs, ...phoneSnapshot.docs};
+      // Perform a simple get() instead of complex queries
+      final snapshot = await _firestore.collection('users').get();
 
-      searchResults.value = allDocs
+      // Filter in memory
+      final filteredResults = snapshot.docs
           .map((doc) {
             try {
-              final data = doc.data();
-              if (data['name'] != null) {
-                data['name'] = data['name'].toString().toLowerCase();
-              }
-              return UserModel.fromMap(data, doc.id);
+              return UserModel.fromMap(doc.data(), doc.id);
             } catch (e) {
-              AppLogger.error('Error parsing user data: $e');
+              AppLogger.error('Error parsing user: $e');
               return null;
             }
           })
@@ -277,26 +283,83 @@ class CreateCooperativeController extends GetxController {
           .cast<UserModel>()
           .toList();
 
-      final sortedResults = List<UserModel>.from(searchResults)
-        ..sort((a, b) {
-          if (a.name.toLowerCase() == queryLower) return -1;
-          if (b.name.toLowerCase() == queryLower) return 1;
-          if (a.phoneNumber == phoneQuery) return -1;
-          if (b.phoneNumber == phoneQuery) return 1;
-          return a.name.length.compareTo(b.name.length);
-        });
+      // Sort results by relevance
+      filteredResults.sort((a, b) {
+        // Exact name match gets highest priority
+        if (a.name.toLowerCase() == queryLower) return -1;
+        if (b.name.toLowerCase() == queryLower) return 1;
 
-      searchResults.value = sortedResults;
+        // Exact phone match gets next priority
+        if (a.phoneNumber.endsWith(phoneQuery)) return -1;
+        if (b.phoneNumber.endsWith(phoneQuery)) return 1;
 
-      AppLogger.debug('Search Results: ${searchResults.length} users found');
+        // Otherwise sort by name length (shorter names first)
+        return a.name.length.compareTo(b.name.length);
+      });
+
+      // Update the observable list
+      searchResults.value = filteredResults;
+      AppLogger.info('Found ${filteredResults.length} users matching "$query"');
     } catch (e) {
       AppLogger.error('Error searching members: $e');
       searchResults.clear();
     }
   }
 
-  // Clear search results when dialog is closed
   void clearSearch() {
     searchResults.clear();
+  }
+
+  Future<void> pickImage(ImageSource source) async {
+    try {
+      final pickedFile = await _imagePicker.pickImage(
+        source: source,
+        imageQuality: 80,
+        maxWidth: 1200,
+      );
+
+      if (pickedFile != null) {
+        selectedImage.value = File(pickedFile.path);
+      }
+    } catch (e) {
+      AppLogger.error('Error picking image: $e');
+      Get.snackbar(
+        'Error',
+        'Failed to select image',
+        snackPosition: SnackPosition.BOTTOM,
+      );
+    }
+  }
+
+  Future<String?> uploadImage() async {
+    if (selectedImage.value == null) return null;
+
+    try {
+      isUploadingImage.value = true;
+      final fileName = path.basename(selectedImage.value!.path);
+      final timestamp = DateTime.now().millisecondsSinceEpoch.toString();
+      final storageRef =
+          _storage.ref().child('cooperatives/$timestamp-$fileName');
+
+      final uploadTask = storageRef.putFile(
+        selectedImage.value!,
+        SettableMetadata(contentType: 'image/jpeg'),
+      );
+
+      final snapshot = await uploadTask;
+      final downloadUrl = await snapshot.ref.getDownloadURL();
+
+      return downloadUrl;
+    } catch (e) {
+      AppLogger.error('Error uploading image: $e');
+      Get.snackbar(
+        'Warning',
+        'Failed to upload image, but cooperative will still be created',
+        snackPosition: SnackPosition.BOTTOM,
+      );
+      return null;
+    } finally {
+      isUploadingImage.value = false;
+    }
   }
 }

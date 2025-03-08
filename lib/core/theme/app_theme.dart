@@ -515,4 +515,21 @@ class AppTheme {
       ),
     );
   }
+
+  static ColorScheme get lightColorScheme => const ColorScheme(
+        primary: AppColors.primary,
+        secondary: AppColors.secondary,
+        tertiary: AppColors.accent,
+        error: Colors.red,
+        surface: Colors.white,
+        background: AppColors.backgroundLight,
+        onPrimary: Colors.white,
+        onSecondary: Colors.white,
+        onTertiary: Colors.white,
+        onError: Colors.white,
+        onSurface: Colors.black87,
+        onBackground: Colors.black87,
+        brightness: Brightness.light,
+        onSurfaceVariant: Color(0xFF757575),
+      );
 }

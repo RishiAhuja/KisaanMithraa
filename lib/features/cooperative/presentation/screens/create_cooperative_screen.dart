@@ -3,6 +3,7 @@ import 'package:cropconnect/features/cooperative/presentation/widgets/member_sea
 import 'package:cropconnect/features/cooperative/presentation/widgets/member_selection_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
 import '../controllers/create_cooperative_controller.dart';
 
 class CreateCooperativeScreen extends GetView<CreateCooperativeController> {
@@ -31,16 +32,14 @@ class CreateCooperativeScreen extends GetView<CreateCooperativeController> {
           ),
           onPressed: () => Get.back(),
         ),
-        toolbarHeight: 56, // Slightly reduced app bar height
+        toolbarHeight: 56,
       ),
       body: SingleChildScrollView(
         child: Column(
           children: [
-            // Compact Header Section
             Container(
               width: double.infinity,
-              padding: const EdgeInsets.symmetric(
-                  vertical: 16, horizontal: 20), // Reduced padding
+              padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 20),
               decoration: BoxDecoration(
                 gradient: LinearGradient(
                   colors: [
@@ -55,14 +54,14 @@ class CreateCooperativeScreen extends GetView<CreateCooperativeController> {
                 children: [
                   // Icon container
                   Container(
-                    padding: const EdgeInsets.all(12), // Smaller padding
+                    padding: const EdgeInsets.all(12),
                     decoration: BoxDecoration(
                       color: Colors.white.withOpacity(0.2),
-                      borderRadius: BorderRadius.circular(16), // Reduced radius
+                      borderRadius: BorderRadius.circular(16),
                     ),
                     child: const Icon(
                       Icons.groups_rounded,
-                      size: 36, // Reduced size
+                      size: 36,
                       color: Colors.white,
                     ),
                   ),
@@ -79,7 +78,7 @@ class CreateCooperativeScreen extends GetView<CreateCooperativeController> {
                             fontWeight: FontWeight.bold,
                           ),
                         ),
-                        const SizedBox(height: 4), // Reduced spacing
+                        const SizedBox(height: 4),
                         Text(
                           'Create a community of farmers working together',
                           style: theme.textTheme.bodySmall?.copyWith(
@@ -95,12 +94,14 @@ class CreateCooperativeScreen extends GetView<CreateCooperativeController> {
 
             // Form Section
             Padding(
-              padding: const EdgeInsets.all(16.0), // Reduced padding
+              padding: const EdgeInsets.all(16.0),
               child: Form(
                 key: controller.formKey,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
+                    _buildImageSelectionSection(theme, context),
+                    const SizedBox(height: 16),
                     _buildTextField(
                       controller: controller.nameController,
                       label: 'Cooperative Name',
@@ -110,7 +111,7 @@ class CreateCooperativeScreen extends GetView<CreateCooperativeController> {
                       validator: (value) =>
                           value?.isEmpty ?? true ? 'Name is required' : null,
                     ),
-                    const SizedBox(height: 16), // Reduced spacing
+                    const SizedBox(height: 16),
                     _buildTextField(
                       controller: controller.descriptionController,
                       label: 'Description',
@@ -122,7 +123,7 @@ class CreateCooperativeScreen extends GetView<CreateCooperativeController> {
                           ? 'Description is required'
                           : null,
                     ),
-                    const SizedBox(height: 16), // Reduced spacing
+                    const SizedBox(height: 16),
                     MemberSelectionWidget(
                       title: 'Select Members',
                       selectedMembers: controller.selectedMembers,
@@ -133,7 +134,7 @@ class CreateCooperativeScreen extends GetView<CreateCooperativeController> {
                     ),
                     const SizedBox(height: 24),
                     _buildCreateButton(theme),
-                    const SizedBox(height: 16), // Reduced spacing
+                    const SizedBox(height: 16),
                   ],
                 ),
               ),
@@ -283,6 +284,209 @@ class CreateCooperativeScreen extends GetView<CreateCooperativeController> {
         onMemberSelected: (user) {
           controller.selectedMembers.add(user);
         },
+      ),
+    );
+  }
+
+  Widget _buildImageSelectionSection(ThemeData theme, BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: theme.colorScheme.surface,
+        borderRadius: BorderRadius.circular(12),
+        boxShadow: [
+          BoxShadow(
+            color: theme.colorScheme.primary.withOpacity(0.08),
+            blurRadius: 8,
+            offset: const Offset(0, 2),
+          ),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Icon(
+                Icons.photo_camera,
+                size: 18,
+                color: theme.colorScheme.primary,
+              ),
+              const SizedBox(width: 8),
+              Text(
+                'Cooperative Banner',
+                style: theme.textTheme.titleSmall?.copyWith(
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              const Spacer(),
+              Text(
+                'Optional',
+                style: theme.textTheme.bodySmall?.copyWith(
+                  color: theme.colorScheme.onSurface.withOpacity(0.6),
+                  fontStyle: FontStyle.italic,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 12),
+          Obx(() => Center(
+                child: controller.selectedImage.value == null
+                    ? GestureDetector(
+                        onTap: () => _showImageSourceDialog(context),
+                        child: Container(
+                          width: 180,
+                          height: 120,
+                          decoration: BoxDecoration(
+                            color: theme.colorScheme.primary.withOpacity(0.1),
+                            borderRadius: BorderRadius.circular(10),
+                            border: Border.all(
+                              color: theme.colorScheme.primary.withOpacity(0.3),
+                              width: 1,
+                            ),
+                          ),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(
+                                Icons.add_photo_alternate_outlined,
+                                size: 40,
+                                color: theme.colorScheme.primary,
+                              ),
+                              const SizedBox(height: 8),
+                              Text(
+                                'Add Banner',
+                                style: theme.textTheme.bodySmall?.copyWith(
+                                  color: theme.colorScheme.primary,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      )
+                    : Stack(
+                        clipBehavior: Clip.none,
+                        children: [
+                          Container(
+                            width: 120,
+                            height: 120,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                              image: DecorationImage(
+                                image:
+                                    FileImage(controller.selectedImage.value!),
+                                fit: BoxFit.cover,
+                              ),
+                              border: Border.all(
+                                color:
+                                    theme.colorScheme.primary.withOpacity(0.3),
+                                width: 1,
+                              ),
+                            ),
+                          ),
+                          Positioned(
+                            top: -8,
+                            right: -8,
+                            child: GestureDetector(
+                              onTap: () =>
+                                  controller.selectedImage.value = null,
+                              child: Container(
+                                padding: const EdgeInsets.all(2),
+                                decoration: BoxDecoration(
+                                  color: theme.colorScheme.error,
+                                  shape: BoxShape.circle,
+                                ),
+                                child: Icon(
+                                  Icons.close,
+                                  size: 16,
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ),
+                          ),
+                          Positioned(
+                            bottom: -8,
+                            right: -8,
+                            child: GestureDetector(
+                              onTap: () => _showImageSourceDialog(context),
+                              child: Container(
+                                padding: const EdgeInsets.all(4),
+                                decoration: BoxDecoration(
+                                  color: theme.colorScheme.primary,
+                                  shape: BoxShape.circle,
+                                ),
+                                child: Icon(
+                                  Icons.edit,
+                                  size: 14,
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+              )),
+          const SizedBox(height: 8),
+          Center(
+            child: Text(
+              'Upload a banner for your cooperative',
+              style: theme.textTheme.bodySmall?.copyWith(
+                color: theme.colorScheme.onSurface.withOpacity(0.6),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _showImageSourceDialog(BuildContext context) {
+    final theme = Theme.of(context);
+
+    showModalBottomSheet(
+      context: context,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+      ),
+      builder: (context) => SafeArea(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(16),
+              child: Text(
+                'Select Image Source',
+                style: theme.textTheme.titleMedium?.copyWith(
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+            const Divider(),
+            ListTile(
+              leading: Icon(
+                Icons.camera_alt,
+                color: theme.colorScheme.primary,
+              ),
+              title: Text('Camera'),
+              onTap: () {
+                Navigator.of(context).pop();
+                controller.pickImage(ImageSource.camera);
+              },
+            ),
+            ListTile(
+              leading: Icon(
+                Icons.photo_library,
+                color: theme.colorScheme.primary,
+              ),
+              title: Text('Gallery'),
+              onTap: () {
+                Navigator.of(context).pop();
+                controller.pickImage(ImageSource.gallery);
+              },
+            ),
+            const SizedBox(height: 8),
+          ],
+        ),
       ),
     );
   }

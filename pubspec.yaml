@@ -55,8 +55,12 @@ dependencies:
   confetti:
   flutter_dotenv: 
   flutter_svg:
+  faker:
+  url_launcher:
+  cached_network_image:
   speech_to_text: 
   avatar_glow:
+  auto_size_text:
   flutter_tts: 
   permission_handler:
   path_provider_platform_interface:
@@ -64,6 +68,8 @@ dependencies:
   introduction_screen: 
   universal_html:
   flutter_lucide:
+  firebase_storage:
+  image_picker:
   flutter_localizations:
     sdk: flutter
   google_maps_flutter:

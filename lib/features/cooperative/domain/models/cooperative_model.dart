@@ -16,9 +16,11 @@ class CooperativeModel {
   final List<String> members;
   final List<CooperativeInvite> pendingInvites;
   final VerificationRequirements verificationRequirements;
+  final String? bannerUrl;
 
   CooperativeModel({
     required this.id,
+    this.bannerUrl,
     required this.name,
     required this.createdBy,
     required this.createdAt,
@@ -48,11 +50,13 @@ class CooperativeModel {
       'members': members,
       'pendingInvites': pendingInvites.map((invite) => invite.toMap()).toList(),
       'verificationRequirements': verificationRequirements.toMap(),
+      'bannerUrl': bannerUrl,
     };
   }
 
   factory CooperativeModel.fromMap(Map<String, dynamic> map) {
     return CooperativeModel(
+      bannerUrl: map['bannerUrl'] ?? '',
       id: map['id'] ?? '',
       name: map['name'] ?? '',
       createdBy: map['createdBy'] ?? '',

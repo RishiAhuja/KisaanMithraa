@@ -1,3 +1,5 @@
+import 'package:cropconnect/core/debug/presentation/debug_screen.dart';
+import 'package:cropconnect/core/services/debug/debug_service.dart';
 import 'package:cropconnect/core/services/locale/locale_service.dart';
 import 'package:cropconnect/core/theme/app_theme.dart';
 import 'package:cropconnect/features/auth/domain/model/user/pending_invite_model.dart';
@@ -15,6 +17,7 @@ import 'package:cropconnect/features/cooperative/presentation/screens/cooperativ
 import 'package:cropconnect/features/cooperative/presentation/screens/cooperative_management_screen.dart';
 import 'package:cropconnect/features/cooperative/presentation/screens/create_cooperative_screen.dart';
 import 'package:cropconnect/features/cooperative/presentation/screens/my_cooperatives_screen.dart';
+import 'package:cropconnect/features/cooperative/presentation/screens/search_cooperatives_screen.dart';
 import 'package:cropconnect/features/home/presentation/bindings/home_bindings.dart';
 import 'package:cropconnect/features/home/presentation/screen/home_screen.dart';
 import 'package:cropconnect/features/intro/presentation/screens/intro_screen.dart';
@@ -71,7 +74,7 @@ Future<void> main() async {
   final binding = AuthBinding();
   binding.dependencies();
   Get.put(LocaleService());
-
+  Get.put(DebugService(), permanent: true);
   runApp(const MyApp());
 }
 
@@ -145,6 +148,15 @@ class MyApp extends StatelessWidget {
             }),
           ),
           GetPage(
+            name: '/debug',
+            page: () => const DebugScreen(),
+            binding: BindingsBuilder(() {
+              Get.lazyPut(
+                () => DebugService(),
+              );
+            }),
+          ),
+          GetPage(
             name: '/notifications',
             page: () => const NotificationsScreen(),
             binding: BindingsBuilder(() {
@@ -163,6 +175,13 @@ class MyApp extends StatelessWidget {
             page: () => const CooperativeDetailsScreen(),
             binding: BindingsBuilder(() {
               Get.lazyPut(() => CooperativeDetailsController());
+            }),
+          ),
+          GetPage(
+            name: '/search-cooperatives',
+            page: () => const SearchCooperativesScreen(),
+            binding: BindingsBuilder(() {
+              Get.lazyPut(() => Get.find<MyCooperativesController>());
             }),
           ),
           GetPage(
