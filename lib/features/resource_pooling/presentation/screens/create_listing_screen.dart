@@ -14,7 +14,7 @@ class CreateListingScreen extends GetView<ResourcePoolingController> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Create Listing'),
+        title: Text('Create Listing'),
       ),
       body: SafeArea(
         child: Column(

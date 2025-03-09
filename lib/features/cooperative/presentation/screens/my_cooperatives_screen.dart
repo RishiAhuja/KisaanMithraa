@@ -497,6 +497,8 @@ class _CooperativeCard extends StatelessWidget {
                     arguments: {
                       'cooperativeId': coop.id,
                       'cooperativeName': coop.name,
+                      'cooperative': coop,
+                      'role': coopWithRole.role,
                     },
                   ),
                   child: Container(
@@ -655,7 +657,9 @@ class _NearbyCooperativeCard extends StatelessWidget {
                     borderRadius: BorderRadius.circular(16),
                   ),
                 ),
-                child: Text('Join'),
+                child: Text('Join',
+                    style: theme.textTheme.bodyMedium
+                        ?.copyWith(color: Colors.white)),
               ),
             ],
           ),

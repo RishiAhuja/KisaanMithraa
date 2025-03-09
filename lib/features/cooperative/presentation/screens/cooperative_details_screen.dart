@@ -19,22 +19,6 @@ class CooperativeDetailsScreen extends GetView<CooperativeDetailsController> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Details'),
-        actions: [
-          Obx(() {
-            if (!controller.isLoading.value &&
-                controller.role.value == 'viewer') {
-              return Chip(
-                label: Text('Viewer'),
-                backgroundColor: theme.colorScheme.surfaceVariant,
-                labelStyle:
-                    TextStyle(color: theme.colorScheme.onSurfaceVariant),
-                padding: EdgeInsets.symmetric(horizontal: 8),
-              );
-            }
-            return SizedBox.shrink();
-          }),
-          SizedBox(width: 8),
-        ],
       ),
       body: Obx(() {
         if (controller.isLoading.value) {
@@ -46,10 +30,9 @@ class CooperativeDetailsScreen extends GetView<CooperativeDetailsController> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Enhanced banner with description, location and verified status tag
               if (coop.bannerUrl != null && coop.bannerUrl!.isNotEmpty)
                 Container(
-                  height: 220, // Increased height to accommodate more text
+                  height: 220,
                   width: double.infinity,
                   margin: EdgeInsets.only(bottom: 16),
                   decoration: BoxDecoration(
@@ -313,83 +296,95 @@ class CooperativeDetailsScreen extends GetView<CooperativeDetailsController> {
                     ],
                   ),
                 ),
-
               _buildCropsMarquee(coop.cropTypes, theme),
-
               SizedBox(height: 8),
-
-              Row(
-                children: [
-                  Expanded(
-                    child: Card(
-                      child: Padding(
-                        padding: const EdgeInsets.all(16),
-                        child: Column(
-                          children: [
-                            Text(
-                              '${coop.members.length}',
-                              style: theme.textTheme.headlineSmall?.copyWith(
-                                fontWeight: FontWeight.bold,
+              IntrinsicHeight(
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: Card(
+                        clipBehavior: Clip.hardEdge,
+                        elevation: 1,
+                        child: Container(
+                          padding: const EdgeInsets.all(16),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                '${coop.members.length}',
+                                style: theme.textTheme.headlineSmall?.copyWith(
+                                  fontWeight: FontWeight.bold,
+                                ),
                               ),
-                            ),
-                            Text('Members', style: theme.textTheme.bodySmall),
-                          ],
+                              const SizedBox(height: 4),
+                              Text('Members', style: theme.textTheme.bodySmall),
+                            ],
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                  Expanded(
-                    child: Card(
-                      child: Padding(
-                        padding: const EdgeInsets.all(16),
-                        child: Column(
-                          children: [
-                            Obx(
-                              () => controller.isLoadingListings.value
-                                  ? SizedBox(
-                                      height: 24,
-                                      width: 24,
-                                      child: CircularProgressIndicator(
-                                          strokeWidth: 2),
-                                    )
-                                  : Text(
-                                      '${controller.resourceListingsCount.value}',
-                                      style: theme.textTheme.headlineSmall
-                                          ?.copyWith(
-                                        fontWeight: FontWeight.bold,
+                    const SizedBox(width: 8),
+                    Expanded(
+                      child: Card(
+                        clipBehavior: Clip.hardEdge,
+                        elevation: 1,
+                        child: Container(
+                          padding: const EdgeInsets.all(16),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Obx(
+                                () => controller.isLoadingListings.value
+                                    ? SizedBox(
+                                        height: 24,
+                                        width: 24,
+                                        child: CircularProgressIndicator(
+                                            strokeWidth: 2),
+                                      )
+                                    : Text(
+                                        '${controller.resourceListingsCount.value}',
+                                        style: theme.textTheme.headlineSmall
+                                            ?.copyWith(
+                                          fontWeight: FontWeight.bold,
+                                        ),
                                       ),
-                                    ),
-                            ),
-                            Text('Listings', style: theme.textTheme.bodySmall),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                  Expanded(
-                    child: Card(
-                      child: Padding(
-                        padding: const EdgeInsets.all(16),
-                        child: Column(
-                          children: [
-                            Text(
-                              '${coop.cropTypes.length}',
-                              style: theme.textTheme.headlineSmall?.copyWith(
-                                fontWeight: FontWeight.bold,
                               ),
-                            ),
-                            Text('Crop Types',
-                                style: theme.textTheme.bodySmall),
-                          ],
+                              const SizedBox(height: 4),
+                              Text('Listings',
+                                  style: theme.textTheme.bodySmall),
+                            ],
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                ],
+                    const SizedBox(width: 8),
+                    Expanded(
+                      child: Card(
+                        clipBehavior: Clip.hardEdge,
+                        elevation: 1,
+                        child: Container(
+                          padding: const EdgeInsets.all(16),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                '${coop.cropTypes.length}',
+                                style: theme.textTheme.headlineSmall?.copyWith(
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              const SizedBox(height: 4),
+                              Text('Crop Types',
+                                  style: theme.textTheme.bodySmall),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
-
               SizedBox(height: 16),
-
               if (controller.role.value == 'viewer')
                 Container(
                   width: double.infinity,
@@ -424,11 +419,8 @@ class CooperativeDetailsScreen extends GetView<CooperativeDetailsController> {
                     ),
                   ),
                 ),
-
               _buildAdminContactCard(coop, theme, context),
-
               SizedBox(height: 8),
-
               controller.role.value == 'viewer'
                   ? _buildMembersPreview(coop, theme)
                   : _buildMembersSection(coop, theme),
@@ -508,7 +500,11 @@ class CooperativeDetailsScreen extends GetView<CooperativeDetailsController> {
                   ),
                   icon: Icon(Icons.phone,
                       color: AppColors.backgroundLight, size: 18),
-                  label: Text('Call'),
+                  label: Text('Call',
+                      style: Theme.of(context)
+                          .textTheme
+                          .labelLarge
+                          ?.copyWith(color: AppColors.backgroundLight)),
                 ),
               ],
             ),

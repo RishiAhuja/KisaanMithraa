@@ -144,7 +144,6 @@ class NearbyCooperativesController extends GetxController {
         return;
       }
 
-      // Create batch operation
       final batch = _firestore.batch();
       final coopRef = _firestore.collection('cooperatives').doc(cooperative.id);
       final joinRequest = {

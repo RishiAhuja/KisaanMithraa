@@ -293,7 +293,6 @@ class AppTheme {
   }
 
   static ThemeData get darkTheme {
-    // Dark theme with the same font as light theme
     final baseTextTheme = GoogleFonts.poppinsTextTheme();
 
     final customTextTheme = baseTextTheme.copyWith(

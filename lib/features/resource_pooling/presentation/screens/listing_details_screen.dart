@@ -6,6 +6,7 @@ import 'package:cropconnect/features/resource_pooling/presentation/controller/re
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class ListingDetailsScreen extends GetView<ResourcePoolingController> {
   const ListingDetailsScreen({super.key});
@@ -103,11 +104,15 @@ class ListingDetailsScreen extends GetView<ResourcePoolingController> {
                               style: theme.textTheme.bodySmall,
                             ),
                             trailing: IconButton(
-                              icon: const Icon(Icons.message_outlined),
-                              onPressed: () {
-                                // TODO: Implement chat functionality
-                                Get.snackbar('Coming Soon',
-                                    'Chat feature will be available soon');
+                              icon: const Icon(Icons.call),
+                              onPressed: () async {
+                                final Uri telUri = Uri.parse(
+                                    'tel:+91${requester.phoneNumber}');
+                                if (await canLaunchUrl(telUri)) {
+                                  await launchUrl(telUri);
+                                } else {
+                                  throw 'Could not launch $telUri';
+                                }
                               },
                             ),
                           ),
@@ -258,7 +263,9 @@ class ListingDetailsScreen extends GetView<ResourcePoolingController> {
             onPressed: listing.status == 'active'
                 ? () => _showMakeOfferDialog(context, listing)
                 : null,
-            child: const Text('Make Offer'),
+            child: Text('Make Offer',
+                style:
+                    theme.textTheme.bodyMedium?.copyWith(color: Colors.white)),
           ),
         ),
       ),
@@ -294,7 +301,11 @@ class ListingDetailsScreen extends GetView<ResourcePoolingController> {
 
     Get.dialog(
       AlertDialog(
-        title: const Text('Make Offer'),
+        title: Text('Make Offer',
+            style: Theme.of(context)
+                .textTheme
+                .bodyMedium
+                ?.copyWith(color: Colors.white)),
         content: Form(
           key: formKey,
           child: Column(
