@@ -276,15 +276,16 @@ class CooperativeDetailsController extends GetxController {
                       ),
                       const SizedBox(height: 16),
                       Text(
-                        'Request Sent!',
+                        'Welcome to $cooperativeName!',
                         style: TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
                         ),
+                        textAlign: TextAlign.center,
                       ),
                       const SizedBox(height: 12),
                       Text(
-                        'Your request to join $cooperativeName has been sent successfully. You will be notified once approved.',
+                        'You are now a member of this cooperative. You can access all resources and features.',
                         textAlign: TextAlign.center,
                         style: TextStyle(
                           fontSize: 14,

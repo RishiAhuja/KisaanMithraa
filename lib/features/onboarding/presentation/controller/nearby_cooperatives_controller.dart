@@ -116,7 +116,7 @@ class NearbyCooperativesController extends GetxController {
 
   Future<void> requestToJoin(CooperativeModel cooperative) async {
     try {
-      AppLogger.info("Requesting to join");
+      AppLogger.info("Joining ${cooperative.name}");
       final currentUser = await _storageService.getUser();
       if (currentUser == null) {
         Get.snackbar(
@@ -132,6 +132,17 @@ class NearbyCooperativesController extends GetxController {
       final coopDoc =
           await _firestore.collection('cooperatives').doc(cooperative.id).get();
 
+      final members = List<String>.from(coopDoc.data()?['members'] ?? []);
+      if (members.contains(currentUser.id)) {
+        Get.snackbar(
+          'Already a Member',
+          'You are already a member of this cooperative',
+          snackPosition: SnackPosition.TOP,
+        );
+        isJoiningCoop.value = false;
+        return;
+      }
+
       final existingRequests = List<Map<String, dynamic>>.from(
           coopDoc.data()?['joinRequests'] ?? []);
 
@@ -141,20 +152,26 @@ class NearbyCooperativesController extends GetxController {
           'You have already sent a request to join this cooperative',
           snackPosition: SnackPosition.TOP,
         );
+        isJoiningCoop.value = false;
         return;
       }
 
       final batch = _firestore.batch();
       final coopRef = _firestore.collection('cooperatives').doc(cooperative.id);
+
       final joinRequest = {
         'userId': currentUser.id,
         'requestedAt': DateTime.now(),
-        'status': 'pending',
+        'status': 'accepted',
         'userName': currentUser.name,
       };
 
       batch.update(coopRef, {
         'joinRequests': FieldValue.arrayUnion([joinRequest]),
+      });
+
+      batch.update(coopRef, {
+        'members': FieldValue.arrayUnion([currentUser.id]),
       });
 
       final adminId = cooperative.createdBy;
@@ -164,28 +181,25 @@ class NearbyCooperativesController extends GetxController {
           .collection('items')
           .doc();
 
-      final notification = NotificationModel.cooperativeJoinRequest(
-        id: notificationRef.id,
-        userId: adminId,
-        requesterId: currentUser.id,
-        requesterName: currentUser.name,
-        cooperativeName: cooperative.name,
-        cooperativeId: cooperative.id,
-      );
+      final notification = NotificationModel.generalMessage(
+          id: notificationRef.id,
+          userId: adminId,
+          title: "New Member Joined",
+          message: "${currentUser.name} joined ${cooperative.name}");
 
       batch.set(notificationRef, notification.toMap());
       await batch.commit();
 
-      AppLogger.info('Join request sent successfully');
+      AppLogger.info('Successfully joined cooperative');
 
       final dialogConfetti =
           ConfettiController(duration: const Duration(seconds: 3));
-      _showSuccessDialog(cooperative.name, dialogConfetti);
+      _showJoinSuccessDialog(cooperative.name, dialogConfetti);
     } catch (e) {
-      AppLogger.error('Error requesting to join cooperative: $e');
+      AppLogger.error('Error joining cooperative: $e');
       Get.snackbar(
         'Error',
-        'Failed to send join request',
+        'Failed to join cooperative',
         snackPosition: SnackPosition.TOP,
         duration: const Duration(seconds: 2),
       );
@@ -194,7 +208,7 @@ class NearbyCooperativesController extends GetxController {
     }
   }
 
-  void _showSuccessDialog(
+  void _showJoinSuccessDialog(
       String cooperativeName, ConfettiController dialogConfetti) {
     Get.dialog(
       Dialog(
@@ -217,7 +231,7 @@ class NearbyCooperativesController extends GetxController {
                   ),
                   const SizedBox(height: 16),
                   Text(
-                    'Congratulations! 🎉',
+                    'Welcome to the Cooperative! 🎉',
                     style: Get.textTheme.headlineSmall?.copyWith(
                       fontWeight: FontWeight.bold,
                     ),
@@ -225,7 +239,7 @@ class NearbyCooperativesController extends GetxController {
                   ),
                   const SizedBox(height: 8),
                   Text(
-                    'Your request to join $cooperativeName has been sent successfully',
+                    'You have successfully joined $cooperativeName',
                     style: Get.textTheme.bodyLarge,
                     textAlign: TextAlign.center,
                   ),
