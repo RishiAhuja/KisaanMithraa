@@ -1,0 +1,423 @@
+{
+    "navigation_contexts": [
+      {
+        "route": "/splash",
+        "title": "Splash Screen",
+        "description": "Initial loading screen shown when the app starts",
+        "redirect_criteria": "Always the first screen when app launches, automatically navigates to other screens based on authentication status",
+        "user_needs": ["Opening the app for the first time"],
+        "intent_keywords": ["start app", "launch", "open app"],
+        "sample_questions": ["How do I start the app?", "App is stuck on loading"],
+        "required_context": {
+          "authentication": false,
+          "location_permission": false
+        }
+      },
+      {
+        "route": "/auth-choice",
+        "title": "Authentication Choice",
+        "description": "Screen where users decide how to authenticate - login, register or continue with social accounts",
+        "redirect_criteria": "When user is not logged in or needs to create a new account",
+        "user_needs": ["Sign in", "Create account", "Authentication help", "Login issues", "Get started"],
+        "intent_keywords": ["login", "register", "sign up", "create account"],
+        "sample_questions": ["How do I login?", "I want to create a new account", "Can't sign in"],
+        "related_routes": ["/register", "/otp"],
+        "required_context": {
+          "authentication": false,
+          "location_permission": false
+        }
+      },
+      {
+        "route": "/onboarding",
+        "title": "Language Selection",
+        "description": "Screen where new users select their preferred language for the app interface",
+        "redirect_criteria": "For new users who need to set up their language preferences",
+        "user_needs": ["Change language", "Select language", "Language preferences", "App in Hindi", "App in English"],
+        "intent_keywords": ["language", "hindi", "english", "change language", "select language"],
+        "sample_questions": ["How do I change the app language?", "Can I use the app in Hindi?"],
+        "required_context": {
+          "authentication": false,
+          "location_permission": false
+        }
+      },
+      {
+        "route": "/register",
+        "title": "Registration",
+        "description": "Form for creating a new user account with personal information and farm details",
+        "redirect_criteria": "When user wants to register a new account",
+        "user_needs": ["Create account", "Sign up", "Register", "New user", "Join CropConnect"],
+        "intent_keywords": ["register", "sign up", "create account", "join"],
+        "sample_questions": ["How do I register?", "What information do I need to sign up?"],
+        "related_routes": ["/auth-choice", "/otp"],
+        "required_context": {
+          "authentication": false,
+          "location_permission": false
+        }
+      },
+      {
+        "route": "/otp",
+        "title": "OTP Verification",
+        "description": "Screen to verify phone number using OTP code sent via SMS",
+        "redirect_criteria": "After phone number submission during registration or login",
+        "user_needs": ["Verify number", "Enter OTP", "Didn't receive code", "Verification failed"],
+        "intent_keywords": ["otp", "verification code", "verify number", "sms code"],
+        "sample_questions": ["Where do I enter the OTP?", "I didn't receive my code", "OTP verification failed"],
+        "related_routes": ["/register", "/auth-choice"],
+        "required_context": {
+          "authentication": "partial",
+          "location_permission": false
+        }
+      },
+      {
+        "route": "/home",
+        "title": "Home Screen",
+        "description": "Main dashboard showing weather, announcements, cooperative updates and quick actions",
+        "redirect_criteria": "Main screen for authenticated users, central hub for navigation",
+        "user_needs": ["Go to home", "Main screen", "Dashboard", "See weather", "Check updates"],
+        "intent_keywords": ["home", "dashboard", "weather", "main screen", "updates"],
+        "sample_questions": ["Show me the home screen", "Where can I check the weather?", "How do I see my updates?"],
+        "related_routes": ["/profile", "/community", "/resource-pool", "/podcasts"],
+        "required_context": {
+          "authentication": true,
+          "location_permission": true
+        }
+      },
+      {
+        "route": "/intro",
+        "title": "Introduction Screen",
+        "description": "Walkthrough tutorial explaining key app features to new users",
+        "redirect_criteria": "For first-time users who need to understand app features",
+        "user_needs": ["How to use app", "App tutorial", "Help getting started", "Learn features"],
+        "intent_keywords": ["tutorial", "guide", "how to use", "help", "introduction"],
+        "sample_questions": ["How do I use this app?", "Show me a tutorial", "I need help with the app"],
+        "related_routes": ["/home"],
+        "required_context": {
+          "authentication": true,
+          "location_permission": false
+        }
+      },
+      {
+        "route": "/profile",
+        "title": "User Profile",
+        "description": "Shows user information, farm details and account settings",
+        "redirect_criteria": "When user wants to view or edit their profile information",
+        "user_needs": ["View profile", "Edit profile", "Change details", "Account settings", "My account"],
+        "intent_keywords": ["profile", "account", "settings", "personal details", "edit information"],
+        "sample_questions": ["How do I edit my profile?", "Where are my account settings?", "Update my phone number"],
+        "related_routes": ["/home"],
+        "required_context": {
+          "authentication": true,
+          "location_permission": false
+        }
+      },
+      {
+        "route": "/create-cooperative",
+        "title": "Create Cooperative",
+        "description": "Form to create a new farmers' cooperative group with name, location and details",
+        "redirect_criteria": "When user wants to start their own cooperative group",
+        "user_needs": ["Create group", "Start cooperative", "New farmers group", "Form collective"],
+        "intent_keywords": ["create cooperative", "new group", "start group", "form cooperative"],
+        "sample_questions": ["How do I start my own cooperative?", "Create a farmers group", "Form a new collective"],
+        "related_routes": ["/my-cooperatives", "/cooperative-management"],
+        "required_context": {
+          "authentication": true,
+          "location_permission": true
+        }
+      },
+      {
+        "route": "/community",
+        "title": "Community Forum",
+        "description": "Social feed showing posts and announcements from cooperative members",
+        "redirect_criteria": "When user wants to see community posts, announcements or chat with other farmers",
+        "user_needs": ["Community posts", "Farmer forum", "Group messages", "Cooperative announcements", "Chat with farmers"],
+        "intent_keywords": ["community", "posts", "forum", "announcements", "discussions"],
+        "sample_questions": ["How do I see community posts?", "Where can I chat with other farmers?", "Read cooperative announcements"],
+        "related_routes": ["/my-cooperatives", "/cooperative-details"],
+        "required_context": {
+          "authentication": true,
+          "location_permission": false
+        }
+      },
+      {
+        "route": "/my-cooperatives",
+        "title": "My Cooperatives",
+        "description": "List of cooperatives the user is a member of or has pending invitations to",
+        "redirect_criteria": "When user wants to see cooperatives they belong to",
+        "user_needs": ["My groups", "My cooperatives", "Group invitations", "Join cooperative"],
+        "intent_keywords": ["my cooperatives", "my groups", "invitations", "joined cooperatives"],
+        "sample_questions": ["Show my cooperatives", "What groups am I in?", "Check my invitations"],
+        "related_routes": ["/cooperative-details", "/search-cooperatives", "/nearby-cooperatives"],
+        "required_context": {
+          "authentication": true,
+          "location_permission": false
+        }
+      },
+      {
+        "route": "/debug",
+        "title": "Debug Screen",
+        "description": "Developer tools for testing and debugging the app",
+        "redirect_criteria": "Only for developers and admin users for testing purposes",
+        "user_needs": ["Debug app", "Admin tools", "Developer access"],
+        "intent_keywords": ["debug", "developer tools", "admin access", "testing"],
+        "sample_questions": ["Access debug mode", "Developer tools", "Admin panel"],
+        "related_routes": [],
+        "required_context": {
+          "authentication": true,
+          "admin_privileges": true,
+          "location_permission": false
+        }
+      },
+      {
+        "route": "/notifications",
+        "title": "Notifications",
+        "description": "List of app notifications, cooperative updates and system messages",
+        "redirect_criteria": "When user wants to see their notifications or alerts",
+        "user_needs": ["My notifications", "Check alerts", "View messages", "See updates"],
+        "intent_keywords": ["notifications", "alerts", "messages", "updates"],
+        "sample_questions": ["Where are my notifications?", "Check my alerts", "Any new messages?"],
+        "related_routes": ["/home"],
+        "required_context": {
+          "authentication": true,
+          "location_permission": false
+        }
+      },
+      {
+        "route": "/cooperative-management",
+        "title": "Cooperative Management",
+        "description": "Admin tools for managing a cooperative, including member management and settings",
+        "redirect_criteria": "When a cooperative admin needs to manage their group",
+        "user_needs": ["Manage cooperative", "Add members", "Remove members", "Cooperative settings", "Admin tools"],
+        "intent_keywords": ["manage cooperative", "admin tools", "add members", "group settings"],
+        "sample_questions": ["How do I manage my cooperative?", "Add new members", "Remove a member", "Change cooperative settings"],
+        "related_routes": ["/cooperative-details", "/my-cooperatives"],
+        "required_context": {
+          "authentication": true,
+          "cooperative_admin": true,
+          "location_permission": false
+        }
+      },
+      {
+        "route": "/cooperative-details",
+        "title": "Cooperative Details",
+        "description": "Detailed information about a specific cooperative, including members, location, and activities",
+        "redirect_criteria": "When user wants to view information about a specific cooperative",
+        "user_needs": ["Cooperative info", "Group details", "See members", "About cooperative"],
+        "intent_keywords": ["cooperative details", "group info", "members list", "about cooperative"],
+        "sample_questions": ["Show details about my cooperative", "Who's in this group?", "Information about this cooperative"],
+        "related_routes": ["/my-cooperatives", "/cooperative-management", "/community"],
+        "required_context": {
+          "authentication": true,
+          "cooperative_id": "required",
+          "location_permission": false
+        }
+      },
+      {
+        "route": "/podcasts",
+        "title": "Agricultural Podcasts",
+        "description": "Library of audio content including farming tips, market information and agricultural education",
+        "redirect_criteria": "When user wants to listen to agricultural audio content",
+        "user_needs": ["Listen to podcasts", "Farming audio", "Agricultural tips", "Learn farming", "Listen to experts"],
+        "intent_keywords": ["podcasts", "audio content", "farming tips", "agricultural education", "listen"],
+        "sample_questions": ["Where can I find farming podcasts?", "Listen to agricultural advice", "Expert farming tips"],
+        "related_routes": ["/podcasts/player"],
+        "required_context": {
+          "authentication": true,
+          "location_permission": false
+        }
+      },
+      {
+        "route": "/podcasts/player",
+        "title": "Podcast Player",
+        "description": "Audio player for listening to podcasts with playback controls",
+        "redirect_criteria": "After selecting a specific podcast to listen to",
+        "user_needs": ["Play podcast", "Listen to episode", "Audio player", "Farming podcast"],
+        "intent_keywords": ["play podcast", "listen", "audio player", "podcast controls"],
+        "sample_questions": ["How do I play this podcast?", "Control podcast playback", "Can't hear the audio"],
+        "related_routes": ["/podcasts"],
+        "required_context": {
+          "authentication": true,
+          "podcast_id": "required",
+          "location_permission": false
+        }
+      },
+      {
+        "route": "/search-cooperatives",
+        "title": "Search Cooperatives",
+        "description": "Search function to find cooperatives by name, location or crop type",
+        "redirect_criteria": "When user wants to discover and join new cooperatives",
+        "user_needs": ["Find cooperative", "Search groups", "Join cooperative", "Find farmers nearby"],
+        "intent_keywords": ["search cooperatives", "find groups", "discover cooperatives", "join group"],
+        "sample_questions": ["How do I find cooperatives near me?", "Search for wheat farming groups", "Find and join cooperatives"],
+        "related_routes": ["/nearby-cooperatives", "/my-cooperatives", "/cooperative-details"],
+        "required_context": {
+          "authentication": true,
+          "location_permission": true
+        }
+      },
+      {
+        "route": "/resource-pool",
+        "title": "Resource Listings",
+        "description": "Marketplace for sharing, lending or renting farming equipment and resources",
+        "redirect_criteria": "When user wants to find or share agricultural resources",
+        "user_needs": ["Find equipment", "Share resources", "Borrow tools", "Rent tractor", "Agricultural equipment"],
+        "intent_keywords": ["equipment sharing", "resource pool", "farm tools", "machinery", "rent equipment"],
+        "sample_questions": ["How can I find a tractor to rent?", "Share my farming tools", "Find equipment near me", "Borrow farming machinery"],
+        "related_routes": ["/create-listing", "/listing-details", "/my-listing-details"],
+        "required_context": {
+          "authentication": true,
+          "location_permission": true
+        },
+        "tracking": {
+          "source": "rag_suggestion",
+          "feature": "resource_sharing"
+        }
+      },
+      {
+        "route": "/create-listing",
+        "title": "Create Resource Listing",
+        "description": "Form to create a new listing for sharing or renting out farming equipment",
+        "redirect_criteria": "When user wants to share their own resources with other farmers",
+        "user_needs": ["Share equipment", "Rent out my tractor", "Create listing", "Offer tools", "List my resources"],
+        "intent_keywords": ["create listing", "share equipment", "rent out", "offer resources", "list machinery"],
+        "sample_questions": ["How do I share my tractor?", "List my equipment for rent", "Create a new resource listing", "Share my farming tools"],
+        "related_routes": ["/resource-pool", "/my-listing-details"],
+        "required_context": {
+          "authentication": true,
+          "location_permission": true
+        },
+        "tracking": {
+          "source": "rag_suggestion",
+          "feature": "resource_creation"
+        }
+      },
+      {
+        "route": "/listing-details",
+        "title": "Resource Listing Details",
+        "description": "Detailed view of a resource listing with equipment information, availability and contact details",
+        "redirect_criteria": "When viewing specific details about an available resource",
+        "user_needs": ["View equipment details", "Check availability", "Resource information", "Contact equipment owner"],
+        "intent_keywords": ["listing details", "equipment info", "availability", "contact owner", "resource details"],
+        "sample_questions": ["How do I see details about this tractor?", "Contact the owner of this equipment", "Check when this machinery is available"],
+        "related_routes": ["/resource-pool"],
+        "required_context": {
+          "authentication": true,
+          "location_permission": false,
+          "listing_id": "required"
+        },
+        "tracking": {
+          "source": "rag_suggestion",
+          "feature": "resource_viewing"
+        }
+      },
+      {
+        "route": "/my-listing-details",
+        "title": "My Listing Details",
+        "description": "Management page for a user's own resource listing with edit and delete options",
+        "redirect_criteria": "When user wants to manage their own resource listing",
+        "user_needs": ["Edit my listing", "Remove listing", "Update equipment details", "Manage my resources"],
+        "intent_keywords": ["edit listing", "remove listing", "update details", "manage resources", "my listings"],
+        "sample_questions": ["Edit my tractor listing", "Remove my equipment from sharing", "Update my resource availability", "Manage my shared tools"],
+        "related_routes": ["/resource-pool", "/create-listing"],
+        "required_context": {
+          "authentication": true,
+          "location_permission": false,
+          "own_listing_id": "required"
+        },
+        "tracking": {
+          "source": "rag_suggestion",
+          "feature": "resource_management"
+        }
+      },
+      {
+        "route": "/chatbot",
+        "title": "Agricultural Assistant",
+        "description": "AI-powered chatbot providing farming advice, market information and answering agricultural questions",
+        "redirect_criteria": "When user needs agricultural information or assistance",
+        "user_needs": ["Farming help", "Ask question", "Agricultural advice", "Crop disease help", "Get recommendations"],
+        "intent_keywords": ["farming advice", "crop questions", "pest control", "agricultural assistant", "farming help"],
+        "sample_questions": ["How do I treat tomato blight?", "Best time to sow wheat", "Help with pest control", "How to increase crop yield"],
+        "related_routes": ["/podcasts"],
+        "required_context": {
+          "authentication": true,
+          "location_permission": true
+        },
+        "tracking": {
+          "source": "rag_suggestion",
+          "feature": "ai_assistance"
+        }
+      },
+      {
+        "route": "/nearby-cooperatives",
+        "title": "Nearby Cooperatives",
+        "description": "Displays cooperatives in the user's geographical area they can join",
+        "redirect_criteria": "When user wants to discover cooperatives near their location",
+        "user_needs": ["Find local groups", "Cooperatives near me", "Join local farmers", "Groups in my area"],
+        "intent_keywords": ["nearby cooperatives", "local groups", "farmers near me", "join local cooperative"],
+        "sample_questions": ["Show cooperatives near me", "Find local farming groups", "Join farmers in my area"],
+        "related_routes": ["/search-cooperatives", "/my-cooperatives", "/cooperative-details"],
+        "required_context": {
+          "authentication": true,
+          "location_permission": true
+        },
+        "tracking": {
+          "source": "rag_suggestion",
+          "feature": "location_based_discovery"
+        }
+      }
+    ],
+    "meta": {
+      "app_name": "CropConnect",
+      "app_description": "Agricultural platform connecting farmers through cooperatives, shared resources, and knowledge exchange",
+      "primary_user_type": "Farmers",
+      "secondary_user_types": ["Agricultural experts", "Cooperative administrators", "Equipment owners"],
+      "key_features": [
+        "Cooperative management",
+        "Resource sharing marketplace",
+        "Agricultural knowledge via podcasts",
+        "AI farming assistant",
+        "Local weather forecasts",
+        "Community forums"
+      ],
+      "app_version": "1.0.0",
+      "supported_languages": ["en", "hi", "pa", "ta", "te", "mr"],
+      "min_authentication_level": {
+        "guest": ["/splash", "/auth-choice", "/register", "/onboarding", "/otp"],
+        "authenticated": ["all other routes"],
+        "admin": ["/debug"]
+      }
+    },
+    "user_context_parameters": {
+      "authentication": {
+        "description": "Whether the user needs to be logged in",
+        "possible_values": [true, false, "partial"]
+      },
+      "location_permission": {
+        "description": "Whether location access is needed for this feature",
+        "possible_values": [true, false]
+      },
+      "cooperative_admin": {
+        "description": "Whether the user needs to be an admin of at least one cooperative",
+        "possible_values": [true, false]
+      },
+      "cooperative_id": {
+        "description": "ID of a specific cooperative needed for this route",
+        "possible_values": ["required", "optional", null]
+      },
+      "podcast_id": {
+        "description": "ID of a specific podcast needed for this route",
+        "possible_values": ["required", "optional", null]
+      },
+      "listing_id": {
+        "description": "ID of a specific resource listing needed for this route",
+        "possible_values": ["required", "optional", null]
+      },
+      "own_listing_id": {
+        "description": "ID of a user's own resource listing needed for this route",
+        "possible_values": ["required", "optional", null]
+      },
+      "admin_privileges": {
+        "description": "Whether the user needs admin privileges",
+        "possible_values": [true, false]
+      }
+    }
+  }
