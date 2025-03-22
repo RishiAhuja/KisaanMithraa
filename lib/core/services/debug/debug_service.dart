@@ -1,17 +1,22 @@
 import 'dart:math';
+import 'dart:io';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:cropconnect/features/podcasts/domain/model/podcast_model.dart';
+import 'package:cropconnect/utils/app_logger.dart';
+import 'package:path/path.dart' as path;
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cropconnect/core/constants/app_constants.dart';
 import 'package:cropconnect/features/auth/domain/model/user/user_model.dart';
 import 'package:cropconnect/features/cooperative/domain/models/cooperative_model.dart';
 import 'package:cropconnect/features/cooperative/domain/models/verification_requirements.dart';
-import 'package:cropconnect/utils/app_logger.dart';
 import 'package:faker/faker.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:uuid/uuid.dart';
 
-class DebugService extends GetxController {
-  final _firestore = FirebaseFirestore.instance;
+class DebugService extends GetxService {
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  final FirebaseStorage _storage = FirebaseStorage.instance;
   static const _uuid = Uuid();
   final faker = Faker();
   final isDebugMode = false.obs;
@@ -494,5 +499,88 @@ class DebugService extends GetxController {
     AppLogger.debug('Member count: ${members.length + 1}'); // +1 for creator
     AppLogger.debug('Crops: ${crops.join(", ")}');
     AppLogger.debug('===============================');
+  }
+
+  Future<PodcastModel?> uploadPodcast({
+    required String title,
+    required String description,
+    required String author,
+    required int duration,
+    required File audioFile,
+    required File imageFile,
+    required List<String> tags,
+    required String languageCode,
+  }) async {
+    try {
+      isGeneratingData.value = true;
+
+      // Create unique IDs for file storage
+      final timestamp = DateTime.now().millisecondsSinceEpoch;
+      final podcastId = 'podcast_$timestamp';
+
+      // Upload image file
+      final imageFileName =
+          'podcasts/$podcastId/${path.basename(imageFile.path)}';
+      final imageRef = _storage.ref().child(imageFileName);
+      await imageRef.putFile(imageFile);
+      final imageUrl = await imageRef.getDownloadURL();
+
+      // Upload audio file
+      final audioFileName =
+          'podcasts/$podcastId/${path.basename(audioFile.path)}';
+      final audioRef = _storage.ref().child(audioFileName);
+
+      // Track upload progress if needed
+      final uploadTask = audioRef.putFile(audioFile);
+
+      // Wait for upload to complete
+      await uploadTask;
+      final audioUrl = await audioRef.getDownloadURL();
+
+      // Create podcast document in Firestore
+      final now = DateTime.now();
+
+      final podcastData = {
+        'title': title,
+        'description': description,
+        'imageUrl': imageUrl,
+        'audioUrl': audioUrl,
+        'author': author,
+        'duration': duration,
+        'likes': 0,
+        'plays': 0,
+        'tags': tags,
+        'createdAt': now,
+        'languageCode': languageCode,
+      };
+
+      // Add to Firestore
+      await _firestore.collection('podcasts').doc(podcastId).set(podcastData);
+
+      // Create and return podcast model
+      final podcast = PodcastModel(
+        id: podcastId,
+        title: title,
+        description: description,
+        imageUrl: imageUrl,
+        audioUrl: audioUrl,
+        author: author,
+        duration: duration,
+        likes: 0,
+        plays: 0,
+        tags: tags,
+        createdAt: now,
+        updatedAt: null,
+        languageCode: languageCode,
+      );
+
+      AppLogger.info('Created podcast: $title');
+      return podcast;
+    } catch (e) {
+      AppLogger.error('Error uploading podcast: $e');
+      rethrow;
+    } finally {
+      isGeneratingData.value = false;
+    }
   }
 }

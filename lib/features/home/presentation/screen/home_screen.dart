@@ -565,7 +565,7 @@ class HomeScreen extends GetView<HomeController> {
               _buildModernFeatureCard(
                 context,
                 icon: Icons.menu_book_rounded,
-                title: 'Farming Guide',
+                title: 'Podcasts',
                 bgColor: Colors.green,
               ),
               _buildModernFeatureCard(
@@ -605,6 +605,25 @@ class HomeScreen extends GetView<HomeController> {
     required String title,
     required Color bgColor,
   }) {
+    String getNavigationRoute() {
+      switch (title) {
+        case 'Farmer Groups':
+          return '/cooperatives';
+        case 'Podcasts':
+          return '/podcasts';
+        case 'Transport':
+          return '/transport';
+        case 'Loans':
+          return '/loans';
+        case 'Weather':
+          return '/weather-details';
+        case 'Help Desk':
+          return '/help-desk';
+        default:
+          return '/home';
+      }
+    }
+
     return Container(
       decoration: BoxDecoration(
         color: Colors.white,
@@ -623,7 +642,7 @@ class HomeScreen extends GetView<HomeController> {
         child: Material(
           color: Colors.transparent,
           child: InkWell(
-            onTap: () {},
+            onTap: () => Get.toNamed(getNavigationRoute()),
             child: Padding(
               padding: const EdgeInsets.all(12),
               child: Column(

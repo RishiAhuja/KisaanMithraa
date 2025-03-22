@@ -3,6 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'dart:io';
+import 'package:file_picker/file_picker.dart';
+import 'package:flutter/services.dart';
 
 class DebugScreen extends GetView<DebugService> {
   const DebugScreen({Key? key}) : super(key: key);
@@ -43,6 +46,8 @@ class DebugScreen extends GetView<DebugService> {
             _buildRandomUsersCard(theme),
             const SizedBox(height: 16),
             _buildRandomCooperativeCard(theme),
+            const SizedBox(height: 16),
+            _buildPodcastUploadCard(theme),
           ],
         ),
       ),
@@ -447,6 +452,361 @@ class DebugScreen extends GetView<DebugService> {
                         : const Text('Generate Cooperative'),
                   )),
             ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildPodcastUploadCard(ThemeData theme) {
+    final titleController = TextEditingController();
+    final descriptionController = TextEditingController();
+    final authorController = TextEditingController(text: 'CropConnect Admin');
+    final durationController = TextEditingController();
+
+    // RxVariables for file selections and language
+    final Rx<File?> audioFile = Rx<File?>(null);
+    final Rx<File?> imageFile = Rx<File?>(null);
+    final RxString selectedLanguage = 'en'.obs;
+    final RxList<String> selectedTags = <String>[].obs;
+
+    // List of available tags and languages
+    final availableTags = [
+      'Farming',
+      'Weather',
+      'Crops',
+      'Market',
+      'Technology',
+      'Government',
+      'Tips',
+      'Interview'
+    ];
+
+    final availableLanguages = [
+      {'code': 'en', 'name': 'English'},
+      {'code': 'hi', 'name': 'Hindi'},
+      {'code': 'pa', 'name': 'Punjabi'},
+      {'code': 'ta', 'name': 'Tamil'},
+      {'code': 'te', 'name': 'Telugu'},
+      {'code': 'mr', 'name': 'Marathi'},
+    ];
+
+    return Card(
+      elevation: 2,
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                Icon(Icons.podcasts, color: theme.colorScheme.primary),
+                const SizedBox(width: 8),
+                Text(
+                  'Upload Test Podcast',
+                  style: theme.textTheme.titleMedium?.copyWith(
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ],
+            ),
+            const Divider(height: 24),
+
+            // Title field
+            TextField(
+              controller: titleController,
+              decoration: const InputDecoration(
+                labelText: 'Podcast Title',
+                hintText: 'Enter podcast title',
+                border: OutlineInputBorder(),
+              ),
+            ),
+            const SizedBox(height: 16),
+
+            // Description field
+            TextField(
+              controller: descriptionController,
+              decoration: const InputDecoration(
+                labelText: 'Description',
+                hintText: 'Enter podcast description',
+                border: OutlineInputBorder(),
+              ),
+              maxLines: 3,
+            ),
+            const SizedBox(height: 16),
+
+            // Author and duration in same row
+            Row(
+              children: [
+                Expanded(
+                  child: TextField(
+                    controller: authorController,
+                    decoration: const InputDecoration(
+                      labelText: 'Author',
+                      hintText: 'Enter author name',
+                      border: OutlineInputBorder(),
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 16),
+                Expanded(
+                  child: TextField(
+                    controller: durationController,
+                    decoration: const InputDecoration(
+                      labelText: 'Duration (seconds)',
+                      hintText: 'Enter duration',
+                      border: OutlineInputBorder(),
+                    ),
+                    keyboardType: TextInputType.number,
+                    inputFormatters: [
+                      FilteringTextInputFormatter.digitsOnly,
+                    ],
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 16),
+
+            // Language dropdown
+            DropdownButtonFormField<String>(
+              decoration: const InputDecoration(
+                labelText: 'Language',
+                border: OutlineInputBorder(),
+              ),
+              value: selectedLanguage.value,
+              items: availableLanguages.map((language) {
+                return DropdownMenuItem(
+                  value: language['code'],
+                  child: Text('${language['name']} (${language['code']})'),
+                );
+              }).toList(),
+              onChanged: (value) {
+                if (value != null) {
+                  selectedLanguage.value = value;
+                }
+              },
+            ),
+            const SizedBox(height: 16),
+
+            // Tags selection
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Tags',
+                  style: theme.textTheme.titleSmall,
+                ),
+                const SizedBox(height: 8),
+                Wrap(
+                  spacing: 8.0,
+                  runSpacing: 8.0,
+                  children: availableTags.map((tag) {
+                    return Obx(() {
+                      final isSelected = selectedTags.contains(tag);
+                      return FilterChip(
+                        label: Text(tag),
+                        selected: isSelected,
+                        onSelected: (selected) {
+                          if (selected) {
+                            selectedTags.add(tag);
+                          } else {
+                            selectedTags.remove(tag);
+                          }
+                        },
+                        checkmarkColor: theme.colorScheme.onPrimary,
+                        selectedColor: theme.colorScheme.primary,
+                        labelStyle: TextStyle(
+                          color: isSelected
+                              ? theme.colorScheme.onPrimary
+                              : theme.colorScheme.onSurface,
+                        ),
+                      );
+                    });
+                  }).toList(),
+                ),
+              ],
+            ),
+            const SizedBox(height: 16),
+
+            // File selection
+            Row(
+              children: [
+                Expanded(
+                  child: Obx(() => _buildFileSelectionButton(
+                        label: 'Audio File',
+                        icon: Icons.audio_file,
+                        file: audioFile.value,
+                        onTap: () async {
+                          FilePickerResult? result =
+                              await FilePicker.platform.pickFiles(
+                            type: FileType.audio,
+                          );
+
+                          if (result != null &&
+                              result.files.single.path != null) {
+                            audioFile.value = File(result.files.single.path!);
+                            // Try to extract duration if not provided
+                            if (durationController.text.isEmpty) {
+                              // Ideally would extract real duration, but simplified for debugging
+                              final fileSize = await audioFile.value!.length();
+                              // Very rough estimate: 1MB ≈ 1 minute of audio
+                              final estimatedDuration =
+                                  (fileSize / (1024 * 1024) * 60).round();
+                              durationController.text =
+                                  estimatedDuration.toString();
+                            }
+                          }
+                        },
+                      )),
+                ),
+                const SizedBox(width: 16),
+                Expanded(
+                  child: Obx(() => _buildFileSelectionButton(
+                        label: 'Cover Image',
+                        icon: Icons.image,
+                        file: imageFile.value,
+                        onTap: () async {
+                          FilePickerResult? result =
+                              await FilePicker.platform.pickFiles(
+                            type: FileType.image,
+                          );
+
+                          if (result != null &&
+                              result.files.single.path != null) {
+                            imageFile.value = File(result.files.single.path!);
+                          }
+                        },
+                      )),
+                ),
+              ],
+            ),
+            const SizedBox(height: 24),
+
+            // Upload button
+            Align(
+              alignment: Alignment.centerRight,
+              child: Obx(() => ElevatedButton.icon(
+                    icon: Icon(Icons.cloud_upload),
+                    label: controller.isGeneratingData.value
+                        ? const SizedBox(
+                            width: 20,
+                            height: 20,
+                            child: CircularProgressIndicator(strokeWidth: 2),
+                          )
+                        : const Text('Upload Podcast'),
+                    onPressed: (controller.isGeneratingData.value ||
+                            audioFile.value == null ||
+                            imageFile.value == null ||
+                            titleController.text.isEmpty ||
+                            descriptionController.text.isEmpty ||
+                            durationController.text.isEmpty ||
+                            selectedTags.isEmpty)
+                        ? null
+                        : () async {
+                            // Validate input
+                            final duration =
+                                int.tryParse(durationController.text);
+                            if (duration == null) {
+                              Get.snackbar(
+                                'Error',
+                                'Please enter a valid duration in seconds',
+                                snackPosition: SnackPosition.BOTTOM,
+                              );
+                              return;
+                            }
+
+                            try {
+                              controller.isGeneratingData.value = true;
+
+                              final podcast = await controller.uploadPodcast(
+                                title: titleController.text,
+                                description: descriptionController.text,
+                                author: authorController.text,
+                                duration: duration,
+                                audioFile: audioFile.value!,
+                                imageFile: imageFile.value!,
+                                tags: selectedTags.toList(),
+                                languageCode: selectedLanguage.value,
+                              );
+
+                              if (podcast != null) {
+                                _showResultDialog(
+                                  'Podcast Uploaded',
+                                  'Successfully uploaded podcast "${podcast.title}"',
+                                );
+
+                                // Clear form
+                                titleController.clear();
+                                descriptionController.clear();
+                                durationController.clear();
+                                audioFile.value = null;
+                                imageFile.value = null;
+                                selectedTags.clear();
+                              }
+                            } catch (e) {
+                              Get.snackbar(
+                                'Upload Failed',
+                                'Error: ${e.toString()}',
+                                snackPosition: SnackPosition.BOTTOM,
+                                backgroundColor: Colors.red[100],
+                                colorText: Colors.red[900],
+                                duration: const Duration(seconds: 5),
+                              );
+                            } finally {
+                              controller.isGeneratingData.value = false;
+                            }
+                          },
+                  )),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  // Helper method for file selection buttons
+  Widget _buildFileSelectionButton({
+    required String label,
+    required IconData icon,
+    required File? file,
+    required VoidCallback onTap,
+  }) {
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(8),
+      child: Container(
+        padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
+        decoration: BoxDecoration(
+          border: Border.all(color: Colors.grey.shade300),
+          borderRadius: BorderRadius.circular(8),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Icon(
+              file != null ? Icons.check_circle : icon,
+              color: file != null ? Colors.green : Colors.grey,
+              size: 32,
+            ),
+            const SizedBox(height: 8),
+            Text(
+              file != null ? file.path.split('/').last : 'Select $label',
+              textAlign: TextAlign.center,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: TextStyle(
+                color: file != null ? Colors.black : Colors.grey.shade700,
+                fontWeight: file != null ? FontWeight.bold : FontWeight.normal,
+              ),
+            ),
+            if (file != null)
+              Text(
+                '${(file.lengthSync() / 1024).toStringAsFixed(1)} KB',
+                style: TextStyle(
+                  color: Colors.grey.shade600,
+                  fontSize: 12,
+                ),
+              ),
           ],
         ),
       ),

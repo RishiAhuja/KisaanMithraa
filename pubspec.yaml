@@ -46,6 +46,7 @@ dependencies:
   shared_preferences: 
   geocoding: 
   geolocator: 
+  file_picker:
   flutter_geocoder_alternative: 
   timeago: 
   lucide_icons: 
@@ -70,6 +71,13 @@ dependencies:
   flutter_lucide:
   firebase_storage:
   image_picker:
+  just_audio:
+  http:
+  equatable:
+  path_provider:
+
+  just_audio_background:
+  audio_video_progress_bar:
   flutter_localizations:
     sdk: flutter
   google_maps_flutter:

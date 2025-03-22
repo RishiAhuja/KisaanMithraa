@@ -8,6 +8,9 @@ plugins {
     id "dev.flutter.flutter-gradle-plugin"
 }
 
+// Add this line to define kotlin_version
+def kotlin_version = '1.9.0'  // Use a stable version
+
 android {
     namespace = "com.example.cropconnect"
     compileSdk = flutter.compileSdkVersion
@@ -45,4 +48,17 @@ android {
 
 flutter {
     source = "../.."
+}
+
+dependencies {
+    // Change this line
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.9.0"  // Directly specify version
+    
+    // Rest of your dependencies remain the same
+    implementation 'com.google.android.exoplayer:exoplayer-core:2.19.0' 
+    implementation 'com.google.android.exoplayer:exoplayer-dash:2.19.0'
+    implementation 'com.google.android.exoplayer:exoplayer-hls:2.19.0'
+    implementation 'com.google.android.exoplayer:exoplayer-smoothstreaming:2.19.0'
+    implementation 'androidx.fragment:fragment:1.6.2' 
+    implementation 'androidx.media:media:1.6.0'
 }

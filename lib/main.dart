@@ -26,6 +26,9 @@ import 'package:cropconnect/features/notification/presentation/screen/notificati
 import 'package:cropconnect/features/onboarding/presentation/controller/nearby_cooperatives_controller.dart';
 import 'package:cropconnect/features/onboarding/presentation/screens/nearby_cooperatives_screen.dart';
 import 'package:cropconnect/features/onboarding/presentation/screens/onboarding_screen.dart';
+import 'package:cropconnect/features/podcasts/data/services/podcast_service.dart';
+import 'package:cropconnect/features/podcasts/presentation/screens/podcast_player_screen.dart';
+import 'package:cropconnect/features/podcasts/presentation/screens/podcasts_screen.dart';
 import 'package:cropconnect/features/profile/screens/profile_screen.dart';
 import 'package:cropconnect/features/resource_pooling/presentation/controller/resource_pooling_controller.dart';
 import 'package:cropconnect/features/resource_pooling/presentation/screens/create_listing_screen.dart';
@@ -40,12 +43,14 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+// import 'package:just_audio_background/just_audio_background.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'features/auth/bindings/auth_binding.dart';
 import 'features/auth/domain/model/user/cooperative_membership_model.dart';
 import 'features/cooperative/presentation/controllers/cooperative_details_controller.dart';
+import 'features/podcasts/presentation/controllers/podcast_controller.dart';
 import 'features/profile/bindings/profile_binding.dart';
 import 'features/community/presentation/screens/community_screen.dart';
 
@@ -57,9 +62,11 @@ Future<void> main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
+  // await JustAudioBackground.init(
+  //   androidNotificationChannelId: 'com.cropconnect.podcast',
+  //   androidNotificationChannelName: 'CropConnect Podcasts',
+  //   androidNotificationOngoing: true,
+  // );
 
   await AppLogger.initializeLogger();
   await Hive.initFlutter();
@@ -67,9 +74,9 @@ Future<void> main() async {
   Hive.registerAdapter(CooperativeMembershipAdapter());
   Hive.registerAdapter(PendingInviteAdapter());
   await Hive.openBox<UserModel>('users');
-
   final sharedPreferences = await SharedPreferences.getInstance();
   Get.put<SharedPreferences>(sharedPreferences, permanent: true);
+  await Get.putAsync<PodcastService>(() => PodcastService().init());
 
   final binding = AuthBinding();
   binding.dependencies();
@@ -176,6 +183,18 @@ class MyApp extends StatelessWidget {
             binding: BindingsBuilder(() {
               Get.lazyPut(() => CooperativeDetailsController());
             }),
+          ),
+          GetPage(
+            name: '/podcasts',
+            page: () => const PodcastsScreen(),
+            binding: BindingsBuilder(() {
+              Get.put(PodcastController());
+            }),
+          ),
+          GetPage(
+            name: '/podcasts/player',
+            page: () => const PodcastPlayerScreen(),
+            transition: Transition.rightToLeft,
           ),
           GetPage(
             name: '/search-cooperatives',
