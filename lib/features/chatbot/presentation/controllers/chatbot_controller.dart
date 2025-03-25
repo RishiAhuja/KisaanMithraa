@@ -66,59 +66,40 @@ class ChatbotController extends GetxController {
     );
   }
 
-  String _getLanguagePrefix() {
-    switch (currentLanguage.value) {
-      case 'hi':
-        return 'in Hindi: ';
-      case 'pa':
-        return 'in Punjabi: ';
-      default:
-        return 'in English: ';
-    }
-  }
-
   Future<void> sendMessage(String text) async {
+    if (text.trim().isEmpty) return;
+
+    // Add user message
+    messages.add(
+      ChatMessageModel(
+        id: DateTime.now().millisecondsSinceEpoch.toString(),
+        text: text.trim(),
+        timestamp: DateTime.now(),
+        isUser: true,
+      ),
+    );
+
     try {
-      if (text.trim().isEmpty) return;
-      if (Get.isRegistered<SpeechService>()) {
-        final speechService = Get.find<SpeechService>();
-        await speechService.stop();
-      }
-      final languagePrefix = _getLanguagePrefix();
-      final translatedMessage = '$languagePrefix$text';
-      AppLogger.debug('Sending message: $translatedMessage');
-      messages.add(
-        ChatMessageModel(
-          id: DateTime.now().millisecondsSinceEpoch.toString(),
-          text: text,
-          timestamp: DateTime.now(),
-          isUser: true,
-        ),
-      );
-
       isLoading.value = true;
-      final response = await _repository.sendMessage(translatedMessage);
-      final responseText = response.text;
+      final response =
+          await _repository.sendMessage(text, language: currentLanguage.value);
 
-      AppLogger.debug('Raw response text: $responseText');
+      AppLogger.debug('Received response with text: ${response.text}');
+      AppLogger.debug('Response language: ${response.language}');
+      AppLogger.debug('Response navigations: ${response.navigations}');
 
-      messages.add(
-        ChatMessageModel(
-          id: DateTime.now().millisecondsSinceEpoch.toString(),
-          text: responseText,
-          timestamp: DateTime.now(),
-          isUser: false,
-        ),
-      );
-    } catch (e) {
+      // Add bot response directly without additional modifications
+      messages.add(response);
+    } catch (e, stackTrace) {
       AppLogger.error('Error in sendMessage: $e');
+      AppLogger.error('Stack trace: $stackTrace');
+
       messages.add(
         ChatMessageModel(
           id: DateTime.now().millisecondsSinceEpoch.toString(),
-          text: 'Error getting response',
+          text: 'Sorry, I encountered an error. Please try again.',
           timestamp: DateTime.now(),
           isUser: false,
-          error: e.toString(),
         ),
       );
     } finally {

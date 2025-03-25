@@ -882,7 +882,6 @@ class _NearbyCooperativeCard extends StatelessWidget {
   }
 }
 
-// Add this helper class at the end of your file to manage the TabController
 class TabControllerScope extends StatefulWidget {
   final int length;
   final int initialIndex;

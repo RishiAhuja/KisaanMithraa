@@ -3,6 +3,9 @@ class ChatMessageModel {
   final String text;
   final DateTime timestamp;
   final bool isUser;
+  final List<String>? navigations;
+  final String? language;
+  final String? sourceLanguage;
   final String? error;
 
   ChatMessageModel({
@@ -10,6 +13,9 @@ class ChatMessageModel {
     required this.text,
     required this.timestamp,
     required this.isUser,
+    this.navigations,
+    this.language,
+    this.sourceLanguage,
     this.error,
   });
 
@@ -19,6 +25,9 @@ class ChatMessageModel {
       text: map['text'] ?? '',
       timestamp: DateTime.parse(map['timestamp'] as String),
       isUser: map['sender'] == 'User',
+      navigations: List<String>.from(map['navigations'] ?? []),
+      language: map['language'],
+      sourceLanguage: map['sourceLanguage'],
       error: map['error'],
     );
   }
@@ -29,6 +38,9 @@ class ChatMessageModel {
       'text': text,
       'timestamp': timestamp.toIso8601String(),
       'sender': isUser ? 'User' : 'Machine',
+      'navigations': navigations,
+      'language': language,
+      'sourceLanguage': sourceLanguage,
       'error': error,
     };
   }

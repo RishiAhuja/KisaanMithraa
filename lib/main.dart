@@ -21,6 +21,7 @@ import 'package:cropconnect/features/cooperative/presentation/screens/search_coo
 import 'package:cropconnect/features/home/presentation/bindings/home_bindings.dart';
 import 'package:cropconnect/features/home/presentation/screen/home_screen.dart';
 import 'package:cropconnect/features/intro/presentation/screens/intro_screen.dart';
+import 'package:cropconnect/features/mandi_prices/presentation/screens/mandi_price_screen.dart';
 import 'package:cropconnect/features/notification/presentation/controller/notification_controller.dart';
 import 'package:cropconnect/features/notification/presentation/screen/notifications_screen.dart';
 import 'package:cropconnect/features/onboarding/presentation/controller/nearby_cooperatives_controller.dart';
@@ -146,6 +147,10 @@ class MyApp extends StatelessWidget {
             name: '/community',
             page: () => const CommunityScreen(),
             binding: CommunityBinding(),
+          ),
+          GetPage(
+            name: '/agri-mart',
+            page: () => const MandiPriceScreen(),
           ),
           GetPage(
             name: '/my-cooperatives',

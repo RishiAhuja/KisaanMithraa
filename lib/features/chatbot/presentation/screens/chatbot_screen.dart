@@ -654,6 +654,13 @@ class ChatBubble extends StatelessWidget {
                           // Handle link taps
                         },
                       )),
+                  if (!isUser &&
+                      message.navigations != null &&
+                      message.navigations!.isNotEmpty)
+                    Padding(
+                      padding: const EdgeInsets.only(top: 12, bottom: 4),
+                      child: _buildNavigationButton(context),
+                    ),
                   Align(
                     alignment: Alignment.bottomRight,
                     child: Padding(
@@ -674,6 +681,168 @@ class ChatBubble extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  Widget _buildNavigationButton(BuildContext context) {
+    // If navigations is empty, return nothing
+    if (message.navigations == null || message.navigations!.isEmpty) {
+      return SizedBox.shrink();
+    }
+
+    // Get the navigation route (we'll use /podcasts or the second navigation route if available)
+    String navigationRoute = '/podcasts';
+
+    // If /podcasts specifically exists in navigations, use that
+    if (message.navigations!.contains('/podcasts')) {
+      navigationRoute = '/podcasts';
+    }
+    // Otherwise if there's a second navigation, use that
+    else if (message.navigations!.length > 1) {
+      navigationRoute = message.navigations![1];
+    }
+    // Last resort: use the first navigation
+    else if (message.navigations!.isNotEmpty) {
+      navigationRoute = message.navigations![0];
+    }
+
+    // Determine the appropriate icon and label
+    Widget icon = _getIconForRoute(navigationRoute);
+    String label = _getLabelForRoute(navigationRoute);
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Divider(height: 24),
+        Text(
+          'Related Content:',
+          style: TextStyle(
+            fontSize: 12,
+            fontWeight: FontWeight.w500,
+            color: Colors.grey[700],
+          ),
+        ),
+        const SizedBox(height: 8),
+        InkWell(
+          onTap: () {
+            HapticFeedback.mediumImpact();
+            Get.toNamed(navigationRoute);
+          },
+          borderRadius: BorderRadius.circular(12),
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+            decoration: BoxDecoration(
+              color: Theme.of(context).colorScheme.primary.withOpacity(0.08),
+              borderRadius: BorderRadius.circular(12),
+              border: Border.all(
+                color: Theme.of(context).colorScheme.primary.withOpacity(0.2),
+                width: 1,
+              ),
+            ),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Container(
+                  padding: const EdgeInsets.all(8),
+                  decoration: BoxDecoration(
+                    color:
+                        Theme.of(context).colorScheme.primary.withOpacity(0.1),
+                    shape: BoxShape.circle,
+                  ),
+                  child: IconTheme(
+                    data: IconThemeData(
+                      color: Theme.of(context).colorScheme.primary,
+                      size: 20,
+                    ),
+                    child: icon,
+                  ),
+                ),
+                const SizedBox(width: 12),
+                Flexible(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        label,
+                        style: TextStyle(
+                          color: Theme.of(context).colorScheme.primary,
+                          fontWeight: FontWeight.w600,
+                          fontSize: 14,
+                        ),
+                      ),
+                      Text(
+                        _getDescriptionForRoute(navigationRoute),
+                        style: TextStyle(
+                          color: Colors.grey[600],
+                          fontSize: 12,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(width: 8),
+                Icon(
+                  Icons.arrow_forward_ios,
+                  size: 14,
+                  color: Theme.of(context).colorScheme.primary,
+                ),
+              ],
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  // Helper to get appropriate icon for each route
+  Widget _getIconForRoute(String route) {
+    switch (route) {
+      case '/podcasts':
+        return Icon(Icons.headset, size: 18);
+      case '/community':
+        return Icon(Icons.people, size: 18);
+      case '/marketplace':
+        return Icon(Icons.shopping_cart, size: 18);
+      case '/resources':
+        return Icon(Icons.book, size: 18);
+      case '/weather':
+        return Icon(Icons.cloud, size: 18);
+      default:
+        return Icon(Icons.arrow_forward, size: 18);
+    }
+  }
+
+  String _getLabelForRoute(String route) {
+    switch (route) {
+      case '/podcasts':
+        return 'Listen our Podcast';
+      case '/community':
+        return 'Join Discussion';
+      case '/marketplace':
+        return 'Go to Marketplace';
+      case '/resources':
+        return 'Explore Resources';
+      case '/weather':
+        return 'Check Weather';
+      default:
+        return 'Learn More';
+    }
+  }
+
+  String _getDescriptionForRoute(String route) {
+    switch (route) {
+      case '/podcasts':
+        return 'Audio content on farming topics';
+      case '/community':
+        return 'Connect with other farmers';
+      case '/marketplace':
+        return 'Buy and sell farm products';
+      case '/resources':
+        return 'Farming guides and resources';
+      case '/weather':
+        return 'Check local weather forecasts';
+      default:
+        return 'Related information';
+    }
   }
 
   String _formatTime(DateTime timestamp) {
