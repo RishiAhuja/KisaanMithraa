@@ -7,7 +7,7 @@ import 'package:http/http.dart' as http;
 
 class ChatbotRepositoryImpl implements ChatbotRepository {
   final String _apiUrl = 'http://13.232.133.58:8005/api/v1/chat';
-  static const String _userId = 'user123'; // Hardcoded user ID as requested
+  static const String _userId = 'user123';
 
   @override
   Future<ChatMessageModel> sendMessage(String message,

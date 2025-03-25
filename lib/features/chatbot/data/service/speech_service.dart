@@ -247,10 +247,11 @@ class SpeechService extends GetxService {
               onResult(result.recognizedWords);
             }
           },
-          listenFor: const Duration(
-              seconds: 10), // Shorter duration for better response
+          listenFor: const Duration(seconds: 30),
           pauseFor: const Duration(seconds: 3),
+          listenMode: stt.ListenMode.confirmation,
           localeId: localeId,
+          cancelOnError: true,
         );
       } catch (e) {
         print('SpeechService: Error in speech.listen: $e');

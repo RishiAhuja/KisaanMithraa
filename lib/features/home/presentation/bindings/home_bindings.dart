@@ -12,7 +12,7 @@ class HomeBinding extends Bindings {
 
     // Register home controller
     Get.lazyPut<HomeController>(
-      () => HomeController(Get.find<UserStorageService>()),
+      () => HomeController(),
       fenix: true,
     );
   }

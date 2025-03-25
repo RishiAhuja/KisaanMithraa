@@ -1013,6 +1013,7 @@ class HomeScreen extends GetView<HomeController> {
 
   Widget _buildMarketPricesSection(BuildContext context) {
     final theme = Theme.of(context);
+    final controller = Get.find<HomeController>();
 
     return Container(
       margin: const EdgeInsets.fromLTRB(16, 0, 16, 20),
@@ -1033,14 +1034,20 @@ class HomeScreen extends GetView<HomeController> {
                         borderRadius: BorderRadius.circular(12),
                       ),
                       child: Icon(
-                        Icons.trending_up_rounded,
-                        color: AppColors.secondary,
+                        controller.hasWatchlist.value
+                            ? Icons.star_rounded
+                            : Icons.trending_up_rounded,
+                        color: controller.hasWatchlist.value
+                            ? Colors.amber.shade700
+                            : AppColors.secondary,
                         size: 20,
                       ),
                     ),
                     const SizedBox(width: 12),
                     Text(
-                      'Market Prices',
+                      controller.hasWatchlist.value
+                          ? 'Your Watchlist'
+                          : 'Market Prices',
                       style: theme.textTheme.titleMedium?.copyWith(
                         fontWeight: FontWeight.bold,
                         fontSize: 18,
@@ -1049,7 +1056,7 @@ class HomeScreen extends GetView<HomeController> {
                   ],
                 ),
                 TextButton(
-                  onPressed: () {},
+                  onPressed: () => Get.toNamed('/agri-mart'),
                   style: TextButton.styleFrom(
                     foregroundColor: theme.colorScheme.primary,
                     padding:
@@ -1077,50 +1084,274 @@ class HomeScreen extends GetView<HomeController> {
           ),
           const SizedBox(height: 12),
 
-          // Market price cards in horizontal scrolling - redesigned
-          SizedBox(
-            height: 156,
-            child: ListView(
-              scrollDirection: Axis.horizontal,
-              physics: const BouncingScrollPhysics(),
-              padding: const EdgeInsets.symmetric(horizontal: 2, vertical: 4),
+          // Dynamic market price cards based on API data
+          Obx(() {
+            if (controller.isLoadingPrices.value) {
+              return _buildPricesLoadingShimmer();
+            }
+
+            if (controller.topCropPrices.isEmpty) {
+              return controller.hasWatchlist.value
+                  ? _buildEmptyWatchlistView(context)
+                  : _buildNoPricesAvailable(context);
+            }
+
+            // Cache indicator if using cached data
+            final Widget cacheIndicator = controller.isUsingCachedPrices.value
+                ? Padding(
+                    padding: const EdgeInsets.only(bottom: 8),
+                    child: Row(
+                      children: [
+                        Icon(
+                          Icons.history_rounded,
+                          size: 14,
+                          color: Colors.amber[700],
+                        ),
+                        const SizedBox(width: 6),
+                        Text(
+                          'Showing cached prices',
+                          style: TextStyle(
+                            fontSize: 12,
+                            fontWeight: FontWeight.w500,
+                            color: Colors.amber[700],
+                          ),
+                        ),
+                      ],
+                    ),
+                  )
+                : const SizedBox.shrink();
+
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                _buildModernCropPriceCard(
-                  context,
-                  crop: 'Wheat',
-                  price: '₹2,340',
-                  change: '+₹120',
-                  isPositive: true,
-                  icon: '🌾',
-                ),
-                _buildModernCropPriceCard(
-                  context,
-                  crop: 'Corn',
-                  price: '₹1,890',
-                  change: '-₹45',
-                  isPositive: false,
-                  icon: '🌽',
-                ),
-                _buildModernCropPriceCard(
-                  context,
-                  crop: 'Potato',
-                  price: '₹1,450',
-                  change: '+₹85',
-                  isPositive: true,
-                  icon: '🥔',
-                ),
-                _buildModernCropPriceCard(
-                  context,
-                  crop: 'Rice',
-                  price: '₹2,100',
-                  change: '+₹95',
-                  isPositive: true,
-                  icon: '🌾',
+                cacheIndicator,
+                SizedBox(
+                  height: 160,
+                  child: ListView.builder(
+                    scrollDirection: Axis.horizontal,
+                    physics: const BouncingScrollPhysics(),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 2, vertical: 4),
+                    itemCount: controller.topCropPrices.length,
+                    itemBuilder: (context, index) {
+                      final crop = controller.topCropPrices[index];
+                      final priceChange = controller.getPriceChange(crop);
+                      final cropIcon = _getCropIcon(crop.commodity);
+
+                      return _buildModernCropPriceCard(
+                        context,
+                        crop: crop.commodity,
+                        market: crop.market,
+                        price: controller.formatPrice(crop.modalPrice),
+                        change: priceChange['text'],
+                        isPositive: priceChange['isPositive'],
+                        icon: cropIcon,
+                        isWatchlisted: controller.hasWatchlist.value,
+                      );
+                    },
+                  ),
                 ),
               ],
-            ),
-          ),
+            );
+          }),
         ],
+      ),
+    );
+  }
+
+  Widget _buildEmptyWatchlistView(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(vertical: 25, horizontal: 16),
+      decoration: BoxDecoration(
+        color: Colors.amber.withOpacity(0.05),
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: Colors.amber.shade200),
+      ),
+      child: Center(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(Icons.star_border_rounded, size: 36, color: Colors.amber[700]),
+            const SizedBox(height: 12),
+            const Text(
+              'Your watchlist is empty',
+              style: TextStyle(
+                fontWeight: FontWeight.w600,
+                fontSize: 16,
+                color: Colors.amber,
+              ),
+            ),
+            const SizedBox(height: 8),
+            Text(
+              'Add crops to your watchlist to see them here',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 14,
+                color: Colors.amber[700]?.withOpacity(0.8),
+              ),
+            ),
+            const SizedBox(height: 16),
+            ElevatedButton.icon(
+              onPressed: () => Get.toNamed('/mandi-prices'),
+              icon: const Icon(Icons.add_rounded),
+              label: const Text('Add to Watchlist'),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.amber[700],
+                foregroundColor: Colors.white,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  String _getCropIcon(String commodity) {
+    final lcCommodity = commodity.toLowerCase();
+
+    if (lcCommodity.contains('wheat') || lcCommodity.contains('barley')) {
+      return '🌾';
+    } else if (lcCommodity.contains('rice') || lcCommodity.contains('paddy')) {
+      return '🍚';
+    } else if (lcCommodity.contains('corn') || lcCommodity.contains('maize')) {
+      return '🌽';
+    } else if (lcCommodity.contains('potato')) {
+      return '🥔';
+    } else if (lcCommodity.contains('onion')) {
+      return '🧅';
+    } else if (lcCommodity.contains('tomato')) {
+      return '🍅';
+    } else if (lcCommodity.contains('carrot')) {
+      return '🥕';
+    } else if (lcCommodity.contains('apple')) {
+      return '🍎';
+    } else if (lcCommodity.contains('banana')) {
+      return '🍌';
+    } else if (lcCommodity.contains('mango')) {
+      return '🥭';
+    } else if (lcCommodity.contains('cotton')) {
+      return '🧵';
+    } else if (lcCommodity.contains('soybean') ||
+        lcCommodity.contains('gram') ||
+        lcCommodity.contains('pulse')) {
+      return '🌱';
+    } else if (lcCommodity.contains('sugar') || lcCommodity.contains('cane')) {
+      return '🍭';
+    } else {
+      return '🌿';
+    }
+  }
+
+  Widget _buildPricesLoadingShimmer() {
+    return SizedBox(
+      height: 156,
+      child: ListView.builder(
+        scrollDirection: Axis.horizontal,
+        physics: const NeverScrollableScrollPhysics(),
+        itemCount: 4,
+        itemBuilder: (context, index) {
+          return Container(
+            width: 150,
+            height: 140,
+            margin: const EdgeInsets.only(right: 12),
+            decoration: BoxDecoration(
+              color: Colors.grey[200],
+              borderRadius: BorderRadius.circular(16),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(12),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Container(
+                        width: 36,
+                        height: 36,
+                        decoration: BoxDecoration(
+                          color: Colors.grey[300],
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                      ),
+                      Container(
+                        width: 50,
+                        height: 24,
+                        decoration: BoxDecoration(
+                          color: Colors.grey[300],
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 16),
+                  Container(
+                    width: 80,
+                    height: 20,
+                    decoration: BoxDecoration(
+                      color: Colors.grey[300],
+                      borderRadius: BorderRadius.circular(4),
+                    ),
+                  ),
+                  const SizedBox(height: 6),
+                  Container(
+                    width: 60,
+                    height: 14,
+                    decoration: BoxDecoration(
+                      color: Colors.grey[300],
+                      borderRadius: BorderRadius.circular(4),
+                    ),
+                  ),
+                  const Spacer(),
+                  Container(
+                    width: 70,
+                    height: 24,
+                    decoration: BoxDecoration(
+                      color: Colors.grey[300],
+                      borderRadius: BorderRadius.circular(4),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          );
+        },
+      ),
+    );
+  }
+
+  Widget _buildNoPricesAvailable(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(vertical: 30, horizontal: 16),
+      decoration: BoxDecoration(
+        color: Colors.grey[100],
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: Colors.grey[300]!),
+      ),
+      child: Center(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(Icons.sync_problem_rounded, size: 36, color: Colors.grey[500]),
+            const SizedBox(height: 12),
+            Text(
+              'Unable to load market prices',
+              style: TextStyle(
+                fontWeight: FontWeight.w600,
+                fontSize: 16,
+                color: Colors.grey[700],
+              ),
+            ),
+            const SizedBox(height: 8),
+            TextButton(
+              onPressed: () {
+                final controller = Get.find<HomeController>();
+                controller.loadWatchlistedPrices();
+              },
+              child: const Text('Retry'),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -1128,14 +1359,17 @@ class HomeScreen extends GetView<HomeController> {
   Widget _buildModernCropPriceCard(
     BuildContext context, {
     required String crop,
+    required String market,
     required String price,
     required String change,
     required bool isPositive,
     required String icon,
+    required bool isWatchlisted,
   }) {
+    // final theme = Theme.of(context);
+
     return Container(
       width: 150,
-      height: 140, // Recommended fixed height
       margin: const EdgeInsets.only(right: 12),
       decoration: BoxDecoration(
         color: Colors.white,
@@ -1153,12 +1387,23 @@ class HomeScreen extends GetView<HomeController> {
         child: Material(
           color: Colors.transparent,
           child: InkWell(
-            onTap: () {},
+            // Change the onTap to show the detail modal
+            onTap: () => _showCropPriceDetails(
+              context,
+              crop: crop,
+              market: market,
+              price: price,
+              change: change,
+              isPositive: isPositive,
+              icon: icon,
+              isWatchlisted: isWatchlisted,
+            ),
             child: Padding(
               padding: const EdgeInsets.all(12),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  // Top row with icon and price change
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -1173,67 +1418,446 @@ class HomeScreen extends GetView<HomeController> {
                           style: const TextStyle(fontSize: 18),
                         ),
                       ),
-                      Container(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 8, vertical: 4),
-                        decoration: BoxDecoration(
-                          color: isPositive
-                              ? Colors.green.withOpacity(0.1)
-                              : Colors.red.withOpacity(0.1),
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        child: Text(
-                          change,
-                          style: TextStyle(
-                            color: isPositive
-                                ? Colors.green[700]
-                                : Colors.red[700],
-                            fontWeight: FontWeight.bold,
-                            fontSize: 12,
-                          ),
-                        ),
-                      ),
+                      // Container(
+                      //   padding: const EdgeInsets.symmetric(
+                      //       horizontal: 8, vertical: 4),
+                      //   decoration: BoxDecoration(
+                      //     color: isPositive
+                      //         ? Colors.green.withOpacity(0.1)
+                      //         : Colors.red.withOpacity(0.1),
+                      //     borderRadius: BorderRadius.circular(10),
+                      //   ),
+                      //   child: Text(
+                      //     change,
+                      //     style: TextStyle(
+                      //       color: isPositive
+                      //           ? Colors.green[700]
+                      //           : Colors.red[700],
+                      //       fontWeight: FontWeight.bold,
+                      //       fontSize: 12,
+                      //     ),
+                      //   ),
+                      // ),
                     ],
                   ),
-                  const SizedBox(height: 12),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            crop,
-                            style: const TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 16,
-                            ),
-                          ),
-                          const SizedBox(height: 2),
-                          Text(
-                            'Per Quintal',
-                            style: TextStyle(
-                              color: Colors.grey[600],
-                              fontSize: 11,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                  const Spacer(),
+
+                  const SizedBox(height: 10),
+
+                  // Crop name
                   Text(
-                    price,
+                    crop,
                     style: const TextStyle(
                       fontWeight: FontWeight.bold,
-                      fontSize: 20,
+                      fontSize: 16,
                     ),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+
+                  const SizedBox(height: 4),
+
+                  // Market name
+                  Row(
+                    children: [
+                      Icon(
+                        Icons.store_rounded,
+                        size: 12,
+                        color: Colors.grey[600],
+                      ),
+                      const SizedBox(width: 4),
+                      Expanded(
+                        child: Text(
+                          market,
+                          style: TextStyle(
+                            color: Colors.grey[600],
+                            fontSize: 12,
+                            fontWeight: FontWeight.w500,
+                          ),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                    ],
+                  ),
+
+                  const Spacer(),
+
+                  // Price
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      Text(
+                        price,
+                        style: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 20,
+                        ),
+                      ),
+                      const SizedBox(width: 4),
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 2),
+                        child: Text(
+                          '/qtl',
+                          style: TextStyle(
+                            color: Colors.grey[600],
+                            fontSize: 11,
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ],
               ),
             ),
           ),
         ),
+      ),
+    );
+  }
+
+  // Add this new method to show the detail modal
+  void _showCropPriceDetails(
+    BuildContext context, {
+    required String crop,
+    required String market,
+    required String price,
+    required String change,
+    required bool isPositive,
+    required String icon,
+    required bool isWatchlisted,
+  }) {
+    final theme = Theme.of(context);
+    final controller = Get.find<HomeController>();
+
+    // Find the full crop price object from controller
+    final cropPriceObj = controller.topCropPrices.firstWhere(
+      (p) => p.commodity == crop && p.market == market,
+    );
+
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (context) => Container(
+        margin: const EdgeInsets.only(top: 60),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.1),
+              blurRadius: 20,
+              offset: const Offset(0, -5),
+            ),
+          ],
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Handle for dragging
+            Center(
+              child: Container(
+                margin: const EdgeInsets.only(top: 12, bottom: 8),
+                height: 5,
+                width: 40,
+                decoration: BoxDecoration(
+                  color: Colors.grey[300],
+                  borderRadius: BorderRadius.circular(3),
+                ),
+              ),
+            ),
+
+            // Header with crop name and icon
+            Padding(
+              padding: const EdgeInsets.fromLTRB(20, 12, 20, 16),
+              child: Row(
+                children: [
+                  Container(
+                    padding: const EdgeInsets.all(16),
+                    decoration: BoxDecoration(
+                      color: theme.colorScheme.primary.withOpacity(0.1),
+                      shape: BoxShape.circle,
+                    ),
+                    child: Text(
+                      icon,
+                      style: const TextStyle(fontSize: 28),
+                    ),
+                  ),
+                  const SizedBox(width: 16),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          crop,
+                          style: const TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 22,
+                          ),
+                        ),
+                        const SizedBox(height: 4),
+                        Row(
+                          children: [
+                            Icon(
+                              Icons.store_rounded,
+                              size: 16,
+                              color: Colors.grey[600],
+                            ),
+                            const SizedBox(width: 6),
+                            Expanded(
+                              child: Text(
+                                market,
+                                style: TextStyle(
+                                  color: Colors.grey[600],
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                  if (isWatchlisted)
+                    Container(
+                      padding: const EdgeInsets.all(12),
+                      decoration: BoxDecoration(
+                        color: Colors.amber.withOpacity(0.1),
+                        shape: BoxShape.circle,
+                      ),
+                      child: Icon(
+                        Icons.star_rounded,
+                        color: Colors.amber[700],
+                        size: 26,
+                      ),
+                    ),
+                ],
+              ),
+            ),
+
+            const Divider(),
+
+            // Price details
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 24),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Current Price',
+                    style: TextStyle(
+                      fontWeight: FontWeight.w600,
+                      fontSize: 16,
+                      color: Colors.grey[700],
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+
+                  // Show price with larger font
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      Text(
+                        price,
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 32,
+                          color: theme.colorScheme.primary,
+                        ),
+                      ),
+                      const SizedBox(width: 6),
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 6),
+                        child: Text(
+                          'per quintal',
+                          style: TextStyle(
+                            color: Colors.grey[600],
+                            fontSize: 14,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+
+            // Full price details if available
+            ...[
+              const Divider(height: 1),
+
+              // Price breakdown section
+              Padding(
+                padding: const EdgeInsets.all(24),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Price Breakdown',
+                      style: TextStyle(
+                        fontWeight: FontWeight.w600,
+                        fontSize: 16,
+                        color: Colors.grey[700],
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+
+                    // Min, Modal, and Max prices
+                    Row(
+                      children: [
+                        _buildPriceDetailItem(
+                          'Min Price',
+                          '₹${cropPriceObj.minPrice.toStringAsFixed(0)}',
+                          Colors.orange,
+                        ),
+                        Container(
+                          height: 40,
+                          width: 1,
+                          color: Colors.grey[200],
+                          margin: const EdgeInsets.symmetric(horizontal: 16),
+                        ),
+                        _buildPriceDetailItem(
+                          'Modal Price',
+                          '₹${cropPriceObj.modalPrice.toStringAsFixed(0)}',
+                          theme.colorScheme.primary,
+                        ),
+                        Container(
+                          height: 40,
+                          width: 1,
+                          color: Colors.grey[200],
+                          margin: const EdgeInsets.symmetric(horizontal: 16),
+                        ),
+                        _buildPriceDetailItem(
+                          'Max Price',
+                          '₹${cropPriceObj.maxPrice.toStringAsFixed(0)}',
+                          Colors.green,
+                        ),
+                      ],
+                    ),
+
+                    const SizedBox(height: 20),
+
+                    // Additional details
+                    _buildDetailRow('Variety', cropPriceObj.variety),
+                    _buildDetailRow('Grade', cropPriceObj.grade),
+                    _buildDetailRow('Arrival Date', cropPriceObj.arrivalDate),
+                  ],
+                ),
+              ),
+            ],
+
+            const Divider(height: 1),
+
+            // Action buttons
+            Padding(
+              padding: const EdgeInsets.all(24),
+              child: Row(
+                children: [
+                  // View all button
+                  Expanded(
+                    child: OutlinedButton.icon(
+                      onPressed: () {
+                        Navigator.pop(context);
+                        Get.toNamed('/agri-mart');
+                      },
+                      icon: const Icon(Icons.visibility_rounded),
+                      label: const Text('View All Prices'),
+                      style: OutlinedButton.styleFrom(
+                        padding: const EdgeInsets.symmetric(vertical: 12),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 16),
+
+                  // Share button
+                  Expanded(
+                    child: ElevatedButton.icon(
+                      onPressed: () {
+                        // Implement share functionality
+                        Navigator.pop(context);
+                        Get.snackbar(
+                          'Share Price',
+                          'Sharing price details for $crop from $market',
+                          snackPosition: SnackPosition.BOTTOM,
+                        );
+                      },
+                      icon: const Icon(Icons.share),
+                      label: const Text('Share'),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: theme.colorScheme.primary,
+                        foregroundColor: Colors.white,
+                        padding: const EdgeInsets.symmetric(vertical: 12),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+
+            // Safety padding at the bottom
+            SizedBox(height: MediaQuery.of(context).padding.bottom),
+          ],
+        ),
+      ),
+    );
+  }
+
+  // Helper method for price breakdown items
+  Widget _buildPriceDetailItem(String label, String value, Color color) {
+    return Expanded(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Text(
+            label,
+            style: TextStyle(
+              fontSize: 12,
+              color: Colors.grey[600],
+            ),
+          ),
+          const SizedBox(height: 6),
+          Text(
+            value,
+            style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+              color: color,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  // Helper method for detail rows
+  Widget _buildDetailRow(String label, String value) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 12),
+      child: Row(
+        children: [
+          SizedBox(
+            width: 100,
+            child: Text(
+              label,
+              style: TextStyle(
+                fontWeight: FontWeight.w500,
+                color: Colors.grey[700],
+              ),
+            ),
+          ),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Text(
+              value,
+              style: const TextStyle(
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -1338,5 +1962,3 @@ class HomeScreen extends GetView<HomeController> {
     );
   }
 }
-
-// Add at class level

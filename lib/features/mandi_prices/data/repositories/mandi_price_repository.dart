@@ -6,21 +6,17 @@ import 'package:cropconnect/features/mandi_prices/data/models/crop_price_model.d
 import 'package:cropconnect/utils/app_logger.dart';
 
 class MandiPriceRepository {
-  // Base URL and resource ID
   static const String baseUrl = 'api.data.gov.in';
   static const String resourceId = '9ef84268-d588-465a-a308-a864a43d0070';
 
-  // Cache keys
   static const String CACHE_DATA_KEY_PREFIX = 'mandi_prices_data_';
   static const String CACHE_TIMESTAMP_KEY_PREFIX = 'mandi_prices_timestamp_';
 
-  // Get API key from environment variables
   String get _apiKey => dotenv.env['DATA_GOV_API_KEY'] ?? '';
 
   Future<List<CropPriceModel>> getCropPrices(
       String state, String district) async {
     try {
-      // Validate API key
       if (_apiKey.isEmpty) {
         AppLogger.error('DATA_GOV_API_KEY not found in environment variables');
         return await _loadFromCache(state, district);
@@ -44,7 +40,6 @@ class MandiPriceRepository {
         final data = json.decode(response.body);
 
         if (data['status'] == 'ok') {
-          // Check if records array exists and has items
           if (data['records'] != null &&
               data['records'] is List &&
               (data['count'] as int) > 0) {
@@ -53,14 +48,12 @@ class MandiPriceRepository {
                 .map((record) => CropPriceModel.fromJson(record))
                 .toList();
 
-            // Cache this valid response for future use
             await _cacheData(state, district, prices);
 
             AppLogger.debug(
                 'Successfully fetched and cached ${prices.length} prices');
             return prices;
           } else {
-            // API returned empty records array, try loading from cache
             AppLogger.debug(
                 'API returned empty records array, attempting to load from cache');
             return await _loadFromCache(state, district);
@@ -80,21 +73,18 @@ class MandiPriceRepository {
     }
   }
 
-  /// Loads cached price data for the specified state and district
   Future<List<CropPriceModel>> _loadFromCache(
       String state, String district) async {
     try {
       final prefs = await SharedPreferences.getInstance();
       final cacheKey = _getCacheKey(state, district);
 
-      // Check if we have cached data
       final cachedData = prefs.getString(cacheKey);
       if (cachedData == null) {
         AppLogger.debug('No cached data found for $state, $district');
         return [];
       }
 
-      // Deserialize the cached data
       final List<dynamic> jsonList = jsonDecode(cachedData);
       final List<CropPriceModel> prices =
           jsonList.map((json) => CropPriceModel.fromJson(json)).toList();
@@ -108,7 +98,6 @@ class MandiPriceRepository {
     }
   }
 
-  /// Caches the price data for the specified state and district
   Future<void> _cacheData(
       String state, String district, List<CropPriceModel> prices) async {
     try {

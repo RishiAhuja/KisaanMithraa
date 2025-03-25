@@ -7,13 +7,14 @@ import 'package:cropconnect/features/mandi_prices/presentation/widgets/market_se
 import 'package:cropconnect/features/mandi_prices/presentation/widgets/commodity_list.dart';
 
 class MandiPriceScreen extends StatelessWidget {
-  const MandiPriceScreen({Key? key}) : super(key: key);
+  const MandiPriceScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     final controller = Get.put(MandiPriceController());
 
     return Scaffold(
+      bottomNavigationBar: const BottomNavBar(currentIndex: 3),
       appBar: AppBar(
         title: const Text('Mandi Prices'),
         elevation: 0,
@@ -232,28 +233,27 @@ class MandiPriceScreen extends StatelessWidget {
 
         return Column(
           children: [
-            // Location information
-            if (!controller.isWatchlistView.value)
-              Container(
-                padding: const EdgeInsets.all(16),
-                color: Theme.of(context).colorScheme.surface,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const Icon(Icons.location_on, size: 18),
-                    const SizedBox(width: 8),
-                    Text(
-                      '${controller.selectedDistrict.value}, ${controller.selectedState.value}',
-                      style: const TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
+            // // Location information
+            // if (!controller.isWatchlistView.value)
+            //   Container(
+            //     padding: const EdgeInsets.all(16),
+            //     color: Theme.of(context).colorScheme.surface,
+            //     child: Row(
+            //       mainAxisAlignment: MainAxisAlignment.center,
+            //       children: [
+            //         const Icon(Icons.location_on, size: 18),
+            //         const SizedBox(width: 8),
+            //         Text(
+            //           '${controller.selectedDistrict.value}, ${controller.selectedState.value}',
+            //           style: const TextStyle(
+            //             fontSize: 16,
+            //             fontWeight: FontWeight.w500,
+            //           ),
+            //         ),
+            //       ],
+            //     ),
+            //   ),
 
-            // Market selector (only show in All Prices view)
             if (!controller.isWatchlistView.value)
               Obx(() => MarketSelector(
                     markets: controller.markets,
@@ -264,7 +264,6 @@ class MandiPriceScreen extends StatelessWidget {
                     cacheTimestampText: controller.cacheTimestampText.value,
                   )),
 
-            // Watchlist hint text
             if (controller.isWatchlistView.value)
               Container(
                 padding: const EdgeInsets.all(12),
@@ -347,7 +346,6 @@ class MandiPriceScreen extends StatelessWidget {
           ],
         );
       }),
-      bottomNavigationBar: const BottomNavBar(currentIndex: 2),
     );
   }
 }

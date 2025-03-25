@@ -1,4 +1,3 @@
-import 'package:cropconnect/core/presentation/widgets/bottom_nav_bar.dart';
 import 'package:cropconnect/core/theme/app_colors.dart';
 import 'package:cropconnect/features/chatbot/data/service/speech_service.dart';
 import 'package:cropconnect/features/chatbot/domain/models/chat_message_model.dart';
@@ -86,7 +85,7 @@ class ChatbotScreen extends GetView<ChatbotController> {
     final appLocalizations = AppLocalizations.of(context);
 
     return Scaffold(
-      bottomNavigationBar: const BottomNavBar(currentIndex: 3),
+      // bottomNavigationBar: const BottomNavBar(currentIndex: 3),
       extendBody: true,
       appBar: AppBar(
         title: Text(appLocalizations?.appTitle ?? 'Kisan Mitra'),
@@ -145,7 +144,7 @@ class ChatbotScreen extends GetView<ChatbotController> {
               ),
               _buildSuggestionsBar(context),
               _buildInputField(context),
-              const SizedBox(height: 60),
+              // const SizedBox(height: 60),
             ],
           ),
           Obx(() => Positioned.fill(
@@ -233,18 +232,18 @@ class ChatbotScreen extends GetView<ChatbotController> {
         if (recognizedText.isNotEmpty) {
           _textController.text = recognizedText;
 
-          // Show a brief confirmation toast
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text(
-                  '${appLocalizations?.recognized ?? 'Recognized: "'}"$recognizedText"'),
-              duration: const Duration(seconds: 2),
-              behavior: SnackBarBehavior.floating,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10),
-              ),
-            ),
-          );
+          // // Show a brief confirmation toast
+          // ScaffoldMessenger.of(context).showSnackBar(
+          //   SnackBar(
+          //     content: Text(
+          //         '${appLocalizations?.recognized ?? 'Recognized: "'}"$recognizedText"'),
+          //     duration: const Duration(seconds: 2),
+          //     behavior: SnackBarBehavior.floating,
+          //     shape: RoundedRectangleBorder(
+          //       borderRadius: BorderRadius.circular(10),
+          //     ),
+          //   ),
+          // );
         }
 
         controller.isListeningToSpeech.value = false;
@@ -357,7 +356,7 @@ class ChatbotScreen extends GetView<ChatbotController> {
                 )),
             Expanded(
               child: Container(
-                padding: const EdgeInsets.only(left: 0, right: 8),
+                padding: const EdgeInsets.symmetric(vertical: 7),
                 child: TextField(
                   controller: _textController,
                   keyboardType: TextInputType.multiline,
@@ -381,6 +380,7 @@ class ChatbotScreen extends GetView<ChatbotController> {
                     border: InputBorder.none,
                     contentPadding: const EdgeInsets.symmetric(
                       vertical: 10,
+                      horizontal: 12,
                     ),
                   ),
                   onSubmitted: (text) {

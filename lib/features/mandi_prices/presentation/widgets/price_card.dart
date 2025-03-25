@@ -14,364 +14,486 @@ class PriceCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      margin: const EdgeInsets.only(bottom: 12),
-      elevation: 2,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-      child: InkWell(
-        borderRadius: BorderRadius.circular(12),
-        onTap: () => _showDetailDialog(context),
-        child: Padding(
-          padding: const EdgeInsets.all(12),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // Commodity icon or image
-              Container(
-                width: 60,
-                height: 60,
-                decoration: BoxDecoration(
-                  color: Theme.of(context).colorScheme.primary.withOpacity(0.1),
-                  shape: BoxShape.circle,
-                ),
-                child: Center(
-                  child: Icon(
-                    _getCommodityIcon(),
-                    color: Theme.of(context).colorScheme.primary,
-                    size: 30,
-                  ),
-                ),
-              ),
-              const SizedBox(width: 16),
+    final theme = Theme.of(context);
 
-              // Commodity information
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      cropPrice.commodity,
-                      style: const TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 16,
-                      ),
-                    ),
-                    const SizedBox(height: 4),
-                    Text(
-                      cropPrice.variety == 'Other'
-                          ? 'General Variety'
-                          : cropPrice.variety,
-                      style: TextStyle(
-                        fontSize: 14,
-                        color: Colors.grey[600],
-                      ),
-                    ),
-                    const SizedBox(height: 4),
-                    Row(
-                      children: [
-                        Text(
-                          'Grade: ${cropPrice.grade}',
-                          style: TextStyle(
-                            fontSize: 12,
-                            color: Colors.grey[600],
+    return Container(
+      margin: const EdgeInsets.only(bottom: 12),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(16),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.04),
+            blurRadius: 8,
+            offset: const Offset(0, 3),
+          ),
+        ],
+      ),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(16),
+        child: Material(
+          color: Colors.transparent,
+          child: InkWell(
+            onTap: () => _showDetailDialog(context),
+            child: Stack(
+              children: [
+                // Main content
+                Padding(
+                  padding: const EdgeInsets.all(16),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      // Crop icon or emoji
+                      Container(
+                        width: 56,
+                        height: 56,
+                        decoration: BoxDecoration(
+                          color: theme.colorScheme.primary.withOpacity(0.1),
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: Center(
+                          child: Text(
+                            _getCropIcon(cropPrice.commodity),
+                            style: const TextStyle(fontSize: 24),
                           ),
                         ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-
-              // Price information
-              Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  Container(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                    decoration: BoxDecoration(
-                      color: Theme.of(context)
-                          .colorScheme
-                          .primaryContainer
-                          .withOpacity(0.7),
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    child: Text(
-                      '₹${cropPrice.modalPrice.toStringAsFixed(0)}',
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                        color: Theme.of(context).colorScheme.onPrimaryContainer,
                       ),
-                    ),
-                  ),
-                  const SizedBox(height: 4),
-                  Text(
-                    'Avg. Price',
-                    style: TextStyle(
-                      fontSize: 12,
-                      color: Colors.grey[600],
-                    ),
-                  ),
-                ],
-              ),
+                      const SizedBox(width: 16),
 
-              // Add watchlist button
-              Obx(() => IconButton(
-                    icon: Icon(
-                      controller.isInWatchlist(cropPrice)
-                          ? Icons.star
-                          : Icons.star_border,
-                      color: controller.isInWatchlist(cropPrice)
-                          ? Colors.amber
-                          : Colors.grey,
-                    ),
-                    onPressed: () => controller.toggleWatchlist(cropPrice),
-                    tooltip: controller.isInWatchlist(cropPrice)
-                        ? 'Remove from Watchlist'
-                        : 'Add to Watchlist',
-                  )),
-            ],
+                      // Info column
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            // Crop name
+                            Text(
+                              cropPrice.commodity,
+                              style: const TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 16,
+                              ),
+                            ),
+                            const SizedBox(height: 4),
+
+                            // Market location
+                            Row(
+                              children: [
+                                Icon(
+                                  Icons.store_rounded,
+                                  size: 12,
+                                  color: Colors.grey[600],
+                                ),
+                                const SizedBox(width: 4),
+                                Expanded(
+                                  child: Text(
+                                    cropPrice.market,
+                                    style: TextStyle(
+                                      fontSize: 13,
+                                      color: Colors.grey[700],
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: 4),
+
+                            // Variety info
+                            Text(
+                              cropPrice.variety == 'Other'
+                                  ? 'General Variety'
+                                  : cropPrice.variety,
+                              style: TextStyle(
+                                fontSize: 12,
+                                color: Colors.grey[600],
+                              ),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+
+                            const SizedBox(height: 8),
+
+                            // Price row
+                            Row(
+                              crossAxisAlignment: CrossAxisAlignment.end,
+                              children: [
+                                Text(
+                                  '₹${cropPrice.modalPrice.toStringAsFixed(0)}',
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 20,
+                                    color: theme.colorScheme.primary,
+                                  ),
+                                ),
+                                const SizedBox(width: 4),
+                                Padding(
+                                  padding: const EdgeInsets.only(bottom: 2),
+                                  child: Text(
+                                    '/qtl',
+                                    style: TextStyle(
+                                      color: Colors.grey[600],
+                                      fontSize: 12,
+                                    ),
+                                  ),
+                                ),
+                                const Spacer(),
+
+                                // Price range
+                                Container(
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 6,
+                                    vertical: 2,
+                                  ),
+                                  decoration: BoxDecoration(
+                                    color: Colors.grey[100],
+                                    borderRadius: BorderRadius.circular(6),
+                                  ),
+                                  child: Text(
+                                    '₹${cropPrice.minPrice.toStringAsFixed(0)} - ₹${cropPrice.maxPrice.toStringAsFixed(0)}',
+                                    style: TextStyle(
+                                      fontSize: 11,
+                                      color: Colors.grey[700],
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+
+                // Watchlist button (positioned in top right)
+                Positioned(
+                  top: 0,
+                  right: 0,
+                  child: Obx(() {
+                    final isInWatchlist = controller.isInWatchlist(cropPrice);
+                    return Material(
+                      color: Colors.transparent,
+                      child: InkWell(
+                        borderRadius: const BorderRadius.only(
+                          bottomLeft: Radius.circular(12),
+                          topRight: Radius.circular(16),
+                        ),
+                        onTap: () => controller.toggleWatchlist(cropPrice),
+                        child: Container(
+                          padding: const EdgeInsets.all(10),
+                          decoration: BoxDecoration(
+                            color: isInWatchlist
+                                ? Colors.amber.withOpacity(0.1)
+                                : Colors.grey[50],
+                            borderRadius: const BorderRadius.only(
+                              bottomLeft: Radius.circular(12),
+                              topRight: Radius.circular(16),
+                            ),
+                          ),
+                          child: Icon(
+                            isInWatchlist
+                                ? Icons.star_rounded
+                                : Icons.star_border_rounded,
+                            color: isInWatchlist
+                                ? Colors.amber[700]
+                                : Colors.grey[400],
+                            size: 20,
+                          ),
+                        ),
+                      ),
+                    );
+                  }),
+                ),
+              ],
+            ),
           ),
         ),
       ),
     );
   }
 
-  IconData _getCommodityIcon() {
-    final commodity = cropPrice.commodity.toLowerCase();
+  void _showDetailDialog(BuildContext context) {
+    // showModalBottomSheet(
+    //   context: context,
+    //   isScrollControlled: true,
+    //   shape: const RoundedRectangleBorder(
+    //     borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+    //   ),
+    //   builder: (context) => _buildDetailSheet(context),
+    // );
 
-    if (commodity.contains('apple') ||
-        commodity.contains('banana') ||
-        commodity.contains('fruit') ||
-        commodity.contains('grape') ||
-        commodity.contains('orange')) {
-      return Icons.emoji_food_beverage;
-    } else if (commodity.contains('potato') ||
-        commodity.contains('onion') ||
-        commodity.contains('tomato')) {
-      return Icons.kitchen;
-    } else if (commodity.contains('chilli') ||
-        commodity.contains('garlic') ||
-        commodity.contains('ginger')) {
-      return Icons.restaurant;
-    } else {
-      return Icons.spa;
-    }
+    _showCropPriceDetails(context, cropPrice);
   }
 
-  void _showDetailDialog(BuildContext context) {
+  void _showCropPriceDetails(
+    BuildContext context,
+    CropPriceModel cropPrice,
+  ) {
+    final theme = Theme.of(context);
+    final controller = Get.find<MandiPriceController>();
+    final icon = _getCropIcon(cropPrice.commodity);
+
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-      ),
-      builder: (context) => _buildDetailSheet(context),
-    );
-  }
-
-  Widget _buildDetailSheet(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(20),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Center(
-            child: Container(
-              width: 40,
-              height: 4,
-              margin: const EdgeInsets.only(bottom: 20),
-              decoration: BoxDecoration(
-                color: Colors.grey[300],
-                borderRadius: BorderRadius.circular(2),
-              ),
+      backgroundColor: Colors.transparent,
+      builder: (context) => Container(
+        margin: const EdgeInsets.only(top: 60),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.1),
+              blurRadius: 20,
+              offset: const Offset(0, -5),
             ),
-          ),
-
-          // Commodity title and market
-          Row(
-            children: [
-              Container(
-                width: 50,
-                height: 50,
+          ],
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Handle for dragging
+            Center(
+              child: Container(
+                margin: const EdgeInsets.only(top: 12, bottom: 8),
+                height: 5,
+                width: 40,
                 decoration: BoxDecoration(
-                  color: Theme.of(context).colorScheme.primary.withOpacity(0.1),
-                  shape: BoxShape.circle,
-                ),
-                child: Center(
-                  child: Icon(
-                    _getCommodityIcon(),
-                    color: Theme.of(context).colorScheme.primary,
-                    size: 25,
-                  ),
+                  color: Colors.grey[300],
+                  borderRadius: BorderRadius.circular(3),
                 ),
               ),
-              const SizedBox(width: 16),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      cropPrice.commodity,
-                      style: const TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 20,
-                      ),
-                    ),
-                    Text(
-                      'at ${cropPrice.market}',
-                      style: TextStyle(
-                        fontSize: 14,
-                        color: Colors.grey[600],
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-
-          const SizedBox(height: 24),
-
-          // Variety and grade
-          Row(
-            children: [
-              Expanded(
-                child: _buildInfoCard(
-                    context,
-                    'Variety',
-                    cropPrice.variety == 'Other'
-                        ? 'General Variety'
-                        : cropPrice.variety,
-                    Icons.category),
-              ),
-              const SizedBox(width: 12),
-              Expanded(
-                child: _buildInfoCard(
-                    context, 'Grade', cropPrice.grade, Icons.grade),
-              ),
-            ],
-          ),
-
-          const SizedBox(height: 12),
-
-          // Price breakdown
-          const Text(
-            'Price Range (₹ per quintal)',
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 16,
             ),
-          ),
 
-          const SizedBox(height: 16),
-
-          Row(
-            children: [
-              Expanded(
-                child: _buildPriceCard(
-                    context, 'Minimum', cropPrice.minPrice, Colors.orange),
-              ),
-              const SizedBox(width: 8),
-              Expanded(
-                child: _buildPriceCard(
-                    context, 'Average', cropPrice.modalPrice, Colors.green),
-              ),
-              const SizedBox(width: 8),
-              Expanded(
-                child: _buildPriceCard(
-                    context, 'Maximum', cropPrice.maxPrice, Colors.blue),
-              ),
-            ],
-          ),
-
-          const SizedBox(height: 24),
-
-          // Date information
-          Center(
-            child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-              decoration: BoxDecoration(
-                color: Colors.grey[100],
-                borderRadius: BorderRadius.circular(20),
-                border: Border.all(color: Colors.grey[300]!),
-              ),
+            // Header with crop name and icon
+            Padding(
+              padding: const EdgeInsets.fromLTRB(20, 12, 20, 16),
               child: Row(
-                mainAxisSize: MainAxisSize.min,
                 children: [
-                  const Icon(Icons.calendar_today, size: 16),
-                  const SizedBox(width: 8),
-                  Text(
-                    'Price as of ${cropPrice.arrivalDate}',
-                    style: const TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w500,
+                  Container(
+                    padding: const EdgeInsets.all(16),
+                    decoration: BoxDecoration(
+                      color: theme.colorScheme.primary.withOpacity(0.1),
+                      shape: BoxShape.circle,
                     ),
+                    child: Text(
+                      icon,
+                      style: const TextStyle(fontSize: 28),
+                    ),
+                  ),
+                  const SizedBox(width: 16),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          cropPrice.commodity,
+                          style: const TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 22,
+                          ),
+                        ),
+                        const SizedBox(height: 4),
+                        Row(
+                          children: [
+                            Icon(
+                              Icons.store_rounded,
+                              size: 16,
+                              color: Colors.grey[600],
+                            ),
+                            const SizedBox(width: 6),
+                            Expanded(
+                              child: Text(
+                                cropPrice.market,
+                                style: TextStyle(
+                                  color: Colors.grey[600],
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                  // Watchlist button
+                  Obx(() {
+                    final isInWatchlist = controller.isInWatchlist(cropPrice);
+                    return Material(
+                      color: Colors.transparent,
+                      child: InkWell(
+                        borderRadius: BorderRadius.circular(50),
+                        onTap: () => controller.toggleWatchlist(cropPrice),
+                        child: Container(
+                          padding: const EdgeInsets.all(12),
+                          decoration: BoxDecoration(
+                            color: isInWatchlist
+                                ? Colors.amber.withOpacity(0.1)
+                                : Colors.grey[100],
+                            shape: BoxShape.circle,
+                          ),
+                          child: Icon(
+                            isInWatchlist
+                                ? Icons.star_rounded
+                                : Icons.star_border_rounded,
+                            color: isInWatchlist
+                                ? Colors.amber[700]
+                                : Colors.grey[500],
+                            size: 26,
+                          ),
+                        ),
+                      ),
+                    );
+                  }),
+                ],
+              ),
+            ),
+
+            const Divider(),
+
+            // Price details
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 24),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Current Price',
+                    style: TextStyle(
+                      fontWeight: FontWeight.w600,
+                      fontSize: 16,
+                      color: Colors.grey[700],
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+
+                  // Show price with larger font
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      Text(
+                        '₹${cropPrice.modalPrice.toStringAsFixed(0)}',
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 32,
+                          color: theme.colorScheme.primary,
+                        ),
+                      ),
+                      const SizedBox(width: 6),
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 6),
+                        child: Text(
+                          'per quintal',
+                          style: TextStyle(
+                            color: Colors.grey[600],
+                            fontSize: 14,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ],
               ),
             ),
-          ),
 
-          const SizedBox(height: 24),
+            const Divider(height: 1),
 
-          // Close button
-          SizedBox(
-            width: double.infinity,
-            child: ElevatedButton(
-              onPressed: () => Navigator.pop(context),
-              style: ElevatedButton.styleFrom(
-                padding: const EdgeInsets.symmetric(vertical: 12),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
-                ),
+            // Price breakdown section
+            Padding(
+              padding: const EdgeInsets.all(24),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Price Breakdown',
+                    style: TextStyle(
+                      fontWeight: FontWeight.w600,
+                      fontSize: 16,
+                      color: Colors.grey[700],
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+
+                  // Min, Modal, and Max prices
+                  Row(
+                    children: [
+                      _buildPriceDetailItem(
+                        'Min Price',
+                        '₹${cropPrice.minPrice.toStringAsFixed(0)}',
+                        Colors.orange,
+                      ),
+                      Container(
+                        height: 40,
+                        width: 1,
+                        color: Colors.grey[200],
+                        margin: const EdgeInsets.symmetric(horizontal: 16),
+                      ),
+                      _buildPriceDetailItem(
+                        'Modal Price',
+                        '₹${cropPrice.modalPrice.toStringAsFixed(0)}',
+                        theme.colorScheme.primary,
+                      ),
+                      Container(
+                        height: 40,
+                        width: 1,
+                        color: Colors.grey[200],
+                        margin: const EdgeInsets.symmetric(horizontal: 16),
+                      ),
+                      _buildPriceDetailItem(
+                        'Max Price',
+                        '₹${cropPrice.maxPrice.toStringAsFixed(0)}',
+                        Colors.green,
+                      ),
+                    ],
+                  ),
+
+                  const SizedBox(height: 20),
+
+                  // Additional details
+                  _buildDetailRow('Variety', cropPrice.variety),
+                  _buildDetailRow('Grade', cropPrice.grade),
+                  _buildDetailRow('District', cropPrice.district),
+                  _buildDetailRow('State', cropPrice.state),
+                  _buildDetailRow('Arrival Date', cropPrice.arrivalDate),
+                ],
               ),
-              child: const Text('Close'),
             ),
-          ),
-        ],
+
+            const Divider(height: 1),
+            SizedBox(height: MediaQuery.of(context).padding.bottom),
+          ],
+        ),
       ),
     );
   }
 
-  Widget _buildInfoCard(
-      BuildContext context, String title, String value, IconData icon) {
-    return Container(
-      padding: const EdgeInsets.all(12),
-      decoration: BoxDecoration(
-        color: Colors.grey[50],
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: Colors.grey[200]!),
-      ),
+// Helper method for price breakdown items
+  Widget _buildPriceDetailItem(String label, String value, Color color) {
+    return Expanded(
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Row(
-            children: [
-              Icon(
-                icon,
-                size: 16,
-                color: Colors.grey[600],
-              ),
-              const SizedBox(width: 6),
-              Text(
-                title,
-                style: TextStyle(
-                  fontSize: 13,
-                  color: Colors.grey[600],
-                ),
-              ),
-            ],
+          Text(
+            label,
+            style: TextStyle(
+              fontSize: 12,
+              color: Colors.grey[600],
+            ),
           ),
-          const SizedBox(height: 4),
+          const SizedBox(height: 6),
           Text(
             value,
-            style: const TextStyle(
-              fontSize: 15,
-              fontWeight: FontWeight.w500,
+            style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+              color: color,
             ),
           ),
         ],
@@ -379,35 +501,69 @@ class PriceCard extends StatelessWidget {
     );
   }
 
-  Widget _buildPriceCard(
-      BuildContext context, String type, double price, Color color) {
-    return Container(
-      padding: const EdgeInsets.all(12),
-      decoration: BoxDecoration(
-        color: color.withOpacity(0.1),
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: color.withOpacity(0.3)),
-      ),
-      child: Column(
+// Helper method for detail rows
+  Widget _buildDetailRow(String label, String value) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 12),
+      child: Row(
         children: [
-          Text(
-            type,
-            style: TextStyle(
-              fontSize: 13,
-              color: color.withOpacity(0.8),
+          SizedBox(
+            width: 100,
+            child: Text(
+              label,
+              style: TextStyle(
+                fontWeight: FontWeight.w500,
+                color: Colors.grey[700],
+              ),
             ),
           ),
-          const SizedBox(height: 4),
-          Text(
-            '₹${price.toStringAsFixed(0)}',
-            style: TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.bold,
-              color: color.withOpacity(0.8),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Text(
+              value,
+              style: const TextStyle(
+                fontWeight: FontWeight.w600,
+              ),
             ),
           ),
         ],
       ),
     );
+  }
+
+  String _getCropIcon(String commodity) {
+    final lcCommodity = commodity.toLowerCase();
+
+    if (lcCommodity.contains('wheat') || lcCommodity.contains('barley')) {
+      return '🌾';
+    } else if (lcCommodity.contains('rice') || lcCommodity.contains('paddy')) {
+      return '🍚';
+    } else if (lcCommodity.contains('corn') || lcCommodity.contains('maize')) {
+      return '🌽';
+    } else if (lcCommodity.contains('potato')) {
+      return '🥔';
+    } else if (lcCommodity.contains('onion')) {
+      return '🧅';
+    } else if (lcCommodity.contains('tomato')) {
+      return '🍅';
+    } else if (lcCommodity.contains('carrot')) {
+      return '🥕';
+    } else if (lcCommodity.contains('apple')) {
+      return '🍎';
+    } else if (lcCommodity.contains('banana')) {
+      return '🍌';
+    } else if (lcCommodity.contains('mango')) {
+      return '🥭';
+    } else if (lcCommodity.contains('cotton')) {
+      return '🧵';
+    } else if (lcCommodity.contains('soybean') ||
+        lcCommodity.contains('gram') ||
+        lcCommodity.contains('pulse')) {
+      return '🌱';
+    } else if (lcCommodity.contains('sugar') || lcCommodity.contains('cane')) {
+      return '🍭';
+    } else {
+      return '🌿';
+    }
   }
 }
