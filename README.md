@@ -1,8 +1,8 @@
-# CropConnect - Agricultural Cooperative Platform
+# KisaanMithraa - Agricultural Cooperative Platform
 
 ## Overview
 
-CropConnect is a mobile application designed to connect farmers with agricultural cooperatives in India. The app facilitates the formation and management of farming cooperatives, resource pooling, and creates a digital marketplace for agricultural resources.
+KisaanMithraa is a mobile application designed to connect farmers with agricultural cooperatives in India. The app facilitates the formation and management of farming cooperatives, resource pooling, and creates a digital marketplace for agricultural resources.
 
 This platform addresses several UN Sustainable Development Goals:
 - **SDG 1**: No Poverty
@@ -17,19 +17,22 @@ This platform addresses several UN Sustainable Development Goals:
 - **Cooperative Management**: Create and manage agricultural cooperatives
 - **Resource Pooling**: Share equipment, seeds, and other farming resources
 - **Marketplace**: Buy, sell, or rent agricultural resources
+- **Mandi Prices**: Real-time agricultural market prices with watchlist functionality
+- **AI-Powered Chatbot**: Get farming advice and assistance through natural conversation
 - **Location-based Services**: Find nearby cooperatives and farmers
 - **Notifications**: Stay updated on cooperative activities and marketplace listings
 - **Offline Support**: Access critical information even with limited connectivity
 
+
 ## Technology Stack
 
-CropConnect is built using Flutter for cross-platform mobile development and Firebase for backend services.
+KisaanMithraa is built using Flutter for cross-platform mobile development and Firebase for backend services.
 
 ### Architecture Overview
 
 ```mermaid
 flowchart TB
-    subgraph "CropConnect Architecture"
+    subgraph "App Architecture"
         direction TB
         
         subgraph "Flutter UI Layer"
@@ -37,11 +40,6 @@ flowchart TB
             UI --> MaterialDesign[Material Design]
             UI --> CustomWidgets[Custom Widgets]
             UI --> Screens[App Screens]
-            
-            Screens --> FarmerDashboard[Farmer Dashboard]
-            Screens --> CooperativeManagement[Cooperative Management]
-            Screens --> ResourcePooling[Resource Marketplace]
-            Screens --> ProfileManagement[Profile Management]
         end
         
         subgraph "State Management"
@@ -49,11 +47,6 @@ flowchart TB
             GetX --> Controllers[Controllers]
             GetX --> Routes[Route Management]
             GetX --> DependencyInjection[Dependency Injection]
-            
-            Controllers --> UserController[User Controller]
-            Controllers --> CooperativeController[Cooperative Controller]
-            Controllers --> ResourceController[Resource Controller]
-            Controllers --> LocationController[Location Controller]
         end
         
         subgraph "Service Layer"
@@ -63,70 +56,198 @@ flowchart TB
             Services --> StorageService[Storage Service]
             Services --> LocationService[Location Service]
             Services --> NotificationService[Notification Service]
+            Services --> SpeechService[Speech Recognition]
         end
         
         UI --> GetX
         GetX --> Services
         
-        subgraph "Firebase Services"
+        subgraph "External Services"
             direction TB
-            FirebaseAuth[Firebase Authentication]
-            Firestore[Cloud Firestore]
-            FirebaseStorage[Firebase Storage]
-            FCM[Firebase Cloud Messaging]
-            
-            subgraph "Firestore Collections"
-                UsersCollection[Users Collection]
-                CooperativesCollection[Cooperatives Collection]
-                ResourcesCollection[Resources Collection]
-                NotificationsCollection[Notifications Collection]
-                
-                UsersCollection --> UserData[User Profiles]
-                CooperativesCollection --> CooperativeData[Cooperative Details]
-                CooperativesCollection --> MembershipData[Membership Info]
-                ResourcesCollection --> ResourceListings[Resource Listings]
-                NotificationsCollection --> UserNotifications[User Notifications]
-            end
-            
-            subgraph "Firebase Storage"
-                ProfileImages[Profile Images]
-                CooperativeImages[Cooperative Banners]
-                ResourceImages[Resource Images]
-            end
+            Firebase[Firebase]
+            DataGovAPI[Data.gov.in API]
+            OpenAI[OpenAI API]
+            GoogleMaps[Google Maps Platform]
         end
         
-        subgraph "Google Maps Platform"
-            GoogleMaps[Google Maps SDK]
-            GoogleMaps --> GeocodingAPI[Geocoding API]
-            GoogleMaps --> PlacesAPI[Places API]
-            GoogleMaps --> MapsWidget[Maps Flutter Widget]
-        end
-        
-        AuthService --> FirebaseAuth
-        DatabaseService --> Firestore
-        StorageService --> FirebaseStorage
-        NotificationService --> FCM
-        LocationService --> GoogleMaps
+        Services --> Firebase
+        Services --> DataGovAPI
+        Services --> OpenAI
+        Services --> GoogleMaps
         
         subgraph "Offline Capabilities"
             FirestoreCache[Firestore Offline Cache]
             LocalStorage[Local Storage]
+            SharedPrefs[Shared Preferences]
         end
         
-        Firestore ---> FirestoreCache
         Services ---> LocalStorage
+        Services ---> SharedPrefs
+    end
+```
+
+### Features Architecture
+
+```mermaid
+flowchart TB
+    subgraph "Core Features"
+        subgraph "User Management"
+            UserAuth[Authentication]
+            UserProfile[Profile Management]
+            Localization[Multilingual Support]
+        end
+        
+        subgraph "Cooperative Management"
+            CoopCreation[Cooperative Creation]
+            CoopManagement[Management Dashboard]
+            ResourceSharing[Resource Sharing]
+            MemberManagement[Member Management]
+        end
+        
+        subgraph "Marketplace"
+            ResourceListings[Resource Listings]
+            BuySellFlow[Buy/Sell Flow]
+            RentalSystem[Equipment Rental]
+            TransactionHistory[Transaction Records]
+        end
     end
     
-    style CropConnect fill:#f9f9f9,stroke:#333,stroke-width:1px
-    style UI fill:#e6f7ff,stroke:#0099cc,stroke-width:1px
-    style GetX fill:#ffe6cc,stroke:#ff9933,stroke-width:1px
-    style Services fill:#e6ffcc,stroke:#66cc33,stroke-width:1px
-    style FirebaseAuth fill:#ffcccc,stroke:#ff6666,stroke-width:1px
-    style Firestore fill:#ffcccc,stroke:#ff6666,stroke-width:1px
-    style FirebaseStorage fill:#ffcccc,stroke:#ff6666,stroke-width:1px
-    style FCM fill:#ffcccc,stroke:#ff6666,stroke-width:1px
-    style GoogleMaps fill:#ccccff,stroke:#6666ff,stroke-width:1px
+    subgraph "Advanced Features"
+        subgraph "Mandi Price System"
+            PriceData[Price Data Fetching]
+            PriceDisplay[UI Representation]
+            Watchlist[Watchlist Management]
+            PriceNotifications[Price Alerts]
+            CacheSystem[Price Caching]
+        end
+        
+        subgraph "AI Chatbot"
+            SpeechRecognition[Voice Recognition]
+            TextProcessing[Text Analysis]
+            AIIntegration[OpenAI Integration]
+            ChatHistory[Conversation History]
+            FarmingDatabase[Knowledge Base]
+        end
+        
+        subgraph "Location Services"
+            MapsIntegration[Maps Integration]
+            GeoLocation[Geolocation Services]
+            ProximitySearch[Proximity Search]
+            RoutePlanning[Route Planning]
+        end
+    end
 ```
+
+### Data Flow Architecture
+
+```mermaid
+flowchart LR
+    subgraph "Mandi Price System"
+        direction TB
+        PriceController[MandiPriceController]
+        PriceRepository[MandiPriceRepository]
+        PriceModels[CropPriceModel]
+        PriceWidgets[Price UI Components]
+        
+        User --> PriceWidgets
+        PriceWidgets --> PriceController
+        PriceController --> PriceRepository
+        PriceRepository -- API Request --> DataGovAPI[Data.gov.in API]
+        DataGovAPI -- JSON Response --> PriceRepository
+        PriceRepository -- Parse --> PriceModels
+        PriceRepository -- Cache --> LocalStorage
+        LocalStorage -- Cached Data --> PriceRepository
+        PriceModels --> PriceController
+        PriceController --> PriceWidgets
+    end
+    
+    subgraph "AI Chatbot System"
+        direction TB
+        ChatController[ChatbotController]
+        SpeechService[SpeechService]
+        OpenAIService[OpenAIService]
+        MessageModels[ChatMessage Model]
+        ChatWidgets[Chat UI Components]
+        
+        User -- Speech Input --> SpeechService
+        User -- Text Input --> ChatWidgets
+        ChatWidgets --> ChatController
+        SpeechService -- Transcribed Text --> ChatController
+        ChatController -- Manages --> MessageModels
+        ChatController -- Request --> OpenAIService
+        OpenAIService -- API Request --> OpenAI[OpenAI API]
+        OpenAI -- Response --> OpenAIService
+        OpenAIService --> ChatController
+        ChatController --> ChatWidgets
+    end
+```
+
+### Debugging & Development Tools
+
+KisaanMithraa includes a comprehensive suite of debugging and development tools to facilitate testing and quality assurance:
+
+- **Test Data Generation**: Ability to generate random users with realistic Indian farmer profiles
+- **Cooperative Simulation**: Create test cooperatives with specified names, descriptions, and member counts
+- **Location Testing**: Interactive map integration for selecting precise geographical coordinates
+- **Media Content Management**: Upload and test podcast content with proper metadata
+- **File Upload Simulation**: Test audio and image file uploads with size validation
+- **Geographic Distribution**: Quick-access buttons to test various regions across India
+- **Location Search**: Geocoding integration to find and test specific locations
+- **Clear Debug Data**: Option to purge all test-generated data from the database
+
+These tools are carefully isolated from production code and provide developers with a sandbox environment to test new features, verify data flows, and ensure the application functions correctly across India's diverse geographic and linguistic landscape.
+
+### Debugging Architecture
+
+```mermaid
+flowchart TB
+    subgraph "Debugging System"
+        direction TB
+        
+        subgraph "Data Generation"
+            UserGenerator[Random User Generator]
+            CooperativeGenerator[Cooperative Generator]
+            ContentGenerator[Podcast Content Generator]
+            LocationSelector[Geographic Location Selector]
+        end
+        
+        subgraph "Test Controls"
+            GenerationControls[Generation Controls]
+            FileUploaders[File Upload Simulators]
+            DataValidator[Input Validator]
+            DataCleaner[Debug Data Cleaner]
+        end
+        
+        subgraph "Visual Tools"
+            MapInterface[Interactive Map Interface]
+            SearchInterface[Location Search]
+            ProgressIndicators[Operation Progress Tracking]
+            WarningBanners[Safety Warning System]
+        end
+        
+        UserGenerator --> GenerationControls
+        CooperativeGenerator --> GenerationControls
+        ContentGenerator --> GenerationControls
+        
+        GenerationControls --> DataValidator
+        FileUploaders --> DataValidator
+        MapInterface --> LocationSelector
+        SearchInterface --> LocationSelector
+        
+        DataValidator --> Firebase
+        DataCleaner --> Firebase
+        
+        subgraph "Integration Points"
+            Firebase[Firebase Database]
+            Storage[Cloud Storage]
+            Auth[Authentication]
+        end
+        
+        ContentGenerator --> Storage
+        UserGenerator --> Auth
+        CooperativeGenerator --> Firebase
+    end
+    ```
 
 ## Key Technologies
 
@@ -135,7 +256,10 @@ flowchart TB
 - **Cloud Firestore**: NoSQL database for storing application data
 - **Firebase Storage**: Cloud storage for images and other assets
 - **Firebase Cloud Messaging**: Push notification service
+- **Data.gov.in API**: Real-time agricultural market prices
+- **OpenAI API**: AI-powered farming assistance chatbot
 - **Google Maps Platform**: Location services and mapping
+- **Speech-to-Text**: Voice recognition for natural conversation
 - **GetX**: State management and dependency injection
 
 ## Getting Started
@@ -145,13 +269,15 @@ flowchart TB
 - Dart (version 3.0.0 or higher)
 - Firebase project with Firestore database
 - Google Maps API key
+- OpenAI API key
+- Data.gov.in API key
 
 ### Installation
 
 1. Clone the repository:
 ```bash
-git clone https://github.com/yourusername/cropconnect.git
-cd cropconnect
+git clone https://github.com/yourusername/kisaanmithraa.git
+cd kisaanmithraa
 ```
 
 2. Install dependencies:
@@ -159,20 +285,48 @@ cd cropconnect
 flutter pub get
 ```
 
-3. Configure Firebase:
+3. Configure environment variables:
+   - Create a .env file in the project root
+   - Add the following keys:
+     ```
+     DATA_GOV_API_KEY=your_data_gov_api_key
+     OPENAI_API_KEY=your_openai_api_key
+     MAPS_API_KEY=your_google_maps_api_key
+     ```
+
+4. Configure Firebase:
    - Create a new Firebase project
    - Add an Android and iOS app to your Firebase project
    - Download the configuration files (google-services.json for Android, GoogleService-Info.plist for iOS)
    - Place these files in the appropriate directories
 
-4. Configure Google Maps API:
-   - Create API key in Google Cloud Console
-   - Add the key to your app configuration
-
 5. Run the app:
 ```bash
 flutter run
 ```
+
+## Technical Implementation Highlights
+
+### Mandi Price Module
+- Real-time agricultural market price data from Data.gov.in API
+- Efficient caching system for offline access and reduced API calls
+- Watchlist functionality for farmers to track specific crops
+- Detailed price analytics with min/max/modal price comparisons
+- Location-based price filtering
+
+### AI-Powered Chatbot
+- Natural language processing using OpenAI's API
+- Voice recognition for hands-free operation
+- Contextual awareness to maintain conversation flow
+- Farming-specific knowledge base for targeted assistance
+- Multilingual support for regional language conversations
+
+### Performance Optimizations
+- Aggressive caching for offline functionality
+- Lazy loading of components for faster startup
+- Image optimization for reduced data usage
+- Background data synchronization
+- Battery-efficient location services
 
 ## Contributing
 
@@ -180,10 +334,11 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 
 ## Social Impact
 
-CropConnect aims to empower farmers in India by:
+KisaanMithraa aims to empower farmers in India by:
 - Facilitating cooperative formation to increase bargaining power
 - Reducing equipment costs through resource sharing
 - Improving access to markets and fair pricing
+- Providing AI-powered farming advice and assistance
 - Building digital literacy in rural communities
 - Creating a network of support among agricultural communities
 
@@ -193,7 +348,8 @@ CropConnect aims to empower farmers in India by:
 - Market price predictions
 - Crop disease detection using image recognition
 - Integration with government agricultural schemes
-- Support for multiple regional languages
+- Support for more regional languages
+- Expanded AI capabilities with specialized agricultural models
 
 ## License
 
@@ -205,4 +361,4 @@ For any inquiries, please reach out to [your-email@example.com](mailto:your-emai
 
 ---
 
-*CropConnect is proudly submitted for the Google Solution Challenge, addressing several UN Sustainable Development Goals through technological innovation in agriculture.*
+*KisaanMithraa is proudly built to address several UN Sustainable Development Goals through technological innovation in agriculture.*
