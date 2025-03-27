@@ -28,6 +28,51 @@ This platform addresses several UN Sustainable Development Goals:
 
 KisaanMithraa is built using Flutter for cross-platform mobile development and Firebase for backend services.
 
+## Screenshots
+
+### Home & Dashboard
+![Home Screen](assets/screenshots/home/home1.png) | ![Home Watchlist](assets/screenshots/home/home2.png) | ![Price Details](assets/screenshots/home/home3.png) | ![Onboarding Example](assets/screenshots/home/onboard1.png)
+:-------------------------:|:-------------------------:|:-------------------------:|:-------------------------:
+Home Dashboard | Home Watchlist | Price Details | Onboarding Experience
+
+![Profile Screen](assets/screenshots/home/profile1.png) | ![Splash Screen](assets/screenshots/home/splash.png) | | 
+:-------------------------:|:-------------------------:|:-------------------------:|:-------------------------:
+User Profile | App Launch Screen | |
+
+### Marketplace & Resource Sharing
+![Marketplace Home](#) | ![Product Details](#) | ![Rental System](#) | ![Transaction History](#)
+:-------------------------:|:-------------------------:|:-------------------------:|:-------------------------:
+Resource Marketplace | Product Details | Equipment Rental | Transaction Records
+
+### Cooperative Management
+![Cooperative Dashboard](assets/screenshots/cooperative/coop1.png) | ![Cooperative Details](assets/screenshots/cooperative/coop2.png) | ![Member Management](assets/screenshots/cooperative/coop3.png) | ![Resource Sharing](assets/screenshots/cooperative/coop4.png)
+:-------------------------:|:-------------------------:|:-------------------------:|:-------------------------:
+Cooperative Dashboard | Cooperative Details | Member Management | Resource Sharing
+
+![Cooperative Creation](assets/screenshots/cooperative/coop5.png) | ![Task Allocation](assets/screenshots/cooperative/coop6.png) | ![Cooperative Analytics](assets/screenshots/cooperative/coop7.png) |
+:-------------------------:|:-------------------------:|:-------------------------:|:-------------------------:
+Cooperative Creation | Task Management | Performance Analytics |
+
+### Mandi Price System
+![Mandi Prices](assets/screenshots/mandi/mandi1.png) | ![Watchlist View](assets/screenshots/mandi/watchlist1.png) | ![Watchlist Management](assets/screenshots/mandi/watchlist2.png) |
+:-------------------------:|:-------------------------:|:-------------------------:|:-------------------------:
+Market Price Listings | Watchlist View | Watchlist Management |
+
+### AI Chatbot & Assistance
+![Chatbot Interface](assets/screenshots/chatbot/chatbot1.png) | | |
+:-------------------------:|:-------------------------:|:-------------------------:|:-------------------------:
+AI Farming Assistant | | |
+
+### Podcast & Knowledge Base
+![Podcast Library](assets/screenshots/podcasts/podcast1.png) | ![Podcast Player](assets/screenshots/podcasts/podcast2.png) | ![Podcast Details](assets/screenshots/podcasts/podcast3.png) |
+:-------------------------:|:-------------------------:|:-------------------------:|:-------------------------:
+Agricultural Knowledge Library | Audio Content Player | Podcast Information |
+
+### Developer Tools
+![Debug Interface](assets/screenshots/debug/debug1.png) | ![Testing Tools](assets/screenshots/debug/debug2.png) | |
+:-------------------------:|:-------------------------:|:-------------------------:|:-------------------------:
+Development Interface | Testing Tools | |
+
 ### Architecture Overview
 
 ```mermaid
@@ -247,7 +292,8 @@ flowchart TB
         UserGenerator --> Auth
         CooperativeGenerator --> Firebase
     end
-    ```
+
+```
 
 ## Key Technologies
 
@@ -357,7 +403,7 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 
 ## Contact
 
-For any inquiries, please reach out to [your-email@example.com](mailto:your-email@example.com)
+For any inquiries, please reach out to [www.rishiahuja@gmail.com](mailto:www.rishiahuja@gmail.com)
 
 ---
 
