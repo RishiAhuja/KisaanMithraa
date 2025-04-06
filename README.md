@@ -20,7 +20,7 @@ This platform addresses several UN Sustainable Development Goals:
 - **Mandi Prices**: Real-time agricultural market prices with watchlist functionality
 - **AI-Powered Chatbot**: Get farming advice and assistance through natural conversation
 - **Location-based Services**: Find nearby cooperatives and farmers
-- **Notifications**: Stay updated on cooperative activities and marketplace listings
+- **Notifications**: Stay updated on coerative activities and marketplace listings
 - **Offline Support**: Access critical information even with limited connectivity
 
 
@@ -81,7 +81,6 @@ KisaanMithraa is built using Flutter for cross-platform mobile development and F
   <img src="assets/screenshots/debug/debug1.png" width="23%" alt="Development Interface" />
   <img src="assets/screenshots/debug/debug2.png" width="23%" alt="Testing Tools" />
 </p>
-
 ### Architecture Overview
 
 ```mermaid
@@ -312,7 +311,7 @@ flowchart TB
 - **Firebase Storage**: Cloud storage for images and other assets
 - **Firebase Cloud Messaging**: Push notification service
 - **Data.gov.in API**: Real-time agricultural market prices
-- **OpenAI API**: AI-powered farming assistance chatbot
+- **Gemini API**: AI-powered farming assistance chatbot
 - **Google Maps Platform**: Location services and mapping
 - **Speech-to-Text**: Voice recognition for natural conversation
 - **GetX**: State management and dependency injection
@@ -331,7 +330,7 @@ flowchart TB
 
 1. Clone the repository:
 ```bash
-git clone https://github.com/yourusername/kisaanmithraa.git
+git clone https://github.com/RishiAhuja/kisaanmithraa.git
 cd kisaanmithraa
 ```
 
@@ -345,7 +344,7 @@ flutter pub get
    - Add the following keys:
      ```
      DATA_GOV_API_KEY=your_data_gov_api_key
-     OPENAI_API_KEY=your_openai_api_key
+     GEMINI_API_KEY=your_gemini_api_key
      MAPS_API_KEY=your_google_maps_api_key
      ```
 
