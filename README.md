@@ -31,47 +31,56 @@ KisaanMithraa is built using Flutter for cross-platform mobile development and F
 ## Screenshots
 
 ### Home & Dashboard
-![Home Screen](assets/screenshots/home/home1.png) | ![Home Watchlist](assets/screenshots/home/home2.png) | ![Price Details](assets/screenshots/home/home3.png) | ![Onboarding Example](assets/screenshots/home/onboard1.png)
-:-------------------------:|:-------------------------:|:-------------------------:|:-------------------------:
-Home Dashboard | Home Watchlist | Price Details | Onboarding Experience
+<p float="left">
+  <img src="assets/screenshots/home/home1.png" width="23%" alt="Home Dashboard" />
+  <img src="assets/screenshots/home/home2.png" width="23%" alt="Home Watchlist" />
+  <img src="assets/screenshots/home/home3.png" width="23%" alt="Price Details" />
+  <img src="assets/screenshots/home/onboard1.png" width="23%" alt="Onboarding Experience" />
+</p>
 
-![Profile Screen](assets/screenshots/home/profile1.png) | ![Splash Screen](assets/screenshots/home/splash.png) | | 
-:-------------------------:|:-------------------------:|:-------------------------:|:-------------------------:
-User Profile | App Launch Screen | |
-
-### Marketplace & Resource Sharing
-![Marketplace Home](#) | ![Product Details](#) | ![Rental System](#) | ![Transaction History](#)
-:-------------------------:|:-------------------------:|:-------------------------:|:-------------------------:
-Resource Marketplace | Product Details | Equipment Rental | Transaction Records
+<p float="left">
+  <img src="assets/screenshots/home/profile1.png" width="23%" alt="User Profile" />
+  <img src="assets/screenshots/home/splash.png" width="23%" alt="App Launch Screen" />
+</p>
 
 ### Cooperative Management
-![Cooperative Dashboard](assets/screenshots/cooperative/coop1.png) | ![Cooperative Details](assets/screenshots/cooperative/coop2.png) | ![Member Management](assets/screenshots/cooperative/coop3.png) | ![Resource Sharing](assets/screenshots/cooperative/coop4.png)
-:-------------------------:|:-------------------------:|:-------------------------:|:-------------------------:
-Cooperative Dashboard | Cooperative Details | Member Management | Resource Sharing
+<p float="left">
+  <img src="assets/screenshots/cooperative/coop1.png" width="23%" alt="Cooperative Dashboard" />
+  <img src="assets/screenshots/cooperative/coop2.png" width="23%" alt="Cooperative Details" />
+  <img src="assets/screenshots/cooperative/coop3.png" width="23%" alt="Member Management" />
+  <img src="assets/screenshots/cooperative/coop4.png" width="23%" alt="Resource Sharing" />
+</p>
 
-![Cooperative Creation](assets/screenshots/cooperative/coop5.png) | ![Task Allocation](assets/screenshots/cooperative/coop6.png) | ![Cooperative Analytics](assets/screenshots/cooperative/coop7.png) |
-:-------------------------:|:-------------------------:|:-------------------------:|:-------------------------:
-Cooperative Creation | Task Management | Performance Analytics |
+<p float="left">
+  <img src="assets/screenshots/cooperative/coop5.png" width="23%" alt="Cooperative Creation" />
+  <img src="assets/screenshots/cooperative/coop6.png" width="23%" alt="Task Management" />
+  <img src="assets/screenshots/cooperative/coop7.png" width="23%" alt="Performance Analytics" />
+</p>
 
 ### Mandi Price System
-![Mandi Prices](assets/screenshots/mandi/mandi1.png) | ![Watchlist View](assets/screenshots/mandi/watchlist1.png) | ![Watchlist Management](assets/screenshots/mandi/watchlist2.png) |
-:-------------------------:|:-------------------------:|:-------------------------:|:-------------------------:
-Market Price Listings | Watchlist View | Watchlist Management |
+<p float="left">
+  <img src="assets/screenshots/mandi/mandi1.png" width="23%" alt="Market Price Listings" />
+  <img src="assets/screenshots/mandi/watchlist.png" width="23%" alt="Watchlist View" />
+  <img src="assets/screenshots/mandi/watchlist2.png" width="23%" alt="Watchlist Management" />
+</p>
 
 ### AI Chatbot & Assistance
-![Chatbot Interface](assets/screenshots/chatbot/chatbot1.png) | | |
-:-------------------------:|:-------------------------:|:-------------------------:|:-------------------------:
-AI Farming Assistant | | |
+<p float="left">
+  <img src="assets/screenshots/chatbot/chatbot1.png" width="23%" alt="AI Farming Assistant" />
+</p>
 
 ### Podcast & Knowledge Base
-![Podcast Library](assets/screenshots/podcasts/podcast1.png) | ![Podcast Player](assets/screenshots/podcasts/podcast2.png) | ![Podcast Details](assets/screenshots/podcasts/podcast3.png) |
-:-------------------------:|:-------------------------:|:-------------------------:|:-------------------------:
-Agricultural Knowledge Library | Audio Content Player | Podcast Information |
+<p float="left">
+  <img src="assets/screenshots/podcasts/podcast1.png" width="23%" alt="Agricultural Knowledge Library" />
+  <img src="assets/screenshots/podcasts/podcast2.png" width="23%" alt="Audio Content Player" />
+  <img src="assets/screenshots/podcasts/podcast3.png" width="23%" alt="Podcast Information" />
+</p>
 
 ### Developer Tools
-![Debug Interface](assets/screenshots/debug/debug1.png) | ![Testing Tools](assets/screenshots/debug/debug2.png) | |
-:-------------------------:|:-------------------------:|:-------------------------:|:-------------------------:
-Development Interface | Testing Tools | |
+<p float="left">
+  <img src="assets/screenshots/debug/debug1.png" width="23%" alt="Development Interface" />
+  <img src="assets/screenshots/debug/debug2.png" width="23%" alt="Testing Tools" />
+</p>
 
 ### Architecture Overview
 

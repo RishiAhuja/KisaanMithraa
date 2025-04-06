@@ -173,13 +173,14 @@ class RegisterScreen extends GetView<AuthController> {
                               return ElevatedButton(
                                 onPressed: isLoading
                                     ? null
-                                    : () {
+                                    : () async {
                                         if (useBackDoor.value) {
-                                          debugController.debugDirectLogin(
-                                              debugController
+                                          await debugController
+                                              .debugDirectLogin(debugController
                                                   .phoneNumberController.text);
                                         } else {
-                                          authController.registerWithPhone();
+                                          await authController
+                                              .registerWithPhone();
                                         }
                                       },
                                 style: ElevatedButton.styleFrom(
@@ -206,13 +207,16 @@ class RegisterScreen extends GetView<AuthController> {
                                         useBackDoor.value
                                             ? 'Debug Login'
                                             : 'Verify Phone',
-                                        style: TextStyle(
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.bold,
-                                          color: useBackDoor.value
-                                              ? Colors.black
-                                              : null,
-                                        ),
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodyLarge
+                                            ?.copyWith(
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.bold,
+                                              color: useBackDoor.value
+                                                  ? Colors.black
+                                                  : null,
+                                            ),
                                       ),
                               );
                             }),
