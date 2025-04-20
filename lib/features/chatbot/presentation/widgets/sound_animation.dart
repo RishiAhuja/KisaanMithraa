@@ -11,7 +11,7 @@ class SoundWaveAnimation extends StatelessWidget {
     Key? key,
     required this.volumeStream,
     required this.color,
-    this.height = 40,
+    this.height = 36,
     this.numberOfBars = 5,
   }) : super(key: key);
 
@@ -19,18 +19,13 @@ class SoundWaveAnimation extends StatelessWidget {
   Widget build(BuildContext context) {
     return StreamBuilder<double>(
       stream: volumeStream,
-      initialData:
-          0.5, // Start with a default value for immediate visual feedback
+      initialData: 0.5,
       builder: (context, snapshot) {
-        // Use a default value if we get null or an error
         final volume = snapshot.hasData ? (snapshot.data ?? 0.5) : 0.5;
-
-        // Log for debugging
-        print('SoundWaveAnimation received volume: $volume');
 
         return SizedBox(
           height: height,
-          width: numberOfBars * 8.0, // Each bar takes 8 pixels (bar + gap)
+          width: numberOfBars * 6.0,
           child: CustomSoundWaves(
             height: height,
             amplitude: volume,
@@ -69,16 +64,15 @@ class _CustomSoundWavesState extends State<CustomSoundWaves>
   @override
   void initState() {
     super.initState();
-    // Create random offsets for more natural wave effect
+
     _randomOffsets.clear();
     for (int i = 0; i < widget.numberOfBars; i++) {
       _randomOffsets.add(math.Random().nextDouble() * 0.4);
     }
 
-    // Use faster animation for more responsive feel
     _controller = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 800),
+      duration: const Duration(milliseconds: 600),
     )..repeat(reverse: true);
   }
 
@@ -103,40 +97,22 @@ class _CustomSoundWavesState extends State<CustomSoundWaves>
                       (index * 0.5) +
                       _randomOffsets[index]);
 
-              // Make amplitude more pronounced for better visual effect
               final heightFactor =
                   widget.amplitude * (0.6 + animationValue * 0.4);
-
-              // Ensure there's always some visible height
-              final actualHeight = math.max(4.0, heightFactor * widget.height);
+              final actualHeight = math.max(3.0, heightFactor * widget.height);
 
               return Container(
-                width: 4.0,
+                width: 3.0,
                 height: actualHeight,
                 decoration: BoxDecoration(
                   color: widget.color,
-                  borderRadius: BorderRadius.circular(2.0),
+                  borderRadius: BorderRadius.circular(1.5),
                 ),
               );
             },
           ),
         );
       },
-    );
-  }
-}
-
-extension CustomSoundWavesExtensions on CustomSoundWaves {
-  static CustomSoundWaves circular({
-    required double amplitude,
-    required Color color,
-    int numberOfBars = 8,
-  }) {
-    return CustomSoundWaves(
-      height: 50.0,
-      amplitude: amplitude,
-      color: color,
-      numberOfBars: numberOfBars,
     );
   }
 }

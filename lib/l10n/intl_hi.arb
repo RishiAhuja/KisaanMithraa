@@ -156,5 +156,68 @@
   "weatherWind": "हवा",
   "weatherWindUnit": "किमी/घंटा",
   "weatherPressure": "दबाव",
-  "weatherPressureUnit": "हेक्टोपास्कल"
+  "weatherPressureUnit": "हेक्टोपास्कल",
+  "allServices": "सभी सेवाएं",
+  "farmerGroupsDesc": "अपने क्षेत्र के किसानों से जुड़ें",
+  "podcastsDesc": "खेती के टिप्स और समाचार सुनें",
+  "transportDesc": "अपनी उपज के लिए परिवहन ढूंढें",
+  "weatherDesc": "स्थानीय मौसम पूर्वानुमान देखें",
+  "weatherPhraseRain": "आज घर के अंदर रहना अच्छा होगा",
+  "weatherPhraseCloud": "खेती के लिए सामान्य दिन",
+  "weatherPhraseClearHot": "खेतों में पानी पीते रहें",
+  "weatherPhraseClear": "खुले में काम करने के लिए अच्छा दिन",
+  "weatherPhraseSnow": "आज अपनी फसलों की रक्षा करें",
+  "weatherPhraseCold": "फसल की वृद्धि के लिए काफी ठंडा",
+  "weatherPhraseHot": "फसलों पर गर्मी तनाव पर नज़र रखें",
+  "weatherPhraseDefault": "खेती के लिए अच्छी स्थिति",
+    "chatbotTitle": "किसान सहायक",
+    "@chatbotTitle": {
+      "description": "The title of the chatbot screen"
+    },
+    
+    "farmingAssistant": "आपका कृषि सहायक",
+    "@farmingAssistant": {
+      "description": "Title shown on the empty chat screen"
+    },
+  
+    "resetConversation": "बातचीत रीसेट करें",
+    "@resetConversation": {
+      "description": "Button tooltip to reset the conversation"
+    },
+    
+    "scrollToBottom": "नीचे स्क्रॉल करें",
+    "@scrollToBottom": {
+      "description": "Tooltip for the scroll to bottom button"
+    },
+    
+    "suggestedQuestions": "यह पूछकर देखें:",
+    "@suggestedQuestions": {
+      "description": "Header for suggested questions section"
+    },
+    "tip": "सुझाव",
+    "listening": "सुन रहा है...",
+    "cancelListening": "रद्द करें",
+    "tapToSpeak": "बोलने के लिए टैप करें",
+    "language": "भाषा",
+    "english": "अंग्रेज़ी",
+    "hindi": "हिंदी",
+    "punjabi": "पंजाबी",
+    "loadingResponse": "जवाब लोड हो रहा है...",
+    "relatedContent": "संबंधित जानकारी:",
+    "listenToPodcast": "हमारा पॉडकास्ट सुनें",
+    "joinDiscussion": "चर्चा में शामिल हों",
+    "checkWeather": "मौसम जांचें",
+    "learnMore": "और जानें",
+    
+      "transportServices": "परिवहन सेवाएं",
+      "weatherDetails": "मौसम का विवरण",
+      "weatherDetailsDesc": "विस्तृत मौसम जानकारी",
+      "listenPodcast": "हमारा पॉडकास्ट सुनें",
+      "goToMarketplace": "मार्केटप्लेस पर जाएं",
+      "exploreResources": "संसाधन खोजें",
+      "communityDesc": "अन्य किसानों से जुड़ें",
+      "marketplaceDesc": "कृषि उत्पादों को खरीदें और बेचें",
+      "resourcesDesc": "खेती के मार्गदर्शिका और संसाधन",
+      "relatedInfoDesc": "संबंधित जानकारी"
+    
 }

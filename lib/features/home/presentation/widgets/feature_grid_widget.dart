@@ -12,81 +12,97 @@ class FeaturesGridWidget extends StatelessWidget {
     final localizations = AppLocalizations.of(context)!;
 
     return Container(
-      margin: const EdgeInsets.fromLTRB(16, 0, 16, 20),
+      margin: const EdgeInsets.fromLTRB(16, 8, 16, 20),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          // Section header with a cleaner design
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 10),
+            padding: const EdgeInsets.only(left: 4, right: 4, bottom: 12),
             child: Row(
               children: [
                 Container(
-                  padding: const EdgeInsets.all(10),
+                  width: 3,
+                  height: 16,
                   decoration: BoxDecoration(
-                    color: AppColors.primary.withOpacity(0.1),
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: Icon(
-                    Icons.grid_view_rounded,
                     color: AppColors.primary,
-                    size: 20,
+                    borderRadius: BorderRadius.circular(2),
                   ),
                 ),
-                const SizedBox(width: 12),
+                const SizedBox(width: 8),
                 Text(
                   localizations.quickAccess,
-                  style: theme.textTheme.titleMedium?.copyWith(
+                  style: theme.textTheme.titleSmall?.copyWith(
                     fontWeight: FontWeight.bold,
-                    fontSize: 18,
+                  ),
+                ),
+                const Spacer(),
+                TextButton.icon(
+                  onPressed: () {},
+                  icon: Icon(
+                    Icons.apps_rounded,
+                    size: 16,
+                    color: AppColors.primary,
+                  ),
+                  label: Text(
+                    localizations.allServices,
+                    style: theme.textTheme.bodySmall?.copyWith(
+                      color: AppColors.primary,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                  style: TextButton.styleFrom(
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
                   ),
                 ),
               ],
             ),
           ),
-          const SizedBox(height: 16),
+
+          // Feature cards in a 2x2 layout with optimized cards
           GridView.count(
-            crossAxisCount: 3,
+            crossAxisCount: 2,
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
-            childAspectRatio: 0.85,
-            mainAxisSpacing: 16,
-            crossAxisSpacing: 16,
+            childAspectRatio: 2.0, // Increased to reduce vertical height
+            mainAxisSpacing: 12,
+            crossAxisSpacing: 12,
             children: [
               _buildFeatureCard(
                 context,
                 icon: Icons.group_rounded,
                 title: localizations.farmerGroups,
-                bgColor: Colors.purple,
+                description: localizations.farmerGroupsDesc,
+                colorKey: 'purple',
+                route: '/cooperatives',
               ),
               _buildFeatureCard(
                 context,
-                icon: Icons.menu_book_rounded,
+                icon: Icons.headphones_rounded,
                 title: localizations.podcasts,
-                bgColor: Colors.green,
+                description: localizations.podcastsDesc,
+                colorKey: 'green',
+                route: '/podcasts',
               ),
               _buildFeatureCard(
                 context,
                 icon: Icons.local_shipping_rounded,
                 title: localizations.transport,
-                bgColor: Colors.orange,
+                description: localizations.transportDesc,
+                colorKey: 'orange',
+                route: '/transport',
               ),
               _buildFeatureCard(
                 context,
-                icon: Icons.account_balance_wallet_rounded,
-                title: localizations.loans,
-                bgColor: Colors.blue,
-              ),
-              _buildFeatureCard(
-                context,
-                icon: Icons.water_drop_rounded,
+                icon: Icons.cloud_outlined,
                 title: localizations.weather,
-                bgColor: Colors.teal,
-              ),
-              _buildFeatureCard(
-                context,
-                icon: Icons.headset_mic_rounded,
-                title: localizations.helpDesk,
-                bgColor: Colors.red,
+                description: localizations.weatherDesc,
+                colorKey: 'blue',
+                route: '/weather-details',
               ),
             ],
           ),
@@ -99,84 +115,119 @@ class FeaturesGridWidget extends StatelessWidget {
     BuildContext context, {
     required IconData icon,
     required String title,
-    required Color bgColor,
+    required String description,
+    required String colorKey,
+    required String route,
   }) {
-    String getNavigationRoute() {
-      switch (title) {
-        case 'Farmer Groups':
-          return '/cooperatives';
-        case 'Podcasts':
-          return '/podcasts';
-        case 'Transport':
-          return '/transport';
-        case 'Loans':
-          return '/loans';
-        case 'Weather':
-          return '/weather-details';
-        case 'Help Desk':
-          return '/help-desk';
-        default:
-          return '/home';
-      }
-    }
+    final theme = Theme.of(context);
+    final bgColor = AppColors.getColorFromKeyForQuickAccess(colorKey);
 
-    return Container(
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(20),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.05),
-            blurRadius: 10,
-            offset: const Offset(0, 4),
-            spreadRadius: 1,
-          ),
-        ],
+    return Card(
+      elevation: 1,
+      margin: EdgeInsets.zero,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12),
       ),
       child: ClipRRect(
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(12),
         child: Material(
-          color: Colors.transparent,
+          color: Colors.white,
           child: InkWell(
-            onTap: () => Get.toNamed(getNavigationRoute()),
-            child: Padding(
-              padding: const EdgeInsets.all(12),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
+            onTap: () => Get.toNamed(route),
+            child: Ink(
+              child: Stack(
                 children: [
-                  Container(
-                    width: 50,
-                    height: 50,
-                    decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                        begin: Alignment.topLeft,
-                        end: Alignment.bottomRight,
-                        colors: [
-                          bgColor.withOpacity(0.8),
-                          bgColor,
-                        ],
+                  Positioned(
+                    bottom: -15,
+                    right: -15,
+                    child: Container(
+                      width: 60,
+                      height: 60,
+                      decoration: BoxDecoration(
+                        color: bgColor.withOpacity(0.1),
+                        shape: BoxShape.circle,
                       ),
-                      borderRadius: BorderRadius.circular(18),
-                      boxShadow: [
-                        BoxShadow(
-                          color: bgColor.withOpacity(0.3),
-                          blurRadius: 8,
-                          offset: const Offset(0, 3),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(10.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Container(
+                              width: 32,
+                              height: 32,
+                              decoration: BoxDecoration(
+                                gradient: LinearGradient(
+                                  begin: Alignment.topLeft,
+                                  end: Alignment.bottomRight,
+                                  colors: [
+                                    bgColor.withOpacity(0.8),
+                                    bgColor,
+                                  ],
+                                ),
+                                borderRadius: BorderRadius.circular(8),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: bgColor.withOpacity(0.2),
+                                    blurRadius: 4,
+                                    offset: const Offset(0, 2),
+                                  ),
+                                ],
+                              ),
+                              child: Icon(
+                                icon,
+                                color: Colors.white,
+                                size: 16,
+                              ),
+                            ),
+                            const SizedBox(width: 8),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    title,
+                                    style: theme.textTheme.bodySmall?.copyWith(
+                                      fontWeight: FontWeight.w600,
+                                      color: theme.colorScheme.onSurface,
+                                      fontSize: 11,
+                                    ),
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                  const SizedBox(height: 2),
+                                  Text(
+                                    description,
+                                    style: theme.textTheme.bodySmall?.copyWith(
+                                      fontSize: 9,
+                                      color: theme.colorScheme.onSurface
+                                          .withOpacity(0.6),
+                                    ),
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
                         ),
                       ],
                     ),
+                  ),
+                  Positioned(
+                    bottom: 10,
+                    right: 10,
                     child: Icon(
-                      icon,
-                      color: Colors.white,
-                      size: 24,
+                      Icons.arrow_forward_ios_rounded,
+                      size: 10,
+                      color: bgColor.withOpacity(0.5),
                     ),
                   ),
-                  const SizedBox(height: 8),
-                  Text(title,
-                      textAlign: TextAlign.center,
-                      style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                            fontWeight: FontWeight.w600,
-                          )),
                 ],
               ),
             ),

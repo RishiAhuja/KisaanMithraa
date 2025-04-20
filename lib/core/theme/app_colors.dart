@@ -61,4 +61,19 @@ class AppColors {
   static const surface = Colors.white;
   static const surfaceVariant =
       Color(0xFFF5F5F5); // Light gray for alternative surfaces
+
+  static Color getColorFromKeyForQuickAccess(String colorKey) {
+    switch (colorKey) {
+      case 'purple':
+        return const Color(0xFF6C5CE7); // AppColors.featurePurple
+      case 'green':
+        return const Color(0xFF00B894); // AppColors.featureGreen
+      case 'orange':
+        return const Color(0xFFFF9F43); // AppColors.featureOrange
+      case 'blue':
+        return const Color(0xFF54A0FF); // AppColors.featureBlue
+      default:
+        return AppColors.primary;
+    }
+  }
 }

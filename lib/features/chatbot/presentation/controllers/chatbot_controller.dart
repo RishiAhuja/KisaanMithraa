@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'package:cropconnect/features/chatbot/data/service/speech_service.dart';
 import 'package:cropconnect/features/chatbot/domain/models/chat_message_model.dart';
 import 'package:cropconnect/features/chatbot/domain/repositories/chatbot_repository.dart';
@@ -85,11 +86,12 @@ class ChatbotController extends GetxController {
           await _repository.sendMessage(text, language: currentLanguage.value);
 
       AppLogger.debug('Received response with text: ${response.text}');
-      AppLogger.debug('Response language: ${response.language}');
-      AppLogger.debug('Response navigations: ${response.navigations}');
 
-      // Add bot response directly without additional modifications
-      messages.add(response);
+      // Process the response to handle inconsistent format
+      final processedResponse = _processResponse(response);
+
+      // Add bot response after processing
+      messages.add(processedResponse);
     } catch (e, stackTrace) {
       AppLogger.error('Error in sendMessage: $e');
       AppLogger.error('Stack trace: $stackTrace');
@@ -105,6 +107,97 @@ class ChatbotController extends GetxController {
     } finally {
       isLoading.value = false;
     }
+  }
+
+  // New method to process inconsistent response formats
+  ChatMessageModel _processResponse(ChatMessageModel originalResponse) {
+    String processedText = originalResponse.text;
+    List<String>? navigations = originalResponse.navigations;
+
+    // Try to parse the text as JSON to handle nested response format
+    try {
+      if (processedText.trim().startsWith('{') &&
+          processedText.trim().endsWith('}')) {
+        // Fix JSON formatting issues before parsing
+        // This handles unescaped newlines and other control characters
+        String sanitizedJson = _sanitizeJsonString(processedText);
+
+        final Map<String, dynamic> parsedJson = json.decode(sanitizedJson);
+
+        // Check if response has the nested 'message' field
+        if (parsedJson.containsKey('message')) {
+          final dynamic messageContent = parsedJson['message'];
+
+          // Handle message field - could be a string or another object
+          if (messageContent is String) {
+            processedText = messageContent;
+          } else if (messageContent is Map) {
+            processedText = messageContent.toString();
+          }
+        }
+
+        // Extract any navigation tags if available
+        if (parsedJson.containsKey('tags') && parsedJson['tags'] is Map) {
+          final tags = parsedJson['tags'] as Map<String, dynamic>;
+
+          // Extract topics or other relevant data for navigation
+          if (tags.containsKey('topics') && tags['topics'] is List) {
+            final topics = (tags['topics'] as List).cast<String>();
+            navigations = _mapTopicsToNavigations(topics);
+          }
+        }
+      }
+    } catch (e) {
+      AppLogger.error('Error parsing response JSON: $e');
+
+      // Fallback: Try to extract message content using regex
+      final messageRegex = RegExp(
+          r'"message"\s*:\s*"([\s\S]*?)"(?=\s*,\s*"|\s*})',
+          dotAll: true);
+      final match = messageRegex.firstMatch(processedText);
+
+      if (match != null && match.groupCount >= 1) {
+        processedText = match.group(1)?.replaceAll(r'\"', '"') ?? processedText;
+      }
+    }
+
+    // Create a new message with the processed text
+    return ChatMessageModel(
+      id: originalResponse.id,
+      text: processedText,
+      timestamp: originalResponse.timestamp,
+      isUser: false,
+      navigations: navigations,
+      language: originalResponse.language,
+    );
+  }
+
+  // Helper method to map topics to navigation routes
+  List<String>? _mapTopicsToNavigations(List<String> topics) {
+    final Map<String, String> topicToRouteMap = {
+      'organic farming': '/resources',
+      'fertilizers': '/marketplace',
+      'pest management': '/resources',
+      'crop rotation': '/resources',
+      'water conservation': '/resources',
+      'biodiversity': '/resources',
+      'seasons': '/weather-details',
+      'weather': '/weather-details',
+      'soil health': '/resources',
+      'podcast': '/podcasts',
+      'community': '/cooperatives',
+    };
+
+    final Set<String> routes = {};
+
+    for (final topic in topics) {
+      final String? route = topicToRouteMap[topic.toLowerCase()];
+      if (route != null) {
+        routes.add(route);
+      }
+    }
+
+    return routes.isNotEmpty ? routes.toList() : null;
   }
 
   String getCurrentLanguageName() {
@@ -140,5 +233,27 @@ class ChatbotController extends GetxController {
   void onClose() {
     stopSpeech();
     super.onClose();
+  }
+
+  // Add this helper method to sanitize the JSON string
+  String _sanitizeJsonString(String jsonString) {
+    // First, let's try to handle the most common case - a JSON string with
+    // unescaped newlines and control characters in string values
+
+    // Regex to find all string values in the JSON
+    final stringValueRegex = RegExp(r'"[^"\\]*(?:\\.[^"\\]*)*"');
+
+    // Replace each string value with a sanitized version
+    return jsonString.replaceAllMapped(stringValueRegex, (match) {
+      String value = match.group(0) ?? '';
+
+      // Escape newlines and other control characters
+      value = value
+          .replaceAll('\n', '\\n')
+          .replaceAll('\r', '\\r')
+          .replaceAll('\t', '\\t');
+
+      return value;
+    });
   }
 }

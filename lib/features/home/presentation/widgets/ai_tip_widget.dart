@@ -41,7 +41,7 @@ class AiTipWidget extends GetView<FarmingTipService> {
             ],
           ),
           padding: const EdgeInsets.symmetric(horizontal: 16),
-          height: 122,
+          height: 90,
           width: double.infinity,
           child: Obx(() {
             if (controller.isLoading.value) {

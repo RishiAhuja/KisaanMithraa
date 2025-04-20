@@ -1,4 +1,3 @@
-import 'package:cropconnect/core/services/locale/locale_service.dart';
 import 'package:cropconnect/features/home/domain/models/weather_model.dart';
 import 'package:cropconnect/features/home/services/weather_api_service.dart';
 import 'package:flutter/material.dart';
@@ -20,7 +19,7 @@ class WeatherHeroWidget extends StatelessWidget {
     final weatherService = Get.find<WeatherApiService>();
 
     return Container(
-      margin: const EdgeInsets.fromLTRB(16, 8, 16, 16),
+      margin: const EdgeInsets.fromLTRB(16, 8, 16, 12),
       decoration: BoxDecoration(
         gradient: LinearGradient(
           begin: Alignment.topLeft,
@@ -31,18 +30,18 @@ class WeatherHeroWidget extends StatelessWidget {
                 .withBlue(theme.colorScheme.primary.blue + 40),
           ],
         ),
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: theme.colorScheme.primary.withOpacity(0.25),
-            blurRadius: 16,
-            offset: const Offset(0, 6),
+            color: theme.colorScheme.primary.withOpacity(0.2),
+            blurRadius: 12,
+            offset: const Offset(0, 4),
           ),
         ],
       ),
       clipBehavior: Clip.antiAlias,
       child: Padding(
-        padding: const EdgeInsets.all(18),
+        padding: const EdgeInsets.all(14),
         child: FutureBuilder<WeatherModel?>(
           future: weatherService.getLocalWeather(),
           builder: (context, snapshot) {
@@ -51,7 +50,7 @@ class WeatherHeroWidget extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   _buildGreetingWithoutWeather(context),
-                  const SizedBox(height: 18),
+                  const SizedBox(height: 14),
                   _buildWeatherLoadingState(context),
                 ],
               );
@@ -62,7 +61,7 @@ class WeatherHeroWidget extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   _buildGreetingWithoutWeather(context),
-                  const SizedBox(height: 18),
+                  const SizedBox(height: 14),
                   _buildWeatherErrorState(context),
                 ],
               );
@@ -73,7 +72,7 @@ class WeatherHeroWidget extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 _buildGreetingWithWeather(context, weather),
-                const SizedBox(height: 18),
+                const SizedBox(height: 14),
                 _buildWeatherDisplay(context, weather),
               ],
             );
@@ -84,25 +83,24 @@ class WeatherHeroWidget extends StatelessWidget {
   }
 
   Widget _buildGreetingWithWeather(BuildContext context, WeatherModel weather) {
-    // Get time-based greeting from shared method
     final greeting = _getLocalizedGreeting(context);
 
     return Row(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Container(
-          padding: const EdgeInsets.all(10),
+          padding: const EdgeInsets.all(8),
           decoration: BoxDecoration(
             color: Colors.white.withOpacity(0.2),
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(10),
           ),
           child: Icon(
             Icons.waving_hand_rounded,
             color: Colors.amber,
-            size: 20,
+            size: 18,
           ),
         ),
-        const SizedBox(width: 12),
+        const SizedBox(width: 10),
         Expanded(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -111,16 +109,16 @@ class WeatherHeroWidget extends StatelessWidget {
                 '$greeting, ${user.name.split(' ')[0]}!',
                 style: const TextStyle(
                   color: Colors.white,
-                  fontSize: 18,
+                  fontSize: 16,
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              const SizedBox(height: 4),
+              const SizedBox(height: 2),
               Text(
                 _getWeatherPhrase(weather, context),
                 style: TextStyle(
                   color: Colors.white.withOpacity(0.9),
-                  fontSize: 13,
+                  fontSize: 11,
                   fontWeight: FontWeight.w500,
                 ),
               ),
@@ -148,18 +146,18 @@ class WeatherHeroWidget extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Container(
-          padding: const EdgeInsets.all(10),
+          padding: const EdgeInsets.all(8),
           decoration: BoxDecoration(
             color: Colors.white.withOpacity(0.2),
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(10),
           ),
           child: Icon(
             Icons.waving_hand_rounded,
             color: Colors.amber,
-            size: 20,
+            size: 18,
           ),
         ),
-        const SizedBox(width: 12),
+        const SizedBox(width: 10),
         Expanded(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -168,16 +166,16 @@ class WeatherHeroWidget extends StatelessWidget {
                 '$greeting, ${user.name.split(' ')[0]}!',
                 style: const TextStyle(
                   color: Colors.white,
-                  fontSize: 18,
+                  fontSize: 16,
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              const SizedBox(height: 4),
+              const SizedBox(height: 2),
               Text(
                 _getContextualMessage(context),
                 style: TextStyle(
                   color: Colors.white.withOpacity(0.9),
-                  fontSize: 13,
+                  fontSize: 11,
                   fontWeight: FontWeight.w500,
                 ),
               ),
@@ -210,54 +208,51 @@ class WeatherHeroWidget extends StatelessWidget {
   }
 
   Widget _buildWeatherDisplay(BuildContext context, WeatherModel weather) {
+    final localizations = AppLocalizations.of(context)!;
     IconData weatherIcon = _getWeatherIcon(weather.weather.first.main);
     final condition = weather.weather.first.main.toLowerCase();
 
     return Container(
-      padding: const EdgeInsets.all(12),
+      padding: const EdgeInsets.all(10),
       decoration: BoxDecoration(
         border: Border.all(color: Colors.white.withOpacity(0.15), width: 1),
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(10),
       ),
       child: Column(
         children: [
-          // Location and weather condition in the same row
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              // Location display
               Row(
                 children: [
                   Icon(
                     Icons.location_on_rounded,
                     color: Colors.white.withOpacity(0.9),
-                    size: 14,
+                    size: 12,
                   ),
-                  const SizedBox(width: 4),
+                  const SizedBox(width: 3),
                   Text(
                     weather.name,
                     style: TextStyle(
                       color: Colors.white.withOpacity(0.9),
-                      fontSize: 13,
+                      fontSize: 11,
                       fontWeight: FontWeight.w500,
                     ),
                   ),
                 ],
               ),
-
-              // Weather condition display
               Row(
                 children: [
                   Icon(
                     weatherIcon,
                     color: _getWeatherIconColor(condition),
-                    size: 20,
+                    size: 16,
                   ),
-                  const SizedBox(width: 6),
+                  const SizedBox(width: 4),
                   Text(
                     weather.weatherDescription,
                     style: const TextStyle(
-                      fontSize: 13,
+                      fontSize: 11,
                       fontWeight: FontWeight.w600,
                       color: Colors.white,
                     ),
@@ -266,16 +261,12 @@ class WeatherHeroWidget extends StatelessWidget {
               ),
             ],
           ),
-
-          const SizedBox(height: 12),
+          const SizedBox(height: 10),
           Divider(color: Colors.white.withOpacity(0.1), height: 1),
-          const SizedBox(height: 12),
-
-          // Temperature and metrics in separate columns
+          const SizedBox(height: 10),
           Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              // Temperature column
               Expanded(
                 flex: 3,
                 child: Column(
@@ -287,7 +278,7 @@ class WeatherHeroWidget extends StatelessWidget {
                         Text(
                           '${weather.temperatureCelsius.round()}',
                           style: const TextStyle(
-                            fontSize: 42,
+                            fontSize: 36,
                             fontWeight: FontWeight.w700,
                             color: Colors.white,
                             height: 0.9,
@@ -298,7 +289,7 @@ class WeatherHeroWidget extends StatelessWidget {
                           child: Text(
                             '°C',
                             style: const TextStyle(
-                              fontSize: 16,
+                              fontSize: 14,
                               fontWeight: FontWeight.w600,
                               color: Colors.white,
                             ),
@@ -309,16 +300,12 @@ class WeatherHeroWidget extends StatelessWidget {
                   ],
                 ),
               ),
-
-              // Vertical divider between temperature and metrics
               Container(
-                height: 80,
+                height: 66,
                 width: 1,
                 color: Colors.white.withOpacity(0.15),
-                margin: const EdgeInsets.symmetric(horizontal: 12),
+                margin: const EdgeInsets.symmetric(horizontal: 10),
               ),
-
-              // Metrics column
               Expanded(
                 flex: 4,
                 child: Column(
@@ -329,20 +316,23 @@ class WeatherHeroWidget extends StatelessWidget {
                       'Humidity',
                       '${weather.main.humidity}%',
                       Colors.lightBlue[200]!,
+                      context,
                     ),
-                    const SizedBox(height: 8),
+                    const SizedBox(height: 6),
                     _buildMetricItem(
                       Icons.air_rounded,
                       'Wind',
-                      '${(weather.wind.speed * 3.6).round()} km/h',
+                      '${(weather.wind.speed * 3.6).round()} ${localizations.weatherWindUnit}',
                       Colors.white,
+                      context,
                     ),
-                    const SizedBox(height: 8),
+                    const SizedBox(height: 6),
                     _buildMetricItem(
                       Icons.compress_rounded,
                       'Pressure',
-                      '${weather.main.pressure} hPa',
+                      '${weather.main.pressure} ${localizations.weatherPressureUnit}',
                       Colors.amber[100]!,
+                      context,
                     ),
                   ],
                 ),
@@ -354,30 +344,42 @@ class WeatherHeroWidget extends StatelessWidget {
     );
   }
 
-  Widget _buildMetricItem(
-      IconData icon, String label, String value, Color iconColor) {
+  Widget _buildMetricItem(IconData icon, String label, String value,
+      Color iconColor, BuildContext context) {
+    final localizations = AppLocalizations.of(context)!;
+
+    // Get localized label
+    String localizedLabel = '';
+    if (label == 'Humidity') {
+      localizedLabel = localizations.weatherHumidity;
+    } else if (label == 'Wind') {
+      localizedLabel = localizations.weatherWind;
+    } else if (label == 'Pressure') {
+      localizedLabel = localizations.weatherPressure;
+    }
+
     return Row(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Icon(
           icon,
-          size: 14,
+          size: 12,
           color: iconColor,
         ),
-        const SizedBox(width: 6),
+        const SizedBox(width: 4),
         Text(
-          '$label:',
+          '$localizedLabel:',
           style: TextStyle(
-            fontSize: 12,
+            fontSize: 10,
             color: Colors.white.withOpacity(0.8),
             fontWeight: FontWeight.w500,
           ),
         ),
-        const SizedBox(width: 4),
+        const SizedBox(width: 2),
         Text(
           value,
           style: const TextStyle(
-            fontSize: 12,
+            fontSize: 10,
             fontWeight: FontWeight.w600,
             color: Colors.white,
           ),
@@ -386,93 +388,31 @@ class WeatherHeroWidget extends StatelessWidget {
     );
   }
 
-  String _getWeatherPhrase(WeatherModel weather, BuildContext context) {
-    final condition = weather.weather.first.main.toLowerCase();
-    final temp = weather.temperatureCelsius.round();
-    final localeService = Get.find<LocaleService>();
-    final currentLocale = localeService.currentLocale.value;
-
-    // Cache key combines condition and temperature for specific lookups
-    final cacheKey = 'weather_phrase_${condition}_$temp';
-
-    // Try to get from cache first
-    final cachedPhrase = localeService.getCachedTranslation(cacheKey);
-    if (cachedPhrase != null) {
-      return cachedPhrase;
-    }
-
-    String phrase;
-
-    if (currentLocale == 'hi') {
-      // Hindi weather phrases
-      if (condition.contains('rain')) {
-        phrase = 'आज घर के अंदर रहना अच्छा होगा';
-      } else if (condition.contains('cloud')) {
-        phrase = 'खेती के लिए सामान्य दिन';
-      } else if (condition.contains('clear') && temp > 30) {
-        phrase = 'खेतों में पानी पीते रहें';
-      } else if (condition.contains('clear')) {
-        phrase = 'खुले में काम करने के लिए अच्छा दिन';
-      } else if (condition.contains('snow')) {
-        phrase = 'आज अपनी फसलों की रक्षा करें';
-      } else if (temp < 15) {
-        phrase = 'फसल की वृद्धि के लिए काफी ठंडा';
-      } else if (temp > 35) {
-        phrase = 'फसलों पर गर्मी तनाव पर नज़र रखें';
-      } else {
-        phrase = 'खेती के लिए अच्छी स्थिति';
-      }
-    } else {
-      // English weather phrases (unchanged)
-      if (condition.contains('rain')) {
-        phrase = 'Best to stay indoors today';
-      } else if (condition.contains('cloud')) {
-        phrase = 'Moderate day for fieldwork';
-      } else if (condition.contains('clear') && temp > 30) {
-        phrase = 'Stay hydrated in the fields';
-      } else if (condition.contains('clear')) {
-        phrase = 'Perfect day for outdoor work';
-      } else if (condition.contains('snow')) {
-        phrase = 'Protect your crops today';
-      } else if (temp < 15) {
-        phrase = 'Quite cold for crop growth';
-      } else if (temp > 35) {
-        phrase = 'Watch for heat stress on crops';
-      } else {
-        phrase = 'Good conditions for farming';
-      }
-    }
-
-    // Cache the phrase
-    localeService.cacheTranslation(cacheKey, phrase);
-    return phrase;
-  }
-
   Widget _buildWeatherLoadingState(BuildContext context) {
     final localizations = AppLocalizations.of(context)!;
     return Container(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
         color: Colors.white.withOpacity(0.08),
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(10),
       ),
       child: Center(
         child: Column(
           children: [
             const SizedBox(
-              height: 24,
-              width: 24,
+              height: 20,
+              width: 20,
               child: CircularProgressIndicator(
                 color: Colors.white,
                 strokeWidth: 2,
               ),
             ),
-            const SizedBox(height: 12),
+            const SizedBox(height: 8),
             Text(
               localizations.weatherLoading,
               style: TextStyle(
                 color: Colors.white.withOpacity(0.9),
-                fontSize: 14,
+                fontSize: 12,
                 fontWeight: FontWeight.w500,
               ),
             ),
@@ -485,10 +425,10 @@ class WeatherHeroWidget extends StatelessWidget {
   Widget _buildWeatherErrorState(BuildContext context) {
     final localizations = AppLocalizations.of(context)!;
     return Container(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
         color: Colors.white.withOpacity(0.08),
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(10),
       ),
       child: Column(
         children: [
@@ -498,25 +438,25 @@ class WeatherHeroWidget extends StatelessWidget {
               Icon(
                 Icons.cloud_off,
                 color: Colors.white.withOpacity(0.9),
-                size: 20,
+                size: 16,
               ),
-              const SizedBox(width: 10),
+              const SizedBox(width: 8),
               Text(
                 localizations.weatherUnavailable,
                 style: TextStyle(
-                  fontSize: 14,
+                  fontSize: 12,
                   fontWeight: FontWeight.w600,
                   color: Colors.white,
                 ),
               ),
             ],
           ),
-          const SizedBox(height: 10),
+          const SizedBox(height: 6),
           Text(
             localizations.weatherCheckManually,
             textAlign: TextAlign.center,
             style: TextStyle(
-              fontSize: 13,
+              fontSize: 11,
               color: Colors.white.withOpacity(0.9),
             ),
           ),
@@ -525,7 +465,6 @@ class WeatherHeroWidget extends StatelessWidget {
     );
   }
 
-  // Helper methods remain the same
   IconData _getWeatherIcon(String condition) {
     final lowercaseCondition = condition.toLowerCase();
 
@@ -572,41 +511,40 @@ class WeatherHeroWidget extends StatelessWidget {
     }
   }
 
+  String _getWeatherPhrase(WeatherModel weather, BuildContext context) {
+    final condition = weather.weather.first.main.toLowerCase();
+    final temp = weather.temperatureCelsius.round();
+    final localizations = AppLocalizations.of(context)!;
+
+    if (condition.contains('rain')) {
+      return localizations.weatherPhraseRain;
+    } else if (condition.contains('cloud')) {
+      return localizations.weatherPhraseCloud;
+    } else if (condition.contains('clear') && temp > 30) {
+      return localizations.weatherPhraseClearHot;
+    } else if (condition.contains('clear')) {
+      return localizations.weatherPhraseClear;
+    } else if (condition.contains('snow')) {
+      return localizations.weatherPhraseSnow;
+    } else if (temp < 15) {
+      return localizations.weatherPhraseCold;
+    } else if (temp > 35) {
+      return localizations.weatherPhraseHot;
+    } else {
+      return localizations.weatherPhraseDefault;
+    }
+  }
+
   String _getLocalizedGreeting(BuildContext context) {
     final hour = DateTime.now().hour;
-    final localeService = Get.find<LocaleService>();
-    final cacheKey = 'greeting_$hour';
+    final localizations = AppLocalizations.of(context)!;
 
-    // Try to get from cache first
-    final cachedGreeting = localeService.getCachedTranslation(cacheKey);
-    if (cachedGreeting != null) {
-      return cachedGreeting;
-    }
-
-    // Otherwise determine greeting based on time and current locale
-    String greeting;
-    final currentLocale = localeService.currentLocale.value;
-
-    if (currentLocale == 'hi') {
-      if (hour < 12) {
-        greeting = 'शुभ प्रभात';
-      } else if (hour < 17) {
-        greeting = 'शुभ दोपहर';
-      } else {
-        greeting = 'शुभ संध्या';
-      }
+    if (hour < 12) {
+      return localizations.goodMorning;
+    } else if (hour < 17) {
+      return localizations.goodAfternoon;
     } else {
-      if (hour < 12) {
-        greeting = 'Good morning';
-      } else if (hour < 17) {
-        greeting = 'Good afternoon';
-      } else {
-        greeting = 'Good evening';
-      }
+      return localizations.goodEvening;
     }
-
-    // Cache the greeting
-    localeService.cacheTranslation(cacheKey, greeting);
-    return greeting;
   }
 }

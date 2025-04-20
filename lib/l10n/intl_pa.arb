@@ -157,5 +157,112 @@
   "weatherWind": "ਹਵਾ",
   "weatherWindUnit": "ਕਿਮੀ/ਘੰਟਾ",
   "weatherPressure": "ਦਬਾਅ",
-  "weatherPressureUnit": "ਹੈਕਟੋਪਾਸਕਲ"
+  "weatherPressureUnit": "ਹੈਕਟੋਪਾਸਕਲ",
+  "allServices": "ਸਾਰੀਆਂ ਸੇਵਾਵਾਂ",
+  "farmerGroupsDesc": "ਆਪਣੇ ਖੇਤਰ ਦੇ ਕਿਸਾਨਾਂ ਨਾਲ ਜੁੜੋ",
+  "podcastsDesc": "ਖੇਤੀਬਾੜੀ ਸੁਝਾਅ ਅਤੇ ਖ਼ਬਰਾਂ ਸੁਣੋ",
+  "transportDesc": "ਆਪਣੀ ਉਪਜ ਲਈ ਟਰਾਂਸਪੋਰਟ ਲੱਭੋ",
+  "weatherDesc": "ਸਥਾਨਕ ਮੌਸਮ ਦੀ ਭਵਿੱਖਬਾਣੀ ਦੇਖੋ",
+  "weatherPhraseRain": "ਅੱਜ ਘਰ ਦੇ ਅੰਦਰ ਰਹਿਣਾ ਚੰਗਾ ਹੋਵੇਗਾ",
+  "weatherPhraseCloud": "ਖੇਤੀ ਦੇ ਕੰਮ ਲਈ ਸਾਧਾਰਨ ਦਿਨ",
+  "weatherPhraseClearHot": "ਖੇਤਾਂ ਵਿੱਚ ਪਾਣੀ ਪੀਂਦੇ ਰਹੋ",
+  "weatherPhraseClear": "ਬਾਹਰੀ ਕੰਮ ਲਈ ਵਧੀਆ ਦਿਨ",
+  "weatherPhraseSnow": "ਅੱਜ ਆਪਣੀਆਂ ਫਸਲਾਂ ਦੀ ਰੱਖਿਆ ਕਰੋ",
+  "weatherPhraseCold": "ਫਸਲ ਦੇ ਵਾਧੇ ਲਈ ਕਾਫ਼ੀ ਠੰਡਾ",
+  "weatherPhraseHot": "ਫਸਲਾਂ ਉੱਤੇ ਗਰਮੀ ਦੇ ਤਣਾਅ ਦਾ ਧਿਆਨ ਰੱਖੋ",
+  "weatherPhraseDefault": "ਖੇਤੀ ਲਈ ਵਧੀਆ ਹਾਲਾਤ",
+    "chatbotTitle": "ਕਿਸਾਨ ਸਹਾਇਕ",
+    "@chatbotTitle": {
+      "description": "The title of the chatbot screen"
+    },
+    
+    "farmingAssistant": "ਤੁਹਾਡਾ ਖੇਤੀਬਾੜੀ ਸਹਾਇਕ",
+    "@farmingAssistant": {
+      "description": "Title shown on the empty chat screen"
+    },
+    
+    "resetConversation": "ਗੱਲਬਾਤ ਰੀਸੈੱਟ ਕਰੋ",
+    "@resetConversation": {
+      "description": "Button tooltip to reset the conversation"
+    },
+    
+    "scrollToBottom": "ਹੇਠਾਂ ਸਕ੍ਰੋਲ ਕਰੋ",
+    "@scrollToBottom": {
+      "description": "Tooltip for the scroll to bottom button"
+    },
+    
+    "suggestedQuestions": "ਇਹ ਪੁੱਛ ਕੇ ਦੇਖੋ:",
+    "@suggestedQuestions": {
+      "description": "Header for suggested questions section"
+    },
+    
+    "transportServices": "ਟਰਾਂਸਪੋਰਟ ਸੇਵਾਵਾਂ",
+    "@transportServices": {
+      "description": "Label for transport services in navigation"
+    },
+    
+    "weatherDetails": "ਮੌਸਮ ਦਾ ਵੇਰਵਾ",
+    "@weatherDetails": {
+      "description": "Label for detailed weather in navigation"
+    },
+    
+    "weatherDetailsDesc": "ਵਿਸਤਰਿਤ ਮੌਸਮ ਜਾਣਕਾਰੀ",
+    "@weatherDetailsDesc": {
+      "description": "Description for weather details"
+    },
+    
+    "relatedContent": "ਸਬੰਧਤ ਸਮੱਗਰੀ:",
+    "@relatedContent": {
+      "description": "Header for related content section"
+    },
+    
+    "listenPodcast": "ਸਾਡਾ ਪੋਡਕਾਸਟ ਸੁਣੋ",
+    "@listenPodcast": {
+      "description": "Label for podcast navigation"
+    },
+    
+    "joinDiscussion": "ਚਰਚਾ ਵਿੱਚ ਸ਼ਾਮਲ ਹੋਵੋ",
+    "@joinDiscussion": {
+      "description": "Label for community discussion navigation"
+    },
+    
+    "goToMarketplace": "ਮਾਰਕੀਟਪਲੇਸ 'ਤੇ ਜਾਓ",
+    "@goToMarketplace": {
+      "description": "Label for marketplace navigation"
+    },
+    
+    "exploreResources": "ਸਰੋਤ ਖੋਜੋ",
+    "@exploreResources": {
+      "description": "Label for resources navigation"
+    },
+    
+    "checkWeather": "ਮੌਸਮ ਚੈੱਕ ਕਰੋ",
+    "@checkWeather": {
+      "description": "Label for weather navigation"
+    },
+    
+    "learnMore": "ਹੋਰ ਜਾਣੋ",
+    "@learnMore": {
+      "description": "Default label for navigation"
+    },
+    
+    "communityDesc": "ਹੋਰ ਕਿਸਾਨਾਂ ਨਾਲ ਜੁੜੋ",
+    "@communityDesc": {
+      "description": "Description for community feature"
+    },
+    
+    "marketplaceDesc": "ਖੇਤੀ ਉਤਪਾਦਾਂ ਨੂੰ ਖਰੀਦੋ ਅਤੇ ਵੇਚੋ",
+    "@marketplaceDesc": {
+      "description": "Description for marketplace feature"
+    },
+    
+    "resourcesDesc": "ਖੇਤੀਬਾੜੀ ਗਾਈਡਾਂ ਅਤੇ ਸਰੋਤ",
+    "@resourcesDesc": {
+      "description": "Description for resources feature"
+    },
+    
+    "relatedInfoDesc": "ਸਬੰਧਤ ਜਾਣਕਾਰੀ",
+    "@relatedInfoDesc": {
+      "description": "Description for general related information"
+    }
 }

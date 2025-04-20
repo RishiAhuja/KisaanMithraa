@@ -5,94 +5,94 @@ import 'app_colors.dart';
 class AppTheme {
   static ThemeData get lightTheme {
     final baseTextTheme = GoogleFonts.plusJakartaSansTextTheme();
-
+    final offset = -1;
     final customTextTheme = baseTextTheme.copyWith(
       displayLarge: baseTextTheme.displayLarge?.copyWith(
-        fontSize: 32.0,
+        fontSize: 32.0 + offset,
         fontWeight: FontWeight.w700,
         letterSpacing: -0.5,
         color: AppColors.textPrimary,
       ),
       displayMedium: baseTextTheme.displayMedium?.copyWith(
-        fontSize: 28.0,
+        fontSize: 28.0 + offset,
         fontWeight: FontWeight.w700,
         letterSpacing: -0.5,
         color: AppColors.textPrimary,
       ),
       displaySmall: baseTextTheme.displaySmall?.copyWith(
-        fontSize: 24.0,
+        fontSize: 24.0 + offset,
         fontWeight: FontWeight.w700,
         letterSpacing: 0,
         color: AppColors.textPrimary,
       ),
       headlineLarge: baseTextTheme.headlineLarge?.copyWith(
-        fontSize: 22.0,
+        fontSize: 22.0 + offset,
         fontWeight: FontWeight.w700,
         letterSpacing: 0,
         color: AppColors.textPrimary,
       ),
       headlineMedium: baseTextTheme.headlineMedium?.copyWith(
-        fontSize: 20.0,
+        fontSize: 20.0 + offset,
         fontWeight: FontWeight.w600,
         letterSpacing: 0,
         color: AppColors.textPrimary,
       ),
       headlineSmall: baseTextTheme.headlineSmall?.copyWith(
-        fontSize: 18.0,
+        fontSize: 18.0 + offset,
         fontWeight: FontWeight.w600,
         letterSpacing: 0,
         color: AppColors.textPrimary,
       ),
       titleLarge: baseTextTheme.titleLarge?.copyWith(
-        fontSize: 18.0,
+        fontSize: 18.0 + offset,
         fontWeight: FontWeight.w600,
         letterSpacing: 0.15,
         color: AppColors.textPrimary,
       ),
       titleMedium: baseTextTheme.titleMedium?.copyWith(
-        fontSize: 16.0,
+        fontSize: 16.0 + offset,
         fontWeight: FontWeight.w500,
         letterSpacing: 0.15,
         color: AppColors.textPrimary,
       ),
       titleSmall: baseTextTheme.titleSmall?.copyWith(
-        fontSize: 14.0,
+        fontSize: 14.0 + offset,
         fontWeight: FontWeight.w500,
         letterSpacing: 0.1,
         color: AppColors.textPrimary,
       ),
       bodyLarge: baseTextTheme.bodyLarge?.copyWith(
-        fontSize: 16.0,
+        fontSize: 16.0 + offset,
         fontWeight: FontWeight.w400,
         letterSpacing: 0.5,
         color: AppColors.textPrimary,
       ),
       bodyMedium: baseTextTheme.bodyMedium?.copyWith(
-        fontSize: 14.0,
+        fontSize: 14.0 + offset,
         fontWeight: FontWeight.w400,
         letterSpacing: 0.25,
         color: AppColors.textSecondary,
       ),
       bodySmall: baseTextTheme.bodySmall?.copyWith(
-        fontSize: 12.0,
+        fontSize: 12.0 + offset,
         fontWeight: FontWeight.w400,
         letterSpacing: 0.4,
         color: AppColors.textSecondary,
       ),
       labelLarge: baseTextTheme.labelLarge?.copyWith(
-        fontSize: 14.0,
+        fontSize: 14.0 + offset,
         fontWeight: FontWeight.w500,
         letterSpacing: 0.1,
         color: AppColors.textPrimary,
       ),
       labelMedium: baseTextTheme.labelMedium?.copyWith(
-        fontSize: 12.0,
+        fontSize: 12.0 + offset,
         fontWeight: FontWeight.w500,
         letterSpacing: 0.5,
         color: AppColors.textSecondary,
       ),
       labelSmall: baseTextTheme.labelSmall?.copyWith(
-        fontSize: 11.0,
+        fontSize: 11.0 + offset,
         fontWeight: FontWeight.w500,
         letterSpacing: 0.5,
         color: AppColors.textSecondary,

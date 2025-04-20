@@ -157,6 +157,121 @@
     "weatherWind": "Wind",
     "weatherWindUnit": "km/h",
     "weatherPressure": "Pressure",
-    "weatherPressureUnit": "hPa"
-    
+    "weatherPressureUnit": "hPa",
+    "allServices": "All Services",
+    "farmerGroupsDesc": "Connect with farmers in your area",
+    "podcastsDesc": "Listen to farming tips and news",
+    "transportDesc": "Find transport for your produce",
+    "weatherDesc": "Check local weather forecasts",
+    "weatherPhraseRain": "Best to stay indoors today",
+    "weatherPhraseCloud": "Moderate day for fieldwork",
+    "weatherPhraseClearHot": "Stay hydrated in the fields",
+    "weatherPhraseClear": "Perfect day for outdoor work",
+    "weatherPhraseSnow": "Protect your crops today",
+    "weatherPhraseCold": "Quite cold for crop growth",
+    "weatherPhraseHot": "Watch for heat stress on crops",
+    "weatherPhraseDefault": "Good conditions for farming",
+
+  "@appTitle": {
+    "description": "The title of the app"
+  },
+  
+  "chatbotTitle": "Kisaan Assistant",
+  "@chatbotTitle": {
+    "description": "The title of the chatbot screen"
+  },
+  
+  "farmingAssistant": "Your Farming Assistant",
+  "@farmingAssistant": {
+    "description": "Title shown on the empty chat screen"
+  },
+  
+
+
+  "resetConversation": "Reset Conversation",
+  "@resetConversation": {
+    "description": "Button tooltip to reset the conversation"
+  },
+  
+  "scrollToBottom": "Scroll to bottom",
+  "@scrollToBottom": {
+    "description": "Tooltip for the scroll to bottom button"
+  },
+  
+  "suggestedQuestions": "Try asking:",
+  "@suggestedQuestions": {
+    "description": "Header for suggested questions section"
+  },
+ 
+  "transportServices": "Transport Services",
+  "@transportServices": {
+    "description": "Label for transport services in navigation"
+  },
+  
+ 
+  "weatherDetails": "Weather Details",
+  "@weatherDetails": {
+    "description": "Label for detailed weather in navigation"
+  },
+  
+  "weatherDetailsDesc": "Detailed weather information",
+  "@weatherDetailsDesc": {
+    "description": "Description for weather details"
+  },
+  
+  "relatedContent": "Related Content:",
+  "@relatedContent": {
+    "description": "Header for related content section"
+  },
+  
+  "listenPodcast": "Listen to our Podcast",
+  "@listenPodcast": {
+    "description": "Label for podcast navigation"
+  },
+  
+  "joinDiscussion": "Join Discussion",
+  "@joinDiscussion": {
+    "description": "Label for community discussion navigation"
+  },
+  
+  "goToMarketplace": "Go to Marketplace",
+  "@goToMarketplace": {
+    "description": "Label for marketplace navigation"
+  },
+  
+  "exploreResources": "Explore Resources",
+  "@exploreResources": {
+    "description": "Label for resources navigation"
+  },
+  
+  "checkWeather": "Check Weather",
+  "@checkWeather": {
+    "description": "Label for weather navigation"
+  },
+  
+  "learnMore": "Learn More",
+  "@learnMore": {
+    "description": "Default label for navigation"
+  },
+  
+  "communityDesc": "Connect with other farmers",
+  "@communityDesc": {
+    "description": "Description for community feature"
+  },
+  
+  "marketplaceDesc": "Buy and sell farm products",
+  "@marketplaceDesc": {
+    "description": "Description for marketplace feature"
+  },
+  
+  "resourcesDesc": "Farming guides and resources",
+  "@resourcesDesc": {
+    "description": "Description for resources feature"
+  },
+  
+  "relatedInfoDesc": "Related information",
+  "@relatedInfoDesc": {
+    "description": "Description for general related information"
+  }
+
   }
