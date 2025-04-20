@@ -7,31 +7,35 @@ import '../widgets/custom_text_field.dart';
 
 class RegisterScreen extends GetView<AuthController> {
   final VoidCallback? onBack;
+  final bool isPartOfOnboarding;
 
   const RegisterScreen({
     Key? key,
     this.onBack,
+    this.isPartOfOnboarding = false,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final RxBool useBackDoor = false.obs;
-
+    final theme = Theme.of(context);
     final authController = controller;
     final debugController = Get.put(DebugAuthController());
 
     return Column(
       children: [
-        LinearProgressIndicator(
-          value: 1.0,
-          backgroundColor: Theme.of(context).primaryColor.withOpacity(0.1),
-          valueColor: AlwaysStoppedAnimation<Color>(
-            Theme.of(context).primaryColor,
+        if (!isPartOfOnboarding)
+          LinearProgressIndicator(
+            value: 1.0,
+            backgroundColor: theme.primaryColor.withOpacity(0.1),
+            valueColor: AlwaysStoppedAnimation<Color>(
+              theme.primaryColor,
+            ),
           ),
-        ),
         Expanded(
           child: LayoutBuilder(
             builder: (context, constraints) => SingleChildScrollView(
+              physics: const BouncingScrollPhysics(),
               child: ConstrainedBox(
                 constraints: BoxConstraints(
                   minHeight: constraints.maxHeight,
@@ -40,43 +44,108 @@ class RegisterScreen extends GetView<AuthController> {
                   child: Padding(
                     padding: const EdgeInsets.all(24.0),
                     child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        // Mitra animation
-                        Lottie.asset(
-                          'assets/animations/mitra_avatar.json',
-                          height: 180,
+                        // Mitra animation with styled container
+                        Center(
+                          child: Container(
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: theme.primaryColor.withOpacity(0.1),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: theme.primaryColor.withOpacity(0.1),
+                                  blurRadius: 15,
+                                  spreadRadius: 1,
+                                  offset: const Offset(0, 4),
+                                ),
+                              ],
+                            ),
+                            padding: const EdgeInsets.all(20),
+                            child: Lottie.asset(
+                              'assets/animations/mitra_avatar.json',
+                              width: 140,
+                              height: 140,
+                            ),
+                          ),
                         ),
 
-                        // Title text
-                        Text(
-                          'One Last Step!',
-                          style: Theme.of(context).textTheme.headlineMedium,
-                          textAlign: TextAlign.center,
-                        ),
+                        const SizedBox(height: 24),
 
-                        const SizedBox(height: 8),
-                        Text(
-                          'Let me know your phone number to verify you',
-                          style:
-                              Theme.of(context).textTheme.bodyLarge?.copyWith(
-                                    color: Colors.grey[600],
-                                  ),
-                          textAlign: TextAlign.center,
+                        // Title with decoration - matches onboarding styling
+                        Container(
+                          width: double.infinity,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(16),
+                            color: Colors.white,
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black.withOpacity(0.05),
+                                blurRadius: 10,
+                                spreadRadius: 0,
+                                offset: const Offset(0, 5),
+                              ),
+                            ],
+                          ),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 24, vertical: 16),
+                          child: Column(
+                            children: [
+                              Text(
+                                'One Last Step!',
+                                style: theme.textTheme.headlineSmall?.copyWith(
+                                  fontWeight: FontWeight.bold,
+                                  color: theme.primaryColor,
+                                ),
+                                textAlign: TextAlign.center,
+                              ),
+                            ],
+                          ),
                         ),
 
                         const SizedBox(height: 32),
 
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 16, vertical: 12),
+                          decoration: BoxDecoration(
+                            color: Colors.blue.shade50,
+                            borderRadius: BorderRadius.circular(12),
+                            border: Border.all(
+                              color: Colors.blue.shade200,
+                            ),
+                          ),
+                          child: Row(
+                            children: [
+                              Icon(
+                                Icons.info_outline,
+                                color: Colors.blue.shade700,
+                                size: 20,
+                              ),
+                              const SizedBox(width: 8),
+                              Expanded(
+                                child: Text(
+                                  'We\'ll send a verification code to this number',
+                                  style: theme.textTheme.bodyMedium?.copyWith(
+                                    color: Colors.blue.shade700,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+
+                        const SizedBox(height: 24),
+
+                        // Phone input field with matching styling
                         AnimatedContainer(
                           duration: const Duration(milliseconds: 300),
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(16),
                             boxShadow: [
                               BoxShadow(
-                                color: Theme.of(context)
-                                    .primaryColor
-                                    .withOpacity(0.1),
+                                color: theme.primaryColor.withOpacity(0.1),
                                 blurRadius: 10,
                                 offset: const Offset(0, 4),
                               ),
@@ -85,8 +154,7 @@ class RegisterScreen extends GetView<AuthController> {
                           child: CustomTextField(
                             label: 'Phone Number',
                             hint: 'Enter your phone number',
-                            controller: controller
-                                .phoneNumberController, // Use the controller from AuthController
+                            controller: controller.phoneNumberController,
                             isPhone: true,
                             prefixIcon: Icons.phone_outlined,
                             onChanged: (value) {
@@ -99,6 +167,7 @@ class RegisterScreen extends GetView<AuthController> {
 
                         const SizedBox(height: 16),
 
+                        // Error message with consistent styling
                         Obx(() {
                           final error = useBackDoor.value
                               ? debugController.error.value
@@ -110,7 +179,10 @@ class RegisterScreen extends GetView<AuthController> {
                                   margin: const EdgeInsets.only(bottom: 16),
                                   decoration: BoxDecoration(
                                     color: Colors.red.withOpacity(0.1),
-                                    borderRadius: BorderRadius.circular(8),
+                                    borderRadius: BorderRadius.circular(12),
+                                    border: Border.all(
+                                      color: Colors.red.shade200,
+                                    ),
                                   ),
                                   child: Row(
                                     children: [
@@ -132,92 +204,174 @@ class RegisterScreen extends GetView<AuthController> {
                               : const SizedBox.shrink();
                         }),
 
-                        Obx(() => Transform.scale(
-                              scale: 0.7,
-                              child: Switch(
-                                value: useBackDoor.value,
-                                activeColor: Colors.amber,
-                                activeTrackColor: Colors.amber.shade200,
-                                onChanged: (value) {
-                                  useBackDoor.value = value;
-                                  if (value) {
-                                    Get.snackbar(
-                                      'Debug Mode',
-                                      'Debug authentication enabled',
-                                      snackPosition: SnackPosition.BOTTOM,
-                                      backgroundColor: Colors.amber,
-                                      colorText: Colors.black,
-                                      duration: const Duration(seconds: 1),
-                                    );
-                                  }
-                                },
+                        // More subtle debug switch
+                        Obx(() => Align(
+                              alignment: Alignment.centerRight,
+                              child: Padding(
+                                padding: const EdgeInsets.only(top: 8),
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Text(
+                                      'Debug',
+                                      style: TextStyle(
+                                        fontSize: 12,
+                                        color: Colors.grey[500],
+                                      ),
+                                    ),
+                                    Transform.scale(
+                                      scale: 0.7,
+                                      child: Switch(
+                                        value: useBackDoor.value,
+                                        activeColor: Colors.amber,
+                                        activeTrackColor: Colors.amber.shade200,
+                                        onChanged: (value) {
+                                          useBackDoor.value = value;
+                                          if (value) {
+                                            Get.snackbar(
+                                              'Debug Mode',
+                                              'Debug authentication enabled',
+                                              snackPosition:
+                                                  SnackPosition.BOTTOM,
+                                              backgroundColor: Colors.amber,
+                                              colorText: Colors.black,
+                                              duration:
+                                                  const Duration(seconds: 1),
+                                            );
+                                          }
+                                        },
+                                      ),
+                                    ),
+                                  ],
+                                ),
                               ),
                             )),
 
                         const Spacer(),
 
+                        // Navigation buttons - already consistent with onboarding
                         Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            TextButton.icon(
+                            OutlinedButton.icon(
                               onPressed:
                                   onBack ?? () => Get.toNamed('/auth-choice'),
-                              icon: const Icon(Icons.arrow_back),
-                              label: const Text('Go Back'),
+                              icon: const Icon(Icons.arrow_back_rounded,
+                                  size: 18),
+                              label: Text(
+                                'Back',
+                                style: theme.textTheme.labelLarge?.copyWith(
+                                  color: theme.primaryColor,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                              style: OutlinedButton.styleFrom(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 20, vertical: 12),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(30),
+                                ),
+                                side: BorderSide(
+                                  color: theme.primaryColor,
+                                  width: 1.5,
+                                ),
+                              ),
                             ),
                             Obx(() {
                               final isLoading = useBackDoor.value
                                   ? debugController.isLoading.value
                                   : authController.isLoading.value;
 
-                              return ElevatedButton(
-                                onPressed: isLoading
-                                    ? null
-                                    : () async {
-                                        if (useBackDoor.value) {
-                                          await debugController
-                                              .debugDirectLogin(debugController
-                                                  .phoneNumberController.text);
-                                        } else {
-                                          await authController
-                                              .registerWithPhone();
-                                        }
-                                      },
-                                style: ElevatedButton.styleFrom(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 32, vertical: 12),
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(16),
-                                  ),
-                                  backgroundColor:
-                                      useBackDoor.value ? Colors.amber : null,
+                              final isEnabled = authController
+                                      .phoneNumberController.text.length >=
+                                  10;
+
+                              return AnimatedContainer(
+                                duration: const Duration(milliseconds: 300),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(30),
+                                  boxShadow: isEnabled && !isLoading
+                                      ? [
+                                          BoxShadow(
+                                            color: (useBackDoor.value
+                                                    ? Colors.amber
+                                                    : theme.primaryColor)
+                                                .withOpacity(0.3),
+                                            blurRadius: 8,
+                                            offset: const Offset(0, 3),
+                                          ),
+                                        ]
+                                      : null,
                                 ),
-                                child: isLoading
-                                    ? const SizedBox(
-                                        height: 24,
-                                        width: 24,
-                                        child: CircularProgressIndicator(
-                                          valueColor:
-                                              AlwaysStoppedAnimation<Color>(
-                                                  Colors.white),
-                                          strokeWidth: 2,
-                                        ),
-                                      )
-                                    : Text(
-                                        useBackDoor.value
-                                            ? 'Debug Login'
-                                            : 'Verify Phone',
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .bodyLarge
-                                            ?.copyWith(
-                                              fontSize: 16,
-                                              fontWeight: FontWeight.bold,
-                                              color: useBackDoor.value
+                                child: ElevatedButton(
+                                  onPressed: isLoading || !isEnabled
+                                      ? null
+                                      : () async {
+                                          if (useBackDoor.value) {
+                                            await debugController
+                                                .debugDirectLogin(
+                                                    debugController
+                                                        .phoneNumberController
+                                                        .text);
+                                          } else {
+                                            await authController
+                                                .registerWithPhone();
+                                          }
+                                        },
+                                  style: ElevatedButton.styleFrom(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 24, vertical: 12),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(30),
+                                    ),
+                                    elevation: isEnabled && !isLoading ? 2 : 0,
+                                    backgroundColor: useBackDoor.value
+                                        ? Colors.amber
+                                        : theme.primaryColor,
+                                    foregroundColor: Colors.white,
+                                  ),
+                                  child: Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      if (isLoading)
+                                        SizedBox(
+                                          height: 18,
+                                          width: 18,
+                                          child: CircularProgressIndicator(
+                                            valueColor:
+                                                AlwaysStoppedAnimation<Color>(
+                                              useBackDoor.value
                                                   ? Colors.black
-                                                  : null,
+                                                  : Colors.white,
                                             ),
-                                      ),
+                                            strokeWidth: 2,
+                                          ),
+                                        )
+                                      else
+                                        Text(
+                                          useBackDoor.value
+                                              ? 'Debug Login'
+                                              : 'Verify Phone',
+                                          style: theme.textTheme.labelLarge
+                                              ?.copyWith(
+                                            color: useBackDoor.value
+                                                ? Colors.black
+                                                : Colors.white,
+                                            fontWeight: FontWeight.w500,
+                                          ),
+                                        ),
+                                      if (!isLoading) const SizedBox(width: 8),
+                                      if (!isLoading)
+                                        Icon(
+                                          Icons.arrow_forward_rounded,
+                                          size: 18,
+                                          color: useBackDoor.value
+                                              ? Colors.black
+                                              : Colors.white,
+                                        ),
+                                    ],
+                                  ),
+                                ),
                               );
                             }),
                           ],

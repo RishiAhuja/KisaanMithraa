@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ListingDetailsScreen extends GetView<ResourcePoolingController> {
   const ListingDetailsScreen({super.key});
@@ -15,10 +16,11 @@ class ListingDetailsScreen extends GetView<ResourcePoolingController> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final listing = Get.arguments['listing'] as ResourceListing;
+    final appLocalizations = AppLocalizations.of(context);
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Listing Details'),
+        title: Text(appLocalizations?.listingDetails ?? 'Listing Details'),
       ),
       body: SafeArea(
         bottom: false,
@@ -127,25 +129,28 @@ class ListingDetailsScreen extends GetView<ResourcePoolingController> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             _DetailRow(
-                              label: 'Quantity',
+                              label: appLocalizations?.quantity ?? 'Quantity',
                               value:
                                   '${listing.quantityRequired} ${listing.unit}',
                             ),
                             const SizedBox(height: 8),
                             _DetailRow(
-                              label: 'Price per unit',
+                              label: appLocalizations?.pricePerUnit ??
+                                  'Price per unit',
                               value: '₹${listing.pricePerUnit}',
                             ),
                             const SizedBox(height: 8),
                             _DetailRow(
-                              label: 'Available from',
+                              label: appLocalizations?.availableFrom ??
+                                  'Available from',
                               value: DateFormat('dd MMM yyyy')
                                   .format(listing.availableFrom),
                             ),
                             if (listing.availableTo != null) ...[
                               const SizedBox(height: 8),
                               _DetailRow(
-                                label: 'Available until',
+                                label: appLocalizations?.availableUntil ??
+                                    'Available until',
                                 value: DateFormat('dd MMM yyyy')
                                     .format(listing.availableFrom),
                               ),
@@ -156,7 +161,7 @@ class ListingDetailsScreen extends GetView<ResourcePoolingController> {
                     ),
                     const SizedBox(height: 24),
                     Text(
-                      'Offers (${listing.offers.length})',
+                      '${appLocalizations?.offers ?? 'Offers'} (${listing.offers.length})',
                       style: theme.textTheme.titleLarge,
                     ),
                     const SizedBox(height: 16),
@@ -174,7 +179,8 @@ class ListingDetailsScreen extends GetView<ResourcePoolingController> {
                         if (snapshot.hasError) {
                           return Center(
                             child: Text(
-                              'Error loading offers',
+                              appLocalizations?.errorLoadingOffers ??
+                                  'Error loading offers',
                               style: theme.textTheme.bodyLarge?.copyWith(
                                 color: theme.colorScheme.error,
                               ),
@@ -187,7 +193,7 @@ class ListingDetailsScreen extends GetView<ResourcePoolingController> {
                         if (offers.isEmpty) {
                           return Center(
                             child: Text(
-                              'No offers yet',
+                              appLocalizations?.noOffersYet ?? 'No offers yet',
                               style: theme.textTheme.bodyLarge,
                             ),
                           );
@@ -263,7 +269,7 @@ class ListingDetailsScreen extends GetView<ResourcePoolingController> {
             onPressed: listing.status == 'active'
                 ? () => _showMakeOfferDialog(context, listing)
                 : null,
-            child: Text('Make Offer',
+            child: Text(appLocalizations?.makeOffer ?? 'Make Offer',
                 style:
                     theme.textTheme.bodyMedium?.copyWith(color: Colors.white)),
           ),
@@ -298,10 +304,11 @@ class ListingDetailsScreen extends GetView<ResourcePoolingController> {
     final quantityController = TextEditingController();
     final priceController = TextEditingController();
     final formKey = GlobalKey<FormState>();
+    final appLocalizations = AppLocalizations.of(context);
 
     Get.dialog(
       AlertDialog(
-        title: Text('Make Offer',
+        title: Text(appLocalizations?.makeOffer ?? 'Make Offer',
             style: Theme.of(context)
                 .textTheme
                 .bodyMedium
@@ -314,20 +321,24 @@ class ListingDetailsScreen extends GetView<ResourcePoolingController> {
               TextFormField(
                 controller: quantityController,
                 decoration: InputDecoration(
-                  labelText: 'Quantity (${listing.unit})',
+                  labelText:
+                      '${appLocalizations?.quantity ?? 'Quantity'} (${listing.unit})',
                   border: const OutlineInputBorder(),
                 ),
                 keyboardType: TextInputType.number,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return 'Please enter quantity';
+                    return appLocalizations?.pleaseEnterQuantity ??
+                        'Please enter quantity';
                   }
                   final quantity = int.tryParse(value);
                   if (quantity == null || quantity <= 0) {
-                    return 'Please enter valid quantity';
+                    return appLocalizations?.pleaseEnterValidQuantity ??
+                        'Please enter valid quantity';
                   }
                   if (quantity > listing.quantityRequired) {
-                    return 'Cannot exceed required quantity';
+                    return appLocalizations?.cannotExceedQuantity ??
+                        'Cannot exceed required quantity';
                   }
                   return null;
                 },
@@ -335,18 +346,21 @@ class ListingDetailsScreen extends GetView<ResourcePoolingController> {
               const SizedBox(height: 16),
               TextFormField(
                 controller: priceController,
-                decoration: const InputDecoration(
-                  labelText: 'Price per unit (₹)',
-                  border: OutlineInputBorder(),
+                decoration: InputDecoration(
+                  labelText:
+                      appLocalizations?.pricePerUnit ?? 'Price per unit (₹)',
+                  border: const OutlineInputBorder(),
                 ),
                 keyboardType: TextInputType.number,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return 'Please enter price';
+                    return appLocalizations?.pleaseEnterPrice ??
+                        'Please enter price';
                   }
                   final price = double.tryParse(value);
                   if (price == null || price <= 0) {
-                    return 'Please enter valid price';
+                    return appLocalizations?.pleaseEnterValidPrice ??
+                        'Please enter valid price';
                   }
                   return null;
                 },
@@ -357,7 +371,7 @@ class ListingDetailsScreen extends GetView<ResourcePoolingController> {
         actions: [
           TextButton(
             onPressed: () => Get.back(),
-            child: const Text('Cancel'),
+            child: Text(appLocalizations?.cancel ?? 'Cancel'),
           ),
           ElevatedButton(
             onPressed: () async {
@@ -386,13 +400,19 @@ class ListingDetailsScreen extends GetView<ResourcePoolingController> {
                     ),
                   );
                   Get.back();
-                  Get.snackbar('Success', 'Offer submitted successfully');
+                  Get.snackbar(
+                      'Success',
+                      appLocalizations?.offerSubmittedSuccess ??
+                          'Offer submitted successfully');
                 } catch (e) {
-                  Get.snackbar('Error', 'Failed to submit offer');
+                  Get.snackbar(
+                      'Error',
+                      appLocalizations?.failedToSubmitOffer ??
+                          'Failed to submit offer');
                 }
               }
             },
-            child: const Text('Submit'),
+            child: Text(appLocalizations?.submit ?? 'Submit'),
           ),
         ],
       ),

@@ -4,8 +4,7 @@ import 'app_colors.dart';
 
 class AppTheme {
   static ThemeData get lightTheme {
-    // Using Poppins as the primary font for a modern, clean look
-    final baseTextTheme = GoogleFonts.poppinsTextTheme();
+    final baseTextTheme = GoogleFonts.plusJakartaSansTextTheme();
 
     final customTextTheme = baseTextTheme.copyWith(
       displayLarge: baseTextTheme.displayLarge?.copyWith(

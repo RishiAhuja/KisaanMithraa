@@ -75,8 +75,9 @@ dependencies:
   http:
   equatable:
   path_provider:
-
   just_audio_background:
+  carousel_slider:
+  flutter_animate:
   audio_video_progress_bar:
   flutter_localizations:
     sdk: flutter
@@ -111,6 +112,9 @@ flutter:
   assets:
     - assets/animations/
     - assets/crops/
+    - assets/splash/
+    - assets/data/states_districts.json
+    - assets/logo/
     - .env
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images

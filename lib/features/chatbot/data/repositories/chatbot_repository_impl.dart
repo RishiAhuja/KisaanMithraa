@@ -6,7 +6,7 @@ import 'package:cropconnect/utils/app_logger.dart';
 import 'package:http/http.dart' as http;
 
 class ChatbotRepositoryImpl implements ChatbotRepository {
-  final String _apiUrl = 'http://13.232.133.58:8005/api/v1/chat';
+  final String _apiUrl = 'https://kisaan-mithraa.davinder.live/api/v1/chat';
   static const String _userId = 'user123';
 
   @override

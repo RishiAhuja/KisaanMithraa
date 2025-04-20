@@ -1,4 +1,6 @@
 import 'dart:convert';
+import 'package:cropconnect/features/home/services/farming_tip_service.dart';
+import 'package:cropconnect/features/home/services/weather_api_service.dart';
 import 'package:get/get.dart';
 import 'package:cropconnect/features/mandi_prices/data/models/crop_price_model.dart';
 import 'package:cropconnect/features/mandi_prices/data/models/watchlist_item.dart';
@@ -18,11 +20,27 @@ class HomeController extends GetxController {
   final RxBool isUsingCachedPrices = false.obs;
   final RxBool hasWatchlist = false.obs;
 
+  final RxBool isLoadingWeather = false.obs;
+  final RxBool isLoadingTips = false.obs;
+  final RxBool hasFetchedWeather = false.obs;
+  final RxBool hasFetchedTips = false.obs;
+
   @override
   void onInit() {
     super.onInit();
-    _loadUser();
-    loadWatchlistedPrices();
+    _loadData();
+  }
+
+  Future<void> _loadData() async {
+    await _loadUser();
+
+    if (user.value != null) {
+      await Future.wait([
+        loadWatchlistedPrices(),
+        loadWeatherData(),
+        loadTips(),
+      ]);
+    }
   }
 
   Future<void> _loadUser() async {
@@ -31,6 +49,65 @@ class HomeController extends GetxController {
       user.value = userData;
     } catch (e) {
       print('Error loading user: $e');
+    }
+  }
+
+  Future<bool> retryLoadUser() async {
+    try {
+      print('Retrying user data load');
+      await _loadUser();
+
+      if (user.value != null) {
+        loadWatchlistedPrices();
+        loadWeatherData();
+        loadTips();
+        return true;
+      }
+      return false;
+    } catch (e) {
+      print('Error in retry loading user: $e');
+      return false;
+    }
+  }
+
+  Future<void> loadWeatherData() async {
+    if (isLoadingWeather.value) return;
+
+    isLoadingWeather.value = true;
+    try {
+      if (user.value == null) {
+        await _loadUser();
+        if (user.value == null) return;
+      }
+
+      final weatherController = Get.find<WeatherApiService>();
+      await weatherController.getLocalWeather();
+      hasFetchedWeather.value = true;
+    } catch (e) {
+      print('Error loading weather data: $e');
+    } finally {
+      isLoadingWeather.value = false;
+    }
+  }
+
+  Future<void> loadTips() async {
+    if (isLoadingTips.value) return;
+
+    isLoadingTips.value = true;
+    try {
+      if (user.value == null) {
+        await _loadUser();
+        if (user.value == null) return;
+      }
+
+      final tipController = Get.find<FarmingTipService>();
+
+      await tipController.fetchTips();
+      hasFetchedTips.value = true;
+    } catch (e) {
+      print('Error loading AI tips: $e');
+    } finally {
+      isLoadingTips.value = false;
     }
   }
 

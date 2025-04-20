@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:cropconnect/features/resource_pooling/domain/resouce_listing_model.dart';
 import 'package:cropconnect/features/resource_pooling/presentation/controller/resource_pooling_controller.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class MyListingDetailsScreen extends GetView<ResourcePoolingController> {
   const MyListingDetailsScreen({super.key});
@@ -13,10 +14,11 @@ class MyListingDetailsScreen extends GetView<ResourcePoolingController> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final listing = Get.arguments['listing'] as ResourceListing;
+    final l10n = AppLocalizations.of(context)!;
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('My Listing Details'),
+        title: Text(l10n.myListingDetails),
         actions: [
           PopupMenuButton<String>(
             onSelected: (value) {
@@ -31,13 +33,13 @@ class MyListingDetailsScreen extends GetView<ResourcePoolingController> {
             },
             itemBuilder: (context) => [
               if (listing.status == 'active')
-                const PopupMenuItem(
+                PopupMenuItem(
                   value: 'cancel',
-                  child: Text('Cancel Listing'),
+                  child: Text(l10n.cancelListing),
                 ),
-              const PopupMenuItem(
+              PopupMenuItem(
                 value: 'delete',
-                child: Text('Delete Listing'),
+                child: Text(l10n.deleteListing),
               ),
             ],
           ),
@@ -107,14 +109,19 @@ class MyListingDetailsScreen extends GetView<ResourcePoolingController> {
                           Text(listing.description),
                           const SizedBox(height: 16),
                           _DetailRow(
-                            label: 'Quantity',
-                            value:
-                                '${listing.quantityRequired} ${listing.unit}',
+                            label: l10n.quantity,
+                            value: l10n.quantityValue(
+                              listing.quantityRequired.toString(),
+                              listing.unit,
+                            ),
                           ),
                           const SizedBox(height: 8),
                           _DetailRow(
-                            label: 'Price per unit',
-                            value: '₹${listing.pricePerUnit}',
+                            label: l10n.pricePerUnit,
+                            value: l10n.priceValue(
+                              listing.pricePerUnit.toString(),
+                              listing.unit,
+                            ),
                           ),
                         ],
                       ),
@@ -123,7 +130,7 @@ class MyListingDetailsScreen extends GetView<ResourcePoolingController> {
 
                   const SizedBox(height: 24),
                   Text(
-                    'Offers (${listing.offers.length})',
+                    l10n.offerCount(listing.offers.length.toString()),
                     style: theme.textTheme.titleLarge,
                   ),
                   const SizedBox(height: 16),
@@ -142,7 +149,7 @@ class MyListingDetailsScreen extends GetView<ResourcePoolingController> {
                       if (snapshot.hasError) {
                         return Center(
                           child: Text(
-                            'Error loading offers',
+                            l10n.errorLoadingOffers,
                             style: TextStyle(color: theme.colorScheme.error),
                           ),
                         );
@@ -151,8 +158,8 @@ class MyListingDetailsScreen extends GetView<ResourcePoolingController> {
                       final offers = snapshot.data ?? [];
 
                       if (offers.isEmpty) {
-                        return const Center(
-                          child: Text('No offers yet'),
+                        return Center(
+                          child: Text(l10n.noOffersYet),
                         );
                       }
 
@@ -193,14 +200,20 @@ class MyListingDetailsScreen extends GetView<ResourcePoolingController> {
                                             ),
                                             const SizedBox(height: 4),
                                             Text(
-                                              'Quantity: ${offer.quantity} ${listing.unit}',
+                                              l10n.quantityWithUnit(
+                                                offer.quantity.toString(),
+                                                listing.unit,
+                                              ),
                                               style: theme.textTheme.bodyMedium,
                                             ),
                                           ],
                                         ),
                                       ),
                                       Text(
-                                        '₹${offer.pricePerUnit}/${listing.unit}',
+                                        l10n.pricePerUnitWithUnit(
+                                          offer.pricePerUnit.toString(),
+                                          listing.unit,
+                                        ),
                                         style: theme.textTheme.titleMedium
                                             ?.copyWith(
                                           color: theme.colorScheme.primary,
@@ -217,12 +230,12 @@ class MyListingDetailsScreen extends GetView<ResourcePoolingController> {
                                         TextButton.icon(
                                           icon: const Icon(
                                               Icons.check_circle_outline),
-                                          label: const Text('Accept'),
+                                          label: Text(l10n.accept),
                                           onPressed: () {
                                             if (offer.id.isEmpty) {
                                               Get.snackbar(
-                                                'Error',
-                                                'Cannot accept offer: Invalid offer ID',
+                                                l10n.error,
+                                                l10n.cannotAcceptOffer,
                                                 snackPosition:
                                                     SnackPosition.TOP,
                                               );
@@ -243,7 +256,7 @@ class MyListingDetailsScreen extends GetView<ResourcePoolingController> {
                                               8), // Add spacing between buttons
                                       TextButton.icon(
                                         icon: const Icon(Icons.chat_outlined),
-                                        label: const Text('Chat'),
+                                        label: Text(l10n.chat),
                                         onPressed: () => Get.toNamed(
                                           '/chat',
                                           arguments: {

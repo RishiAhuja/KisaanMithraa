@@ -1,0 +1,2 @@
+/home/rishi/StudioProjects/cropconnect/android/app/.cxx/Debug/481b1n5t/armeabi-v7a/CMakeFiles/edit_cache.dir
+/home/rishi/StudioProjects/cropconnect/android/app/.cxx/Debug/481b1n5t/armeabi-v7a/CMakeFiles/rebuild_cache.dir

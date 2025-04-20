@@ -1,3 +1,4 @@
 {
-    "cmake.sourceDirectory": "/home/rishi/StudioProjects/cropconnect/linux"
+  "cmake.sourceDirectory": "/home/rishi/StudioProjects/cropconnect/linux",
+  "dart.flutterSdkPath": ".fvm/versions/3.27.1"
 }

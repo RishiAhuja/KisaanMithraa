@@ -5,10 +5,15 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:geolocator/geolocator.dart';
 import '../../../core/services/hive/hive_storage_service.dart';
+import 'package:cropconnect/core/services/crop/crop_service.dart';
+import 'package:cropconnect/features/onboarding/domain/services/location_service.dart';
 
 class ProfileController extends GetxController {
   final UserStorageService _storageService;
   final FirebaseFirestore _firestore;
+  final CropService _cropService = Get.find<CropService>();
+  final LocationSelectionService _locationService =
+      Get.find<LocationSelectionService>();
 
   final formKey = GlobalKey<FormState>();
   final nameController = TextEditingController();
@@ -23,24 +28,11 @@ class ProfileController extends GetxController {
   final selectedState = Rx<String?>(null);
   final selectedCity = Rx<String?>(null);
 
-  final states = <String>[
-    'Uttar Pradhes', 'Bihar', 'Punjab'
-    // Add more states as needed
-  ].obs;
+  List<String> get states => _locationService.getAllStates();
 
   final cities = <String>[].obs;
 
   final RxList<String> selectedCrops = <String>[].obs;
-  final RxList<String> availableCrops = <String>[
-    'Rice',
-    'Wheat',
-    'Corn',
-    'Cotton',
-    'Sugarcane',
-    'Pulses',
-    'Vegetables',
-    'Fruits'
-  ].obs;
 
   final soilTypes = [
     'Alluvial Soil',
@@ -51,11 +43,26 @@ class ProfileController extends GetxController {
     'Mountain Soil',
   ];
 
+  final isEditMode = false.obs;
+
   ProfileController(this._storageService, this._firestore);
 
   @override
   void onInit() {
     super.onInit();
+
+    if (!_locationService.isLoaded) {
+      _locationService.loadStateDistrictData();
+    }
+
+    ever(selectedState, (state) {
+      if (state != null && state.isNotEmpty) {
+        loadCities(state);
+      } else {
+        cities.clear();
+      }
+    });
+
     loadUserData();
   }
 
@@ -80,22 +87,32 @@ class ProfileController extends GetxController {
         soilTypeController.text = userData.soilType ?? '';
         selectedState.value = userData.state;
         selectedCity.value = userData.city;
-        selectedCrops.value = userData.crops ?? [];
 
-        if (userData.state != null) {
-          await loadCities(userData.state!);
+        AppLogger.info('Crops from storage: ${userData.crops}');
+
+        if (userData.crops != null && userData.crops!.isNotEmpty) {
+          selectedCrops.value = List<String>.from(userData.crops!);
+        } else {
+          selectedCrops.value = [];
         }
+
+        AppLogger.info('Selected crops after loading: $selectedCrops');
       }
       AppLogger.info('User Loaded: ${userData!.id}');
     } catch (e) {
+      AppLogger.error('Failed to load user data: $e');
       Get.snackbar('Error', 'Failed to load user data');
     } finally {
       isLoading.value = false;
     }
   }
 
-  Future<void> loadCities(String state) async {
-    cities.value = ['Amritsar', 'Ludhiana', 'Jalandhar'];
+  void loadCities(String state) {
+    cities.value = _locationService.getDistrictsForState(state);
+
+    if (selectedCity.value != null && !cities.contains(selectedCity.value)) {
+      selectedCity.value = null;
+    }
   }
 
   Future<Position?> getCurrentLocation() async {
@@ -129,7 +146,6 @@ class ProfileController extends GetxController {
     try {
       isUpdating.value = true;
 
-      // Get current location
       final position = await getCurrentLocation();
       if (position == null) {
         Get.snackbar('Error', 'Could not get current location');
@@ -163,5 +179,28 @@ class ProfileController extends GetxController {
     } finally {
       isUpdating.value = false;
     }
+  }
+
+  void toggleEditMode() {
+    isEditMode.value = !isEditMode.value;
+
+    if (!isEditMode.value) {
+      loadUserData();
+    }
+  }
+
+  void cancelEdit() {
+    isEditMode.value = false;
+    loadUserData();
+  }
+
+  List<String> get availableCrops => _cropService.getAllCropNames();
+
+  List<String> getRecommendedCrops() {
+    if (selectedState.value == null || selectedState.value!.isEmpty) return [];
+    return _cropService
+        .getRecommendedCropsForState(selectedState.value ?? "")
+        .map((crop) => crop.name)
+        .toList();
   }
 }

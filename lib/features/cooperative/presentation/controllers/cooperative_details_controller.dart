@@ -151,7 +151,6 @@ class CooperativeDetailsController extends GetxController {
       final existingRequests = List<Map<String, dynamic>>.from(
           coopDoc.data()?['joinRequests'] ?? []);
 
-      // Check if user has already requested to join
       if (existingRequests.any((req) => req['userId'] == currentUser.id)) {
         Get.snackbar(
           'Already Requested',

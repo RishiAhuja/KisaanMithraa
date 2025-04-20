@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../domain/model/notifications_model.dart';
 import 'package:timeago/timeago.dart' as timeago;
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class NotificationsScreen extends GetView<NotificationsController> {
   const NotificationsScreen({Key? key}) : super(key: key);
@@ -10,10 +11,11 @@ class NotificationsScreen extends GetView<NotificationsController> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final appLocalizations = AppLocalizations.of(context);
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Notifications'),
+        title: Text(appLocalizations?.notifications ?? 'Notifications'),
       ),
       body: Obx(() {
         if (controller.isLoading.value) {
@@ -23,7 +25,7 @@ class NotificationsScreen extends GetView<NotificationsController> {
         if (controller.notifications.isEmpty) {
           return Center(
             child: Text(
-              'No notifications yet',
+              appLocalizations?.noNotificationsYet ?? 'No notifications yet',
               style: theme.textTheme.bodyLarge,
             ),
           );

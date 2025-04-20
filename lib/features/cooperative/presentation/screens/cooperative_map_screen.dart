@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:get/get.dart';
 import '../../domain/models/cooperative_model.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class CooperativeMapScreen extends StatefulWidget {
   final CooperativeModel cooperative;
@@ -47,6 +48,8 @@ class _CooperativeMapScreenState extends State<CooperativeMapScreen> {
   }
 
   void _showCooperativeDetails() {
+    final appLocalizations = AppLocalizations.of(context);
+
     Get.dialog(
       Dialog(
         shape: RoundedRectangleBorder(
@@ -79,13 +82,13 @@ class _CooperativeMapScreenState extends State<CooperativeMapScreen> {
               const SizedBox(height: 8),
               _InfoRow(
                 icon: Icons.people,
-                label: 'Members',
+                label: appLocalizations?.totalMembers ?? 'Members',
                 value: widget.cooperative.members.length.toString(),
               ),
               const SizedBox(height: 12),
               _InfoRow(
                 icon: Icons.location_on,
-                label: 'Location',
+                label: appLocalizations?.location ?? 'Location',
                 value: '${widget.cooperative.latitude.toStringAsFixed(6)}, '
                     '${widget.cooperative.longitude.toStringAsFixed(6)}',
               ),
@@ -104,7 +107,8 @@ class _CooperativeMapScreenState extends State<CooperativeMapScreen> {
                       borderRadius: BorderRadius.circular(8),
                     ),
                   ),
-                  child: const Text('Join Cooperative'),
+                  child: Text(
+                      appLocalizations?.joinCooperative ?? 'Join Cooperative'),
                 ),
               ),
             ],

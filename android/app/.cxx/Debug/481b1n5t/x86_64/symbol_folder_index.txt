@@ -1,0 +1,1 @@
+/home/rishi/StudioProjects/cropconnect/build/app/intermediates/cxx/Debug/481b1n5t/obj/x86_64

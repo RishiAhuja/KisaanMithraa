@@ -11,6 +11,12 @@ class AppColors {
   static const secondaryLight =
       Color(0xFFFFD152); // Light yellow for highlights
 
+  // Splash screen colors (from design)
+  static const splashGreen = Color(0xFF1F844A);
+  static const splashYellow = Color(0xFFF2CB22);
+  static const splashOrange = Color(0xFFFF9800);
+  static const splashLightGreen = Color(0xFF8BC34A);
+
   // Accent colors
   static const accent = Color(0xFF3498DB); // Blue for interactive elements
   static const accentLight =

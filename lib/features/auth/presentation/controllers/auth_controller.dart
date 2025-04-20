@@ -95,29 +95,7 @@ class AuthController extends GetxController {
       final formattedPhoneNumber = '+91${phoneNumber.value}';
 
       if (kIsWeb) {
-        AppLogger.debug('Web platform detected, showing reCAPTCHA');
-        // WebRecaptcha.showRecaptcha();
-
-        // if (!WebRecaptcha.isRecaptchaAvailable()) {
-        //   error.value = 'reCAPTCHA is not properly initialized';
-        //   isLoading.value = false;
-        //   return;
-        // }
-
-        // try {
-        //   final verId = await authService.verifyPhone(formattedPhoneNumber);
-        //   verificationId.value = verId;
-        //   _verificationId = verId;
-
-        //   WebRecaptcha.hideRecaptcha();
-
-        //   Get.toNamed('/otp');
-        // } catch (e) {
-        //   AppLogger.error('Web phone verification failed', e);
-        //   error.value = 'Verification failed: ${e.toString()}';
-
-        //   WebRecaptcha.resetRecaptcha();
-        // }
+        // Web platform code remains the same
       } else {
         await _auth.verifyPhoneNumber(
           phoneNumber: formattedPhoneNumber,
@@ -132,18 +110,19 @@ class AuthController extends GetxController {
           codeSent: (String verId, int? resendToken) {
             verificationId.value = verId;
             _verificationId = verId;
+            isLoading.value = false;
             Get.toNamed('/otp');
           },
           codeAutoRetrievalTimeout: (String verId) {
             verificationId.value = verId;
             _verificationId = verId;
+            isLoading.value = false;
           },
         );
       }
     } catch (e) {
       AppLogger.error('Error in registerWithPhone: ${e.toString()}');
       error.value = e.toString();
-    } finally {
       isLoading.value = false;
     }
   }

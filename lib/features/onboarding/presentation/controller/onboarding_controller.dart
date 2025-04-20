@@ -1,5 +1,7 @@
 import 'package:cropconnect/features/onboarding/domain/models/crop_model.dart';
+import 'package:cropconnect/features/onboarding/domain/services/location_service.dart';
 import 'package:get/get.dart';
+import 'package:cropconnect/core/services/crop/crop_service.dart';
 
 class OnboardingController extends GetxController {
   final RxString selectedLanguage = ''.obs;
@@ -9,39 +11,23 @@ class OnboardingController extends GetxController {
   final RxDouble progress = 0.2.obs;
 
   final RxList<String> selectedCrops = <String>[].obs;
+  final LocationSelectionService _locationService =
+      Get.find<LocationSelectionService>();
 
-  final List<CropModel> availableCrops = [
-    CropModel(
-      id: 'crop',
-      name: 'Crop',
-      imageUrl: 'assets/crops/corn.svg',
-      description: 'Major cereal grain',
-    ),
-    CropModel(
-      id: 'fruits',
-      name: 'Fruits',
-      imageUrl: 'assets/crops/fruits.svg',
-      description: 'Staple food crop',
-    ),
-    CropModel(
-      id: 'rice',
-      name: 'Rice',
-      imageUrl: 'assets/crops/rice.svg',
-      description: 'Versatile grain crop',
-    ),
-    CropModel(
-      id: 'tomato',
-      name: 'Tomato',
-      imageUrl: 'assets/crops/tomato.svg',
-      description: 'Versatile grain crop',
-    ),
-  ];
+  final RxBool showRecommended = true.obs;
 
-  final Map<String, List<String>> stateCities = {
-    'Uttar Pradesh': ['Siddharthnagar', 'Balrampur', 'Lucknow', 'Kanpur'],
-    'Bihar': ['Patna', 'Gaya', 'Bhagalpur'],
-    'Punjab': ['Amritsar', 'Ludhiana', 'Jalandhar'],
-  }.obs;
+  final CropService _cropService = Get.find<CropService>();
+
+  Map<String, List<String>> get stateCities =>
+      _locationService.stateDistrictMap;
+
+  @override
+  void onInit() {
+    super.onInit();
+    if (!_locationService.isLoaded) {
+      _locationService.loadStateDistrictData();
+    }
+  }
 
   void setLanguage(String language) {
     selectedLanguage.value = language;
@@ -69,7 +55,11 @@ class OnboardingController extends GetxController {
   }
 
   List<String> getCitiesForState(String state) {
-    return stateCities[state] ?? [];
+    return _locationService.getDistrictsForState(state);
+  }
+
+  List<String> getAllStates() {
+    return _locationService.getAllStates();
   }
 
   void toggleCropSelection(String cropId) {
@@ -78,6 +68,17 @@ class OnboardingController extends GetxController {
     } else {
       selectedCrops.add(cropId);
     }
-    progress.value = 0.9; // Update progress
+    progress.value = 0.9;
+  }
+
+  List<CropModel> get availableCrops => _cropService.getAllCrops();
+
+  List<CropModel> getRecommendedCrops() {
+    if (selectedState.isEmpty) return [];
+    return _cropService.getRecommendedCropsForState(selectedState.value);
+  }
+
+  void toggleCropView() {
+    showRecommended.value = !showRecommended.value;
   }
 }

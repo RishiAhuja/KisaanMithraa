@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import '../controllers/create_cooperative_controller.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class CreateCooperativeScreen extends GetView<CreateCooperativeController> {
   const CreateCooperativeScreen({Key? key}) : super(key: key);
@@ -12,11 +13,12 @@ class CreateCooperativeScreen extends GetView<CreateCooperativeController> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final appLocalizations = AppLocalizations.of(context);
 
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'Create Cooperative',
+          appLocalizations?.createCooperative ?? 'Create Cooperative',
           style: theme.textTheme.titleMedium?.copyWith(
             fontWeight: FontWeight.bold,
           ),
@@ -72,7 +74,8 @@ class CreateCooperativeScreen extends GetView<CreateCooperativeController> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'Start Your Cooperative',
+                          appLocalizations?.startYourCooperative ??
+                              'Start Your Cooperative',
                           style: theme.textTheme.titleMedium?.copyWith(
                             color: Colors.white,
                             fontWeight: FontWeight.bold,
@@ -80,7 +83,8 @@ class CreateCooperativeScreen extends GetView<CreateCooperativeController> {
                         ),
                         const SizedBox(height: 4),
                         Text(
-                          'Create a community of farmers working together',
+                          appLocalizations?.createCommunity ??
+                              'Create a community of farmers working together',
                           style: theme.textTheme.bodySmall?.copyWith(
                             color: Colors.white.withOpacity(0.9),
                           ),
@@ -104,8 +108,10 @@ class CreateCooperativeScreen extends GetView<CreateCooperativeController> {
                     const SizedBox(height: 16),
                     _buildTextField(
                       controller: controller.nameController,
-                      label: 'Cooperative Name',
-                      hint: 'Enter cooperative name',
+                      label: appLocalizations?.cooperativeName ??
+                          'Cooperative Name',
+                      hint: appLocalizations?.enterCooperativeName ??
+                          'Enter cooperative name',
                       icon: Icons.business_rounded,
                       theme: theme,
                       validator: (value) =>
@@ -114,8 +120,9 @@ class CreateCooperativeScreen extends GetView<CreateCooperativeController> {
                     const SizedBox(height: 16),
                     _buildTextField(
                       controller: controller.descriptionController,
-                      label: 'Description',
-                      hint: 'Describe your cooperative\'s mission and goals',
+                      label: appLocalizations?.description ?? 'Description',
+                      hint: appLocalizations?.describeCooperative ??
+                          'Describe your cooperative\'s mission and goals',
                       icon: Icons.description_rounded,
                       theme: theme,
                       maxLines: 3,
@@ -125,7 +132,8 @@ class CreateCooperativeScreen extends GetView<CreateCooperativeController> {
                     ),
                     const SizedBox(height: 16),
                     MemberSelectionWidget(
-                      title: 'Select Members',
+                      title:
+                          appLocalizations?.selectMembers ?? 'Select Members',
                       selectedMembers: controller.selectedMembers,
                       onMemberRemoved: (member) =>
                           controller.selectedMembers.remove(member),
@@ -133,7 +141,7 @@ class CreateCooperativeScreen extends GetView<CreateCooperativeController> {
                       showMinimumText: true,
                     ),
                     const SizedBox(height: 24),
-                    _buildCreateButton(theme),
+                    _buildCreateButton(theme, appLocalizations),
                     const SizedBox(height: 16),
                   ],
                 ),
@@ -207,7 +215,8 @@ class CreateCooperativeScreen extends GetView<CreateCooperativeController> {
     );
   }
 
-  Widget _buildCreateButton(ThemeData theme) {
+  Widget _buildCreateButton(
+      ThemeData theme, AppLocalizations? appLocalizations) {
     return Obx(() => Container(
           height: 48,
           decoration: BoxDecoration(
@@ -246,7 +255,7 @@ class CreateCooperativeScreen extends GetView<CreateCooperativeController> {
                       ),
                       const SizedBox(width: 8),
                       Text(
-                        'Creating...',
+                        appLocalizations?.creating ?? 'Creating...',
                         style: theme.textTheme.labelLarge?.copyWith(
                           color: Colors.white,
                           fontWeight: FontWeight.bold,
@@ -264,7 +273,8 @@ class CreateCooperativeScreen extends GetView<CreateCooperativeController> {
                       ),
                       const SizedBox(width: 8),
                       Text(
-                        'Create Cooperative',
+                        appLocalizations?.createCooperative ??
+                            'Create Cooperative',
                         style: theme.textTheme.labelLarge?.copyWith(
                           color: Colors.white,
                           fontWeight: FontWeight.bold,
@@ -289,6 +299,8 @@ class CreateCooperativeScreen extends GetView<CreateCooperativeController> {
   }
 
   Widget _buildImageSelectionSection(ThemeData theme, BuildContext context) {
+    final appLocalizations = AppLocalizations.of(context);
+
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
@@ -314,14 +326,14 @@ class CreateCooperativeScreen extends GetView<CreateCooperativeController> {
               ),
               const SizedBox(width: 8),
               Text(
-                'Cooperative Banner',
+                appLocalizations?.cooperativeBanner ?? 'Cooperative Banner',
                 style: theme.textTheme.titleSmall?.copyWith(
                   fontWeight: FontWeight.bold,
                 ),
               ),
               const Spacer(),
               Text(
-                'Optional',
+                appLocalizations?.optional ?? 'Optional',
                 style: theme.textTheme.bodySmall?.copyWith(
                   color: theme.colorScheme.onSurface.withOpacity(0.6),
                   fontStyle: FontStyle.italic,
@@ -355,7 +367,7 @@ class CreateCooperativeScreen extends GetView<CreateCooperativeController> {
                               ),
                               const SizedBox(height: 8),
                               Text(
-                                'Add Banner',
+                                appLocalizations?.addBanner ?? 'Add Banner',
                                 style: theme.textTheme.bodySmall?.copyWith(
                                   color: theme.colorScheme.primary,
                                 ),
@@ -429,7 +441,8 @@ class CreateCooperativeScreen extends GetView<CreateCooperativeController> {
           const SizedBox(height: 8),
           Center(
             child: Text(
-              'Upload a banner for your cooperative',
+              appLocalizations?.uploadBanner ??
+                  'Upload a banner for your cooperative',
               style: theme.textTheme.bodySmall?.copyWith(
                 color: theme.colorScheme.onSurface.withOpacity(0.6),
               ),
@@ -442,6 +455,7 @@ class CreateCooperativeScreen extends GetView<CreateCooperativeController> {
 
   void _showImageSourceDialog(BuildContext context) {
     final theme = Theme.of(context);
+    final appLocalizations = AppLocalizations.of(context);
 
     showModalBottomSheet(
       context: context,
@@ -455,7 +469,7 @@ class CreateCooperativeScreen extends GetView<CreateCooperativeController> {
             Padding(
               padding: const EdgeInsets.all(16),
               child: Text(
-                'Select Image Source',
+                appLocalizations?.selectImageSource ?? 'Select Image Source',
                 style: theme.textTheme.titleMedium?.copyWith(
                   fontWeight: FontWeight.bold,
                 ),
@@ -467,7 +481,7 @@ class CreateCooperativeScreen extends GetView<CreateCooperativeController> {
                 Icons.camera_alt,
                 color: theme.colorScheme.primary,
               ),
-              title: Text('Camera'),
+              title: Text(appLocalizations?.camera ?? 'Camera'),
               onTap: () {
                 Navigator.of(context).pop();
                 controller.pickImage(ImageSource.camera);
@@ -478,7 +492,7 @@ class CreateCooperativeScreen extends GetView<CreateCooperativeController> {
                 Icons.photo_library,
                 color: theme.colorScheme.primary,
               ),
-              title: Text('Gallery'),
+              title: Text(appLocalizations?.gallery ?? 'Gallery'),
               onTap: () {
                 Navigator.of(context).pop();
                 controller.pickImage(ImageSource.gallery);

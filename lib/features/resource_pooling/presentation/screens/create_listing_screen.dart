@@ -4,6 +4,7 @@ import 'package:cropconnect/features/resource_pooling/presentation/controller/re
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class CreateListingScreen extends GetView<ResourcePoolingController> {
   const CreateListingScreen({super.key});
@@ -11,10 +12,11 @@ class CreateListingScreen extends GetView<ResourcePoolingController> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final appLocalizations = AppLocalizations.of(context);
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Create Listing'),
+        title: Text(appLocalizations?.createListing ?? 'Create Listing'),
       ),
       body: SafeArea(
         child: Column(
@@ -28,9 +30,10 @@ class CreateListingScreen extends GetView<ResourcePoolingController> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       DropdownButtonFormField<ListingType>(
-                        decoration: const InputDecoration(
-                          labelText: 'Listing Type',
-                          border: OutlineInputBorder(),
+                        decoration: InputDecoration(
+                          labelText:
+                              appLocalizations?.listingType ?? 'Listing Type',
+                          border: const OutlineInputBorder(),
                         ),
                         items: ListingType.values.map((type) {
                           return DropdownMenuItem(
@@ -49,9 +52,10 @@ class CreateListingScreen extends GetView<ResourcePoolingController> {
                       ),
                       const SizedBox(height: 16),
                       DropdownButtonFormField<TransactionType>(
-                        decoration: const InputDecoration(
-                          labelText: 'Transaction Type',
-                          border: OutlineInputBorder(),
+                        decoration: InputDecoration(
+                          labelText: appLocalizations?.transactionType ??
+                              'Transaction Type',
+                          border: const OutlineInputBorder(),
                         ),
                         items: TransactionType.values.map((type) {
                           return DropdownMenuItem(
@@ -71,9 +75,9 @@ class CreateListingScreen extends GetView<ResourcePoolingController> {
                       const SizedBox(height: 16),
                       TextFormField(
                         controller: controller.titleController,
-                        decoration: const InputDecoration(
-                          labelText: 'Title',
-                          border: OutlineInputBorder(),
+                        decoration: InputDecoration(
+                          labelText: appLocalizations?.title ?? 'Title',
+                          border: const OutlineInputBorder(),
                         ),
                         validator: (value) {
                           if (value?.isEmpty ?? true) {
@@ -85,9 +89,10 @@ class CreateListingScreen extends GetView<ResourcePoolingController> {
                       const SizedBox(height: 16),
                       TextFormField(
                         controller: controller.descriptionController,
-                        decoration: const InputDecoration(
-                          labelText: 'Description',
-                          border: OutlineInputBorder(),
+                        decoration: InputDecoration(
+                          labelText:
+                              appLocalizations?.description ?? 'Description',
+                          border: const OutlineInputBorder(),
                         ),
                         maxLines: 3,
                         validator: (value) {
@@ -104,15 +109,19 @@ class CreateListingScreen extends GetView<ResourcePoolingController> {
                             flex: 2,
                             child: TextFormField(
                               controller: controller.quantityController,
-                              decoration: const InputDecoration(
-                                labelText: 'Quantity',
-                                border: OutlineInputBorder(),
+                              decoration: InputDecoration(
+                                labelText:
+                                    appLocalizations?.quantity ?? 'Quantity',
+                                border: const OutlineInputBorder(),
                               ),
                               keyboardType: TextInputType.number,
                               validator: (value) {
-                                if (value?.isEmpty ?? true) return 'Required';
+                                if (value?.isEmpty ?? true)
+                                  return appLocalizations?.required ??
+                                      'Required';
                                 if (int.tryParse(value!) == null) {
-                                  return 'Invalid number';
+                                  return appLocalizations?.invalidNumber ??
+                                      'Invalid number';
                                 }
                                 return null;
                               },
@@ -122,12 +131,14 @@ class CreateListingScreen extends GetView<ResourcePoolingController> {
                           Expanded(
                             child: TextFormField(
                               controller: controller.unitController,
-                              decoration: const InputDecoration(
-                                labelText: 'Unit',
-                                border: OutlineInputBorder(),
+                              decoration: InputDecoration(
+                                labelText: appLocalizations?.unit ?? 'Unit',
+                                border: const OutlineInputBorder(),
                               ),
                               validator: (value) {
-                                if (value?.isEmpty ?? true) return 'Required';
+                                if (value?.isEmpty ?? true)
+                                  return appLocalizations?.required ??
+                                      'Required';
                                 return null;
                               },
                             ),
@@ -137,22 +148,25 @@ class CreateListingScreen extends GetView<ResourcePoolingController> {
                       const SizedBox(height: 16),
                       TextFormField(
                         controller: controller.priceController,
-                        decoration: const InputDecoration(
-                          labelText: 'Price per unit (₹)',
-                          border: OutlineInputBorder(),
+                        decoration: InputDecoration(
+                          labelText: appLocalizations?.pricePerUnit ??
+                              'Price per unit (₹)',
+                          border: const OutlineInputBorder(),
                         ),
                         keyboardType: TextInputType.number,
                         validator: (value) {
-                          if (value?.isEmpty ?? true) return 'Required';
+                          if (value?.isEmpty ?? true)
+                            return appLocalizations?.required ?? 'Required';
                           if (double.tryParse(value!) == null) {
-                            return 'Invalid price';
+                            return appLocalizations?.invalidPrice ??
+                                'Invalid price';
                           }
                           return null;
                         },
                       ),
                       const SizedBox(height: 24),
                       Text(
-                        'Availability',
+                        appLocalizations?.availability ?? 'Availability',
                         style: theme.textTheme.titleMedium,
                       ),
                       const SizedBox(height: 8),
@@ -163,16 +177,17 @@ class CreateListingScreen extends GetView<ResourcePoolingController> {
                               onTap: () =>
                                   controller.selectAvailableFrom(context),
                               child: InputDecorator(
-                                decoration: const InputDecoration(
-                                  labelText: 'From',
-                                  border: OutlineInputBorder(),
+                                decoration: InputDecoration(
+                                  labelText: appLocalizations?.from ?? 'From',
+                                  border: const OutlineInputBorder(),
                                 ),
                                 child: Obx(
                                   () => Text(
                                     controller.availableFrom.value != null
                                         ? DateFormat('dd MMM yyyy').format(
                                             controller.availableFrom.value!)
-                                        : 'Select Date',
+                                        : appLocalizations?.selectDate ??
+                                            'Select Date',
                                   ),
                                 ),
                               ),
@@ -187,16 +202,18 @@ class CreateListingScreen extends GetView<ResourcePoolingController> {
                                       onTap: () =>
                                           controller.selectAvailableTo(context),
                                       child: InputDecorator(
-                                        decoration: const InputDecoration(
-                                          labelText: 'To',
-                                          border: OutlineInputBorder(),
+                                        decoration: InputDecoration(
+                                          labelText:
+                                              appLocalizations?.to ?? 'To',
+                                          border: const OutlineInputBorder(),
                                         ),
                                         child: Text(
                                           controller.availableTo.value != null
                                               ? DateFormat('dd MMM yyyy')
                                                   .format(controller
                                                       .availableTo.value!)
-                                              : 'Select Date',
+                                              : appLocalizations?.selectDate ??
+                                                  'Select Date',
                                         ),
                                       ),
                                     )
@@ -259,7 +276,8 @@ class CreateListingScreen extends GetView<ResourcePoolingController> {
                     Get.snackbar('Error', 'Failed to create listing');
                   }
                 },
-                child: const Text('Create Listing'),
+                child:
+                    Text(appLocalizations?.createListing ?? 'Create Listing'),
               ),
             ),
           ],

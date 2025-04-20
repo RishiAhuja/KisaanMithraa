@@ -1,5 +1,9 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cropconnect/core/debug/presentation/debug_screen.dart';
+import 'package:cropconnect/core/services/crop/crop_service.dart';
 import 'package:cropconnect/core/services/debug/debug_service.dart';
+import 'package:cropconnect/core/services/hive/hive_storage_service.dart'
+    show UserStorageService;
 import 'package:cropconnect/core/services/locale/locale_service.dart';
 import 'package:cropconnect/core/theme/app_theme.dart';
 import 'package:cropconnect/features/auth/domain/model/user/pending_invite_model.dart';
@@ -24,12 +28,14 @@ import 'package:cropconnect/features/intro/presentation/screens/intro_screen.dar
 import 'package:cropconnect/features/mandi_prices/presentation/screens/mandi_price_screen.dart';
 import 'package:cropconnect/features/notification/presentation/controller/notification_controller.dart';
 import 'package:cropconnect/features/notification/presentation/screen/notifications_screen.dart';
+import 'package:cropconnect/features/onboarding/domain/services/location_service.dart';
 import 'package:cropconnect/features/onboarding/presentation/controller/nearby_cooperatives_controller.dart';
 import 'package:cropconnect/features/onboarding/presentation/screens/nearby_cooperatives_screen.dart';
 import 'package:cropconnect/features/onboarding/presentation/screens/onboarding_screen.dart';
 import 'package:cropconnect/features/podcasts/data/services/podcast_service.dart';
 import 'package:cropconnect/features/podcasts/presentation/screens/podcast_player_screen.dart';
 import 'package:cropconnect/features/podcasts/presentation/screens/podcasts_screen.dart';
+import 'package:cropconnect/features/profile/controller/profile_controller.dart';
 import 'package:cropconnect/features/profile/screens/profile_screen.dart';
 import 'package:cropconnect/features/resource_pooling/presentation/controller/resource_pooling_controller.dart';
 import 'package:cropconnect/features/resource_pooling/presentation/screens/create_listing_screen.dart';
@@ -44,7 +50,6 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-// import 'package:just_audio_background/just_audio_background.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -78,6 +83,15 @@ Future<void> main() async {
   final sharedPreferences = await SharedPreferences.getInstance();
   Get.put<SharedPreferences>(sharedPreferences, permanent: true);
   await Get.putAsync<PodcastService>(() => PodcastService().init());
+  final localeService = Get.put(LocaleService(), permanent: true);
+  await Get.putAsync(() => LocationSelectionService().init());
+  Get.put(CropService(), permanent: true);
+  localeService.loadSavedLocale();
+  final userStorageService = UserStorageService();
+  Get.put(userStorageService, permanent: true);
+  final profileController =
+      ProfileController(userStorageService, FirebaseFirestore.instance);
+  Get.put(profileController, permanent: true);
 
   final binding = AuthBinding();
   binding.dependencies();
@@ -96,7 +110,7 @@ class MyApp extends StatelessWidget {
     return GetX<LocaleService>(
       builder: (_) => GetMaterialApp(
         debugShowCheckedModeBanner: false,
-        title: 'Kisan Mitra',
+        title: 'Kisaan Mitra',
         theme: AppTheme.lightTheme,
         darkTheme: AppTheme.darkTheme,
         themeMode: ThemeMode.light,
@@ -117,7 +131,7 @@ class MyApp extends StatelessWidget {
           GetPage(name: '/auth-choice', page: () => AuthChoiceScreen()),
           GetPage(
             name: '/onboarding',
-            page: () => LanguageSelectionScreen(),
+            page: () => OnboardingScreen(),
           ),
           GetPage(
             name: '/register',

@@ -14,7 +14,6 @@ class PodcastPlayerScreen extends GetView<PodcastController> {
     final theme = Theme.of(context);
     final podcast = Get.arguments as PodcastModel;
 
-    // Use a post-frame callback to play the podcast after the UI is built
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (controller.currentPodcast.value?.id != podcast.id) {
         controller.playPodcast(podcast);
