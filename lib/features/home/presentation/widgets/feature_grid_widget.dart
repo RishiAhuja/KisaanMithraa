@@ -16,7 +16,6 @@ class FeaturesGridWidget extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Section header with a cleaner design
           Padding(
             padding: const EdgeInsets.only(left: 4, right: 4, bottom: 12),
             child: Row(
@@ -62,13 +61,11 @@ class FeaturesGridWidget extends StatelessWidget {
               ],
             ),
           ),
-
-          // Feature cards in a 2x2 layout with optimized cards
           GridView.count(
             crossAxisCount: 2,
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
-            childAspectRatio: 2.0, // Increased to reduce vertical height
+            childAspectRatio: 2.0,
             mainAxisSpacing: 12,
             crossAxisSpacing: 12,
             children: [
@@ -78,7 +75,7 @@ class FeaturesGridWidget extends StatelessWidget {
                 title: localizations.farmerGroups,
                 description: localizations.farmerGroupsDesc,
                 colorKey: 'purple',
-                route: '/cooperatives',
+                route: '/my-cooperatives',
               ),
               _buildFeatureCard(
                 context,
@@ -88,22 +85,22 @@ class FeaturesGridWidget extends StatelessWidget {
                 colorKey: 'green',
                 route: '/podcasts',
               ),
-              _buildFeatureCard(
-                context,
-                icon: Icons.local_shipping_rounded,
-                title: localizations.transport,
-                description: localizations.transportDesc,
-                colorKey: 'orange',
-                route: '/transport',
-              ),
-              _buildFeatureCard(
-                context,
-                icon: Icons.cloud_outlined,
-                title: localizations.weather,
-                description: localizations.weatherDesc,
-                colorKey: 'blue',
-                route: '/weather-details',
-              ),
+              // _buildFeatureCard(
+              //   context,
+              //   icon: Icons.local_shipping_rounded,
+              //   title: localizations.transport,
+              //   description: localizations.transportDesc,
+              //   colorKey: 'orange',
+              //   route: '/transport',
+              // ),
+              // _buildFeatureCard(
+              //   context,
+              //   icon: Icons.cloud_outlined,
+              //   title: localizations.weather,
+              //   description: localizations.weatherDesc,
+              //   colorKey: 'blue',
+              //   route: '/weather-details',
+              // ),
             ],
           ),
         ],

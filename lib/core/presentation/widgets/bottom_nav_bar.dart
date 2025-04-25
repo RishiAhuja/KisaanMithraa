@@ -158,7 +158,7 @@ class BottomNavBar extends StatelessWidget {
                 Get.offAllNamed('/agri-mart');
                 break;
               case 4:
-                // AgriHelp - leave empty for now
+                Get.offAllNamed('/agri-help');
                 break;
             }
           },

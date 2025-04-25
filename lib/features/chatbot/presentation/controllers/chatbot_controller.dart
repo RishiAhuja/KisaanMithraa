@@ -15,6 +15,10 @@ class ChatbotController extends GetxController {
   final isListeningToSpeech = false.obs;
   final isReadingResponse = false.obs;
 
+  // New properties for word highlighting reader
+  final currentHighlightedMessageId = ''.obs;
+  final currentHighlightedWordIndex = (-1).obs;
+
   final Map<String, String> supportedLanguages = {
     'en': 'English',
     'hi': 'हिंदी',
@@ -27,6 +31,7 @@ class ChatbotController extends GetxController {
   void onInit() {
     super.onInit();
     _initializeLanguage();
+    _setupSpeechListeners();
   }
 
   void _initializeLanguage() {
@@ -36,6 +41,27 @@ class ChatbotController extends GetxController {
       currentLanguage.value = savedLocale;
     } else {
       currentLanguage.value = 'en';
+    }
+  }
+
+  void _setupSpeechListeners() {
+    if (Get.isRegistered<SpeechService>()) {
+      final speechService = Get.find<SpeechService>();
+
+      // Listen to speech status to update reading state
+      speechService.volumeController.listen((volume) {
+        isReadingResponse.value = volume > 0;
+
+        // Reset word highlighting when speech stops
+        if (volume <= 0) {
+          currentHighlightedWordIndex.value = -1;
+        }
+      });
+
+      // Listen to word boundary events
+      speechService.wordIndexController.listen((wordIndex) {
+        currentHighlightedWordIndex.value = wordIndex;
+      });
     }
   }
 
@@ -59,6 +85,12 @@ class ChatbotController extends GetxController {
     currentLanguage.value = newLanguage;
     _localeService.changeLocale(newLanguage);
 
+    // Update speech service language
+    if (Get.isRegistered<SpeechService>()) {
+      final speechService = Get.find<SpeechService>();
+      speechService.setLanguage(newLanguage);
+    }
+
     Get.snackbar(
       'Language Changed',
       'Now using ${supportedLanguages[newLanguage]}',
@@ -69,6 +101,9 @@ class ChatbotController extends GetxController {
 
   Future<void> sendMessage(String text) async {
     if (text.trim().isEmpty) return;
+
+    // Stop any ongoing speech when sending a new message
+    stopSpeech();
 
     // Add user message
     messages.add(
@@ -109,7 +144,7 @@ class ChatbotController extends GetxController {
     }
   }
 
-  // New method to process inconsistent response formats
+  // Process inconsistent response formats
   ChatMessageModel _processResponse(ChatMessageModel originalResponse) {
     String processedText = originalResponse.text;
     List<String>? navigations = originalResponse.navigations;
@@ -119,7 +154,6 @@ class ChatbotController extends GetxController {
       if (processedText.trim().startsWith('{') &&
           processedText.trim().endsWith('}')) {
         // Fix JSON formatting issues before parsing
-        // This handles unescaped newlines and other control characters
         String sanitizedJson = _sanitizeJsonString(processedText);
 
         final Map<String, dynamic> parsedJson = json.decode(sanitizedJson);
@@ -211,15 +245,52 @@ class ChatbotController extends GetxController {
     isListeningToSpeech.value = false;
   }
 
+  // Method to read a specific message with word highlighting
+  void readMessageWithHighlighting(String messageId) {
+    if (Get.isRegistered<SpeechService>()) {
+      final speechService = Get.find<SpeechService>();
+      final message = messages.firstWhere(
+        (msg) => msg.id == messageId,
+        orElse: () => ChatMessageModel(
+          id: '',
+          text: '',
+          timestamp: DateTime.now(),
+          isUser: true,
+        ),
+      );
+
+      if (message.id.isNotEmpty && !message.isUser) {
+        // Stop any ongoing speech first
+        speechService.stop();
+
+        // Set the current message being read
+        currentHighlightedMessageId.value = messageId;
+
+        // Start reading with word highlighting
+        speechService.speakWithWordHighlighting(
+          message.text,
+          onWordBoundary: (int wordIndex) {
+            currentHighlightedWordIndex.value = wordIndex;
+          },
+        );
+      }
+    }
+  }
+
   // Method to stop any ongoing speech
   Future<void> stopSpeech() async {
     if (Get.isRegistered<SpeechService>()) {
       final speechService = Get.find<SpeechService>();
       await speechService.stop();
+
       if (isListeningToSpeech.value) {
         await speechService.stopListening();
         isListeningToSpeech.value = false;
       }
+
+      // Reset highlighting
+      currentHighlightedMessageId.value = '';
+      currentHighlightedWordIndex.value = -1;
       isReadingResponse.value = false;
     }
   }
@@ -235,7 +306,7 @@ class ChatbotController extends GetxController {
     super.onClose();
   }
 
-  // Add this helper method to sanitize the JSON string
+  // Helper method to sanitize the JSON string
   String _sanitizeJsonString(String jsonString) {
     // First, let's try to handle the most common case - a JSON string with
     // unescaped newlines and control characters in string values

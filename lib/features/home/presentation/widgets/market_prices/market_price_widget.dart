@@ -6,7 +6,7 @@ import 'package:cropconnect/features/home/presentation/controller/home_controlle
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class MarketPricesWidget extends StatelessWidget {
-  const MarketPricesWidget({Key? key}) : super(key: key);
+  const MarketPricesWidget({super.key});
 
   @override
   Widget build(BuildContext context) {

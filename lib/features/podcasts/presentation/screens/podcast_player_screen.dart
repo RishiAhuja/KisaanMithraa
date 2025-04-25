@@ -176,7 +176,6 @@ class PodcastPlayerScreen extends GetView<PodcastController> {
           return Stack(
             alignment: Alignment.center,
             children: [
-              // Album image
               CachedNetworkImage(
                 imageUrl: podcast.imageUrl,
                 fit: BoxFit.cover,
@@ -195,7 +194,6 @@ class PodcastPlayerScreen extends GetView<PodcastController> {
                 ),
               ),
 
-              // Play/pause animation overlay
               if (isCurrentlyPlaying)
                 Container(
                   decoration: BoxDecoration(
@@ -318,7 +316,6 @@ class PodcastPlayerScreen extends GetView<PodcastController> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          // Skip backward 10 seconds
           IconButton(
             icon: const Icon(Icons.replay_10_rounded, size: 30),
             padding: EdgeInsets.zero,
@@ -332,18 +329,16 @@ class PodcastPlayerScreen extends GetView<PodcastController> {
             },
           ),
 
-          // Previous podcast
           IconButton(
             icon: const Icon(Icons.skip_previous_rounded, size: 32),
             padding: EdgeInsets.zero,
-            constraints: const BoxConstraints(), // Remove default padding
+            constraints: const BoxConstraints(),
             onPressed: controller.playPreviousPodcast,
           ),
 
-          // Play/pause button (slightly larger)
           Container(
-            width: 64, // Reduced from 70
-            height: 64, // Reduced from 70
+            width: 64, 
+            height: 64, 
             decoration: BoxDecoration(
               gradient: LinearGradient(
                 begin: Alignment.topLeft,
@@ -368,18 +363,17 @@ class PodcastPlayerScreen extends GetView<PodcastController> {
                         ? Icons.pause_rounded
                         : Icons.play_arrow_rounded,
                     color: Colors.white,
-                    size: 32, // Slightly reduced
+                    size: 32,
                   ),
                   padding: EdgeInsets.zero,
                   onPressed: controller.togglePlayPause,
                 )),
           ),
 
-          // Next podcast
           IconButton(
             icon: const Icon(Icons.skip_next_rounded, size: 32),
             padding: EdgeInsets.zero,
-            constraints: const BoxConstraints(), // Remove default padding
+            constraints: const BoxConstraints(), 
             onPressed: controller.playNextPodcast,
           ),
 
@@ -387,7 +381,7 @@ class PodcastPlayerScreen extends GetView<PodcastController> {
           IconButton(
             icon: const Icon(Icons.forward_30_rounded, size: 30),
             padding: EdgeInsets.zero,
-            constraints: const BoxConstraints(), // Remove default padding
+            constraints: const BoxConstraints(), 
             onPressed: () {
               controller.seekTo(
                 Duration(

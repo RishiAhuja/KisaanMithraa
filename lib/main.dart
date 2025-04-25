@@ -53,6 +53,7 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'features/agrihelp/presentation/screens/agri_help_screen.dart';
 import 'features/auth/bindings/auth_binding.dart';
 import 'features/auth/domain/model/user/cooperative_membership_model.dart';
 import 'features/cooperative/presentation/controllers/cooperative_details_controller.dart';
@@ -161,6 +162,11 @@ class MyApp extends StatelessWidget {
             name: '/community',
             page: () => const CommunityScreen(),
             binding: CommunityBinding(),
+          ),
+          GetPage(
+            name: '/agri-help',
+            page: () => const AgriHelpScreen(),
+            // binding: AgriHelpBinding(),
           ),
           GetPage(
             name: '/agri-mart',

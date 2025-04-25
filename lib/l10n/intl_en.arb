@@ -272,6 +272,36 @@
   "relatedInfoDesc": "Related information",
   "@relatedInfoDesc": {
     "description": "Description for general related information"
-  }
+  },
 
+  
+    "agriHelp": "Agri Help",
+    "emergencyContacts": "Emergency Contacts",
+    "frequentlyAskedQuestions": "Frequently Asked Questions",
+    "call": "Call",
+    
+    "kisanCallCenter": "Kisan Call Center",
+    "kisanCallCenterDesc": "24x7 helpline for farmers' queries on agriculture and allied sectors",
+    "agriInsuranceHelpline": "Crop Insurance Helpline",
+    "agriInsuranceDesc": "Get help with crop insurance claims and information",
+    "plantProtectionHelpline": "Plant Protection Helpline",
+    "plantProtectionDesc": "Expert advice on pest and disease management",
+    "seedHelpline": "Seed Helpline",
+    "seedHelplineDesc": "Information about quality seeds and seed-related issues",
+    
+    "faqSubsidyQuestion": "How can I apply for agricultural subsidies?",
+    "faqSubsidyAnswer": "To apply for agricultural subsidies, register with your local agriculture office with your land documents, Aadhaar card, and bank account details. You can also apply online through the PM-KISAN portal or your state's agriculture department website. Eligibility varies by scheme.",
+    
+    "faqPestControlQuestion": "What are organic methods to control common pests?",
+    "faqPestControlAnswer": "Effective organic pest control methods include crop rotation, companion planting, and using neem oil spray. You can also introduce beneficial insects like ladybugs, use sticky traps, or apply garlic-chili spray. For specific pests, contact your local agriculture extension office.",
+    
+    "faqSoilHealthQuestion": "How can I improve my soil health naturally?",
+    "faqSoilHealthAnswer": "Improve soil health by adding organic matter like compost and farmyard manure, practicing crop rotation with legumes, using green manures, minimizing tillage, and maintaining proper drainage. Regular soil testing can help identify specific nutrient deficiencies to address.",
+    
+    "faqWeatherImpactQuestion": "How can I protect crops during extreme weather?",
+    "faqWeatherImpactAnswer": "Protect crops during extreme weather by using windbreaks, shade cloths, and mulching. For drought, implement drip irrigation and moisture retention practices. For heavy rains, ensure proper drainage and use raised beds. Consider weather-resistant crop varieties and check weather alerts regularly.",
+    
+    "faqCropInsuranceQuestion": "How does the crop insurance scheme work?",
+    "faqCropInsuranceAnswer": "The Pradhan Mantri Fasal Bima Yojana (PMFBY) provides financial support to farmers suffering crop loss. Premium rates are 2% for kharif crops, 1.5% for rabi crops, and 5% for commercial crops. Register at your bank or Common Service Centre with land records and premium payment. Claims are assessed based on crop cutting experiments."
+  
   }

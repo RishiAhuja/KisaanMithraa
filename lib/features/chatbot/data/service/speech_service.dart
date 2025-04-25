@@ -20,6 +20,12 @@ class SpeechService extends GetxService {
   final RxBool isSpeaking = false.obs;
   final RxBool isInitialized = false.obs;
 
+  final RxBool isPaused = false.obs;
+  String _lastSpokenText = '';
+  final StreamController<int> _wordIndexController =
+      StreamController<int>.broadcast();
+  Stream<int> get wordIndexController => _wordIndexController.stream;
+
   // Stream for volume levels that will drive the animation
   final _volumeStreamController = StreamController<double>.broadcast();
   Stream<double> get volumeStream => _volumeStreamController.stream;
@@ -41,6 +47,87 @@ class SpeechService extends GetxService {
     'hi': 'hi-IN',
     'pa': 'pa-IN',
   };
+
+  Future<void> speakWithWordHighlighting(
+    String text, {
+    Function(int wordIndex)? onWordBoundary,
+  }) async {
+    if (text.isEmpty) return;
+
+    if (isListening.value) {
+      await stopListening();
+    }
+
+    // If already speaking, stop first
+    if (isSpeaking.value && !isPaused.value) {
+      await stop();
+    }
+
+    _lastSpokenText = text;
+    isPaused.value = false;
+
+    // Set up progress handler if not already set
+    flutterTts.setProgressHandler(
+        (String text, int startOffset, int endOffset, String word) {
+      if (word.isNotEmpty) {
+        // Save position for potential resume
+        // Estimate the word index based on position
+        final wordIndex = _estimateWordIndex(text, startOffset);
+        _wordIndexController.add(wordIndex);
+      }
+    });
+
+    isSpeaking.value = true;
+    _startVolumeSimulation();
+    await flutterTts.speak(text);
+  }
+
+  Future<void> pause() async {
+    if (isSpeaking.value && !isPaused.value) {
+      isPaused.value = true;
+      await flutterTts.stop();
+      // Lower volume but don't stop simulation completely
+      _volumeStreamController.add(0.2);
+    }
+  }
+
+// Add this method to resume speech
+  Future<void> resume() async {
+    if (isPaused.value) {
+      isPaused.value = false;
+      // Start from the beginning since many TTS engines don't support resuming
+      isSpeaking.value = true;
+      // You can try to start from the last known word, but this is not perfect
+      await flutterTts.speak(_lastSpokenText);
+      _startVolumeSimulation();
+    }
+  }
+
+// Add this helper method to estimate word index
+  int _estimateWordIndex(String text, int position) {
+    if (position <= 0) return 0;
+
+    // Extract words up to the position
+    String textUpToPosition = text.substring(0, position);
+    List<String> wordsUpToPosition = _extractWords(textUpToPosition);
+
+    return wordsUpToPosition.length - 1;
+  }
+
+// Add this helper method to extract words
+  List<String> _extractWords(String text) {
+    final cleanText = text.replaceAll('\n', ' ').replaceAll('\r', ' ');
+    final List<String> words = [];
+
+    final RegExp wordRegex = RegExp(r'[^\s]+');
+    final matches = wordRegex.allMatches(cleanText);
+
+    for (final match in matches) {
+      words.add(match.group(0) ?? '');
+    }
+
+    return words;
+  }
 
   // Initialize TTS and STT
   Future<void> initializeSpeech() async {
@@ -163,9 +250,11 @@ class SpeechService extends GetxService {
   Future<void> stop() async {
     if (isSpeaking.value) {
       isSpeaking.value = false;
+      isPaused.value = false;
       await flutterTts.stop();
       _stopVolumeSimulation();
       _volumeStreamController.add(0.0);
+      _wordIndexController.add(-1);
     }
   }
 
@@ -303,5 +392,6 @@ class SpeechService extends GetxService {
     speech.stop();
     _stopVolumeSimulation();
     _volumeStreamController.close();
+    _wordIndexController.close();
   }
 }
