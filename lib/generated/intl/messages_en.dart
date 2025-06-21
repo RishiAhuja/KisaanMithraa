@@ -28,19 +28,22 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static String m3(count) => "${count} Nearby Cooperatives";
 
-  static String m4(count) => "Offers (${count})";
+  static String m4(district, state) =>
+      "No price data available for ${district} in ${state}";
 
-  static String m5(name) => "Posted by ${name}";
+  static String m5(count) => "Offers (${count})";
 
-  static String m6(date) => "Posted on ${date}";
+  static String m6(name) => "Posted by ${name}";
 
-  static String m7(price, unit) => "₹${price}/${unit}";
+  static String m7(date) => "Posted on ${date}";
 
-  static String m8(price, unit) => "₹${price} per ${unit}";
+  static String m8(price, unit) => "₹${price}/${unit}";
 
-  static String m9(quantity, unit) => "${quantity} ${unit}";
+  static String m9(price, unit) => "₹${price} per ${unit}";
 
-  static String m10(quantity, unit) => "Quantity: ${quantity} ${unit}";
+  static String m10(quantity, unit) => "${quantity} ${unit}";
+
+  static String m11(quantity, unit) => "Quantity: ${quantity} ${unit}";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
@@ -52,7 +55,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "Add crops to your watchlist to see them here",
     ),
     "admin": MessageLookupByLibrary.simpleMessage("Admin"),
-    "agriHelp": MessageLookupByLibrary.simpleMessage("Agri Help"),
+    "agriHelp": MessageLookupByLibrary.simpleMessage("AgriHelp"),
     "agriInsuranceDesc": MessageLookupByLibrary.simpleMessage(
       "Get help with crop insurance claims and information",
     ),
@@ -60,6 +63,8 @@ class MessageLookup extends MessageLookupByLibrary {
       "Crop Insurance Helpline",
     ),
     "aiFarmingTips": MessageLookupByLibrary.simpleMessage("AI Farming Tips"),
+    "aiMitra": MessageLookupByLibrary.simpleMessage("AI Mitra"),
+    "allPrices": MessageLookupByLibrary.simpleMessage("All Prices"),
     "allServices": MessageLookupByLibrary.simpleMessage("All Services"),
     "appTitle": MessageLookupByLibrary.simpleMessage("Kisan Mitra"),
     "applyNow": MessageLookupByLibrary.simpleMessage("Apply Now"),
@@ -76,6 +81,7 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "availableFrom": MessageLookupByLibrary.simpleMessage("Available from"),
     "availableUntil": MessageLookupByLibrary.simpleMessage("Available until"),
+    "averagePrice": MessageLookupByLibrary.simpleMessage("Average Price"),
     "bestCrops": MessageLookupByLibrary.simpleMessage(
       "Best crops for this season",
     ),
@@ -251,6 +257,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "gettingTips": MessageLookupByLibrary.simpleMessage(
       "Getting farming tips...",
     ),
+    "goToAllPrices": MessageLookupByLibrary.simpleMessage("Go to All Prices"),
     "goToHome": MessageLookupByLibrary.simpleMessage("Go to Home"),
     "goToMarketplace": MessageLookupByLibrary.simpleMessage(
       "Go to Marketplace",
@@ -262,6 +269,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "Heavy rain expected in next 3 days, secure your wheat crop",
     ),
     "helpDesk": MessageLookupByLibrary.simpleMessage("Help Desk"),
+    "home": MessageLookupByLibrary.simpleMessage("Home"),
     "info": MessageLookupByLibrary.simpleMessage("Info"),
     "initializing": MessageLookupByLibrary.simpleMessage("Initializing..."),
     "invalidDataFormat": MessageLookupByLibrary.simpleMessage(
@@ -282,6 +290,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "24x7 helpline for farmers\' queries on agriculture and allied sectors",
     ),
     "kmAway": m2,
+    "lastUpdated": MessageLookupByLibrary.simpleMessage("Last updated"),
     "learnMore": MessageLookupByLibrary.simpleMessage("Learn More"),
     "listenAndLearn": MessageLookupByLibrary.simpleMessage(
       "Listen and learn about farming",
@@ -295,6 +304,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "loadingCooperatives": MessageLookupByLibrary.simpleMessage(
       "Loading your cooperatives...",
     ),
+    "loadingPrices": MessageLookupByLibrary.simpleMessage("Loading prices..."),
     "loadingProfile": MessageLookupByLibrary.simpleMessage(
       "Loading your profile...",
     ),
@@ -303,6 +313,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "locationNotSet": MessageLookupByLibrary.simpleMessage("Location not set"),
     "makeOffer": MessageLookupByLibrary.simpleMessage("Make Offer"),
     "manage": MessageLookupByLibrary.simpleMessage("Manage"),
+    "mandiPrices": MessageLookupByLibrary.simpleMessage("Mandi Prices"),
     "marketPrices": MessageLookupByLibrary.simpleMessage("Market Prices"),
     "marketplaceDesc": MessageLookupByLibrary.simpleMessage(
       "Buy and sell farm products",
@@ -355,6 +366,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "noPodcastsAvailable": MessageLookupByLibrary.simpleMessage(
       "No podcasts available",
     ),
+    "noPriceDataAvailable": m4,
     "noResultsFound": MessageLookupByLibrary.simpleMessage("No results found"),
     "noTipsAvailable": MessageLookupByLibrary.simpleMessage(
       "No tips available. Tap refresh to try again.",
@@ -362,7 +374,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "notSpecified": MessageLookupByLibrary.simpleMessage("Not specified"),
     "notifications": MessageLookupByLibrary.simpleMessage("Notifications"),
     "nowPlaying": MessageLookupByLibrary.simpleMessage("Now Playing"),
-    "offerCount": m4,
+    "offerCount": m5,
     "offerStatus": MessageLookupByLibrary.simpleMessage("Offer Status"),
     "offerSubmittedSuccess": MessageLookupByLibrary.simpleMessage(
       "Offer submitted successfully",
@@ -417,18 +429,26 @@ class MessageLookup extends MessageLookupByLibrary {
       "Listen to farming tips and news",
     ),
     "popularPodcasts": MessageLookupByLibrary.simpleMessage("Popular Podcasts"),
-    "postedBy": m5,
-    "postedOn": m6,
+    "postedBy": m6,
+    "postedOn": m7,
     "pricePerUnit": MessageLookupByLibrary.simpleMessage("Price per unit (₹)"),
-    "pricePerUnitWithUnit": m7,
-    "priceValue": m8,
+    "pricePerUnitWithUnit": m8,
+    "priceRange": MessageLookupByLibrary.simpleMessage("Price Range"),
+    "priceValue": m9,
+    "pricesAsOfToday": MessageLookupByLibrary.simpleMessage(
+      "Prices as of today",
+    ),
+    "pricesInRupees": MessageLookupByLibrary.simpleMessage(
+      "Prices in ₹/Quintal",
+    ),
     "priorityAlerts": MessageLookupByLibrary.simpleMessage("Priority Alerts"),
     "quantity": MessageLookupByLibrary.simpleMessage("Quantity"),
-    "quantityValue": m9,
-    "quantityWithUnit": m10,
+    "quantityValue": m10,
+    "quantityWithUnit": m11,
     "quickAccess": MessageLookupByLibrary.simpleMessage("Quick Access"),
     "recognized": MessageLookupByLibrary.simpleMessage("Recognized: \""),
     "refresh": MessageLookupByLibrary.simpleMessage("Refresh"),
+    "refreshPrices": MessageLookupByLibrary.simpleMessage("Refresh Prices"),
     "relatedContent": MessageLookupByLibrary.simpleMessage("Related Content:"),
     "relatedInfoDesc": MessageLookupByLibrary.simpleMessage(
       "Related information",
@@ -461,6 +481,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "selectImageSource": MessageLookupByLibrary.simpleMessage(
       "Select Image Source",
     ),
+    "selectMarket": MessageLookupByLibrary.simpleMessage("Select Market"),
     "selectMembers": MessageLookupByLibrary.simpleMessage("Select Members"),
     "serviceUnavailable": MessageLookupByLibrary.simpleMessage(
       "Service temporarily unavailable",
@@ -484,6 +505,9 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "speechRecognitionError": MessageLookupByLibrary.simpleMessage(
       "Speech recognition error",
+    ),
+    "starYourFavoriteCrops": MessageLookupByLibrary.simpleMessage(
+      "Star your favorite crops to add them here",
     ),
     "startSpeaking": MessageLookupByLibrary.simpleMessage("Start Speaking"),
     "startYourCooperative": MessageLookupByLibrary.simpleMessage(
@@ -540,12 +564,19 @@ class MessageLookup extends MessageLookupByLibrary {
       "User account is disabled",
     ),
     "userNotFound": MessageLookupByLibrary.simpleMessage("User not found"),
+    "usingCachedData": MessageLookupByLibrary.simpleMessage(
+      "Using cached data",
+    ),
     "verify": MessageLookupByLibrary.simpleMessage("Verify"),
     "viewAll": MessageLookupByLibrary.simpleMessage("View all"),
     "viewAllPrices": MessageLookupByLibrary.simpleMessage("View All Prices"),
     "viewOnMap": MessageLookupByLibrary.simpleMessage("View on Map"),
     "viewTips": MessageLookupByLibrary.simpleMessage("View Tips"),
     "warning": MessageLookupByLibrary.simpleMessage("Warning"),
+    "watchlist": MessageLookupByLibrary.simpleMessage("Watchlist"),
+    "watchlistShowsPrices": MessageLookupByLibrary.simpleMessage(
+      "Your watchlist shows prices for your starred items from all markets",
+    ),
     "waterConservation": MessageLookupByLibrary.simpleMessage(
       "Water conservation",
     ),
@@ -610,5 +641,8 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "wrongPassword": MessageLookupByLibrary.simpleMessage("Wrong password"),
     "yourWatchlist": MessageLookupByLibrary.simpleMessage("Your Watchlist"),
+    "yourWatchlistIsEmpty": MessageLookupByLibrary.simpleMessage(
+      "Your watchlist is empty",
+    ),
   };
 }

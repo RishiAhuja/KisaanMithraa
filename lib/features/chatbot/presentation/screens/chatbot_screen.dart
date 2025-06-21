@@ -1,4 +1,5 @@
 import 'package:cropconnect/core/presentation/widgets/common_app_bar.dart';
+import 'package:cropconnect/core/constants/localization_standards.dart';
 import 'package:cropconnect/features/chatbot/data/service/speech_service.dart';
 import 'package:cropconnect/features/chatbot/presentation/controllers/chatbot_controller.dart';
 import 'package:cropconnect/features/chatbot/presentation/widgets/chat_bubble.dart';
@@ -67,14 +68,14 @@ class ChatbotScreen extends GetView<ChatbotController> {
 
   @override
   Widget build(BuildContext context) {
-    final appLocalizations = AppLocalizations.of(context);
+    final appLocalizations = LocalizationStandards.getLocalizations(context);
     final theme = Theme.of(context);
 
     return Scaffold(
       extendBody: true,
       backgroundColor: theme.colorScheme.background,
       appBar: ChatAppBar(
-        title: appLocalizations?.chatbotTitle ?? 'Kisaan Mithraa',
+        title: appLocalizations.chatbotTitle,
         isOnline: _isServiceReady.value,
         onResetPressed: () => controller.resetConversation(),
       ),
@@ -137,7 +138,7 @@ class ChatbotScreen extends GetView<ChatbotController> {
   }
 
   Widget _buildEmptyState(BuildContext context) {
-    final appLocalizations = AppLocalizations.of(context);
+    final appLocalizations = LocalizationStandards.getLocalizations(context);
     final theme = Theme.of(context);
 
     return Center(
@@ -149,7 +150,7 @@ class ChatbotScreen extends GetView<ChatbotController> {
             _buildEmptyStateIcon(theme),
             const SizedBox(height: 20),
             Text(
-              appLocalizations?.farmingAssistant ?? 'Your Farming Assistant',
+              appLocalizations.farmingAssistant,
               style: theme.textTheme.headlineSmall?.copyWith(
                 fontWeight: FontWeight.bold,
                 color: theme.colorScheme.primary,
@@ -158,7 +159,7 @@ class ChatbotScreen extends GetView<ChatbotController> {
             ),
             const SizedBox(height: 8),
             Text(
-              appLocalizations?.askAnything ?? 'Ask me anything about farming',
+              appLocalizations.askAnything,
               textAlign: TextAlign.center,
               style: theme.textTheme.bodyMedium?.copyWith(
                 color: theme.colorScheme.onSurface.withOpacity(0.7),
@@ -217,7 +218,7 @@ class ChatbotScreen extends GetView<ChatbotController> {
   }
 
   Widget _buildSpeakButton(BuildContext context,
-      AppLocalizations? appLocalizations, ThemeData theme) {
+      AppLocalizations appLocalizations, ThemeData theme) {
     return Obx(() => ElevatedButton.icon(
           icon: Icon(
             Icons.mic_rounded,
@@ -226,8 +227,8 @@ class ChatbotScreen extends GetView<ChatbotController> {
           ),
           label: Text(
             _isServiceReady.value
-                ? appLocalizations?.startSpeaking ?? 'Start Speaking'
-                : appLocalizations?.initializing ?? 'Initializing...',
+                ? appLocalizations.startSpeaking
+                : appLocalizations.initializing,
             style: Theme.of(context).textTheme.labelLarge?.copyWith(
                   color: Colors.white,
                   fontWeight: FontWeight.w600,
@@ -248,17 +249,14 @@ class ChatbotScreen extends GetView<ChatbotController> {
   }
 
   Widget _buildSuggestedQuestions(BuildContext context) {
-    final appLocalizations = AppLocalizations.of(context);
+    final appLocalizations = LocalizationStandards.getLocalizations(context);
     final theme = Theme.of(context);
 
     final questions = [
-      appLocalizations?.bestCropsQuestion ??
-          'What are the best crops to plant this season?',
-      appLocalizations?.pestControlQuestion ??
-          'How can I deal with common pests?',
-      appLocalizations?.waterConservationQuestion ??
-          'How can I conserve water?',
-      appLocalizations?.organicFarmingQuestion ?? 'Tips for organic farming?',
+      appLocalizations.bestCropsQuestion,
+      appLocalizations.pestControlQuestion,
+      appLocalizations.waterConservationQuestion,
+      appLocalizations.organicFarmingQuestion,
     ];
 
     final icons = [
@@ -285,7 +283,7 @@ class ChatbotScreen extends GetView<ChatbotController> {
               ),
               const SizedBox(width: 6),
               Text(
-                appLocalizations?.suggestedQuestions ?? 'Try asking:',
+                appLocalizations.suggestedQuestions,
                 style: theme.textTheme.labelLarge?.copyWith(
                   fontWeight: FontWeight.w600,
                   fontSize: 13,
@@ -363,13 +361,12 @@ class ChatbotScreen extends GetView<ChatbotController> {
   }
 
   void _startSpeechRecognition(BuildContext context) async {
-    final appLocalizations = AppLocalizations.of(context);
+    final appLocalizations = LocalizationStandards.getLocalizations(context);
 
     if (!_isServiceReady.value) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text(appLocalizations?.speechInitializing ??
-              'Speech recognition is initializing. Please wait...'),
+          content: Text(appLocalizations.speechInitializing),
           behavior: SnackBarBehavior.floating,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(10),
@@ -394,8 +391,7 @@ class ChatbotScreen extends GetView<ChatbotController> {
       controller.isListeningToSpeech.value = false;
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text(
-              '${appLocalizations?.speechError ?? 'Speech recognition error: '}${e.toString()}'),
+          content: Text('${appLocalizations.speechError}${e.toString()}'),
           duration: const Duration(seconds: 3),
           behavior: SnackBarBehavior.floating,
           shape: RoundedRectangleBorder(
@@ -407,25 +403,21 @@ class ChatbotScreen extends GetView<ChatbotController> {
   }
 
   Widget _buildSuggestionsBar(BuildContext context) {
-    final appLocalizations = AppLocalizations.of(context);
+    final appLocalizations = LocalizationStandards.getLocalizations(context);
 
     final suggestions = [
       QuickSuggestion(
-          label: appLocalizations?.bestCrops ?? 'Best crops for this season',
-          question: appLocalizations?.bestCropsQuestion ??
-              'What are the best crops to plant this season?'),
+          label: appLocalizations.bestCrops,
+          question: appLocalizations.bestCropsQuestion),
       QuickSuggestion(
-          label: appLocalizations?.pestControl ?? 'Pest control tips',
-          question: appLocalizations?.pestControlQuestion ??
-              'How can I deal with common pests?'),
+          label: appLocalizations.pestControl,
+          question: appLocalizations.pestControlQuestion),
       QuickSuggestion(
-          label: appLocalizations?.waterConservation ?? 'Water conservation',
-          question: appLocalizations?.waterConservationQuestion ??
-              'How can I conserve water?'),
+          label: appLocalizations.waterConservation,
+          question: appLocalizations.waterConservationQuestion),
       QuickSuggestion(
-          label: appLocalizations?.organicFarming ?? 'Organic farming',
-          question: appLocalizations?.organicFarmingQuestion ??
-              'Tips for organic farming?'),
+          label: appLocalizations.organicFarming,
+          question: appLocalizations.organicFarmingQuestion),
     ];
 
     return Container(
@@ -448,7 +440,7 @@ class ChatbotScreen extends GetView<ChatbotController> {
   }
 
   Widget _buildInputField(BuildContext context) {
-    final appLocalizations = AppLocalizations.of(context);
+    final appLocalizations = LocalizationStandards.getLocalizations(context);
     final theme = Theme.of(context);
     final primaryColor = theme.colorScheme.primary;
 
@@ -502,8 +494,7 @@ class ChatbotScreen extends GetView<ChatbotController> {
                 ),
                 decoration: InputDecoration(
                   isDense: true,
-                  hintText: appLocalizations?.askFarmingQuestion ??
-                      'Ask anything about farming...',
+                  hintText: appLocalizations.askFarmingQuestion,
                   hintStyle: TextStyle(
                     color: Colors.grey.shade400,
                     fontWeight: FontWeight.w400,

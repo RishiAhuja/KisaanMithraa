@@ -1,6 +1,14 @@
 {
     "@@locale": "en",
     "appTitle": "Kisan Mitra",
+    
+    "@BottomNavBar": {},
+    "home": "Home",
+    "community": "Community", 
+    "aiMitra": "AI Mitra",
+    "mandiPrices": "Mandi Prices",
+    "agriHelp": "AgriHelp",
+    
     "welcome": "Welcome back,",
     "createCooperative": "Create Cooperative",
     "personalInfo": "Personal Information",
@@ -35,7 +43,6 @@
     "viewTips": "View Tips",
     "chooseLanguage": "Choose Your Language",
     
-    "community": "Community",
     "farmers": "Farmers",
     "cooperatives": "Cooperatives",
     "search": "Search...",
@@ -192,7 +199,6 @@
     "resourcesDesc": "Farming guides and resources",
     "relatedInfoDesc": "Related information",
     
-    "agriHelp": "Agri Help",
     "emergencyContacts": "Emergency Contacts",
     "frequentlyAskedQuestions": "Frequently Asked Questions",
     "call": "Call",
@@ -316,5 +322,33 @@
     "removeMember": "Remove Member",
     "noResultsFound": "No results found",
     "viewAllPrices": "View All Prices",
-    "share": "Share"
+    "share": "Share",
+    "@MandiPricesScreen": {},
+    "refreshPrices": "Refresh Prices",
+    "allPrices": "All Prices", 
+    "watchlist": "Watchlist",
+    "tryAgain": "Try Again",
+    "yourWatchlistIsEmpty": "Your watchlist is empty",
+    "starYourFavoriteCrops": "Star your favorite crops to add them here",
+    "goToAllPrices": "Go to All Prices",
+    "usingCachedData": "Using cached data",
+    "pricesAsOfToday": "Prices as of today",
+    "pricesInRupees": "Prices in ₹/Quintal",
+    "noPriceDataAvailable": "No price data available for {district} in {state}",
+    "@noPriceDataAvailable": {
+        "placeholders": {
+            "district": {
+                "type": "String"
+            },
+            "state": {
+                "type": "String"
+            }
+        }
+    },
+    "watchlistShowsPrices": "Your watchlist shows prices for your starred items from all markets",
+    "loadingPrices": "Loading prices...",
+    "selectMarket": "Select Market",
+    "lastUpdated": "Last updated",
+    "priceRange": "Price Range",
+    "averagePrice": "Average Price"
 }

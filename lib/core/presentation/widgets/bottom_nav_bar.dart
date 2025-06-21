@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:cropconnect/core/theme/app_colors.dart';
+import 'package:cropconnect/core/constants/localization_standards.dart';
 
 class BottomNavBar extends StatelessWidget {
   final int currentIndex;
@@ -10,65 +11,62 @@ class BottomNavBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final appLocalizations = LocalizationStandards.getLocalizations(context);
     final bottomPadding = MediaQuery.of(context).padding.bottom;
 
     return Container(
       width: double.infinity,
-      height: 85 + bottomPadding,
-      padding: EdgeInsets.only(bottom: bottomPadding),
+      height: 90 + bottomPadding,
+      padding: EdgeInsets.only(bottom: bottomPadding + 8),
       decoration: BoxDecoration(
         color: theme.colorScheme.surface,
         boxShadow: [
           BoxShadow(
-            color: AppColors.shadow.withOpacity(0.08),
-            blurRadius: 20,
-            offset: const Offset(0, -5),
-            spreadRadius: 5,
+            color: Colors.black.withOpacity(0.1),
+            blurRadius: 16,
+            offset: const Offset(0, -4),
           ),
         ],
         borderRadius: const BorderRadius.only(
-          topLeft: Radius.circular(30),
-          topRight: Radius.circular(30),
-        ),
-        border: Border.all(
-          color: Colors.grey.withOpacity(0.05),
-          width: 1.5,
+          topLeft: Radius.circular(24),
+          topRight: Radius.circular(24),
         ),
       ),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           _buildNavItem(
             context: context,
             index: 0,
             icon: Icons.home_outlined,
             activeIcon: Icons.home_rounded,
-            label: 'Home',
+            label: appLocalizations.home,
             isSelected: currentIndex == 0,
           ),
           _buildNavItem(
             context: context,
             index: 1,
-            icon: Icons.group_outlined,
-            activeIcon: Icons.group_rounded,
-            label: 'Community',
+            icon: Icons.people_outline_rounded,
+            activeIcon: Icons.people_rounded,
+            label: appLocalizations.cooperatives,
             isSelected: currentIndex == 1,
           ),
-          _buildCenterNavItem(context),
+          _buildCenterNavItem(context, appLocalizations),
           _buildNavItem(
             context: context,
             index: 3,
-            icon: Icons.store_mall_directory_outlined,
-            activeIcon: Icons.store_mall_directory_rounded,
-            label: 'AgriMart',
+            icon: Icons.storefront_outlined,
+            activeIcon: Icons.storefront_rounded,
+            label: appLocalizations.mandiPrices,
             isSelected: currentIndex == 3,
           ),
           _buildNavItem(
             context: context,
             index: 4,
-            icon: Icons.support_outlined,
-            activeIcon: Icons.support_rounded,
-            label: 'AgriHelp',
+            icon: Icons.support_agent_outlined,
+            activeIcon: Icons.support_agent_rounded,
+            label: appLocalizations.agriHelp,
             isSelected: currentIndex == 4,
           ),
         ],
@@ -76,54 +74,54 @@ class BottomNavBar extends StatelessWidget {
     );
   }
 
-  Widget _buildCenterNavItem(BuildContext context) {
+  Widget _buildCenterNavItem(BuildContext context, appLocalizations) {
     final theme = Theme.of(context);
 
     return Expanded(
       child: GestureDetector(
         onTap: () {
-          Get.toNamed('/chatbot');
+          HapticFeedback.mediumImpact();
+          if (currentIndex != 2) {
+            Get.offAllNamed('/chatbot');
+          }
         },
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Container(
-              height: 56,
-              width: 56,
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                  colors: [
-                    theme.colorScheme.primary,
-                    theme.colorScheme.primary,
+        child: Container(
+          padding: const EdgeInsets.only(top: 4, bottom: 12),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Container(
+                height: 46,
+                width: 46,
+                decoration: BoxDecoration(
+                  color: theme.colorScheme.primary,
+                  shape: BoxShape.circle,
+                  boxShadow: [
+                    BoxShadow(
+                      color: theme.colorScheme.primary.withOpacity(0.3),
+                      blurRadius: 8,
+                      offset: const Offset(0, 3),
+                    ),
                   ],
                 ),
-                shape: BoxShape.circle,
-                boxShadow: [
-                  BoxShadow(
-                    color: theme.colorScheme.primary.withOpacity(0.3),
-                    blurRadius: 12,
-                    offset: const Offset(0, 4),
-                  ),
-                ],
+                child: Icon(
+                  Icons.smart_toy_rounded,
+                  color: Colors.white,
+                  size: 22,
+                ),
               ),
-              child: const Icon(
-                Icons.smart_toy,
-                color: Colors.white,
-                size: 26,
+              const SizedBox(height: 3),
+              Text(
+                appLocalizations.aiMitra,
+                style: TextStyle(
+                  color: theme.colorScheme.primary,
+                  fontWeight: FontWeight.w600,
+                  fontSize: 10,
+                ),
               ),
-            ),
-            const SizedBox(height: 4),
-            Text(
-              'AI Mitra',
-              style: TextStyle(
-                color: theme.colorScheme.primary,
-                fontWeight: FontWeight.bold,
-                fontSize: 12,
-              ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
@@ -144,37 +142,12 @@ class BottomNavBar extends StatelessWidget {
         color: Colors.transparent,
         child: InkWell(
           onTap: () {
-            switch (index) {
-              case 0:
-                Get.offAllNamed('/home');
-                break;
-              case 1:
-                Get.offAllNamed('/my-cooperatives');
-                break;
-              case 2:
-                Get.offAllNamed('/chatbot');
-                break;
-              case 3:
-                Get.offAllNamed('/agri-mart');
-                break;
-              case 4:
-                Get.offAllNamed('/agri-help');
-                break;
-            }
+            HapticFeedback.lightImpact();
+            _navigateToPage(index);
           },
-          customBorder: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(20),
-          ),
-          child: AnimatedContainer(
-            duration: const Duration(milliseconds: 200),
-            margin: const EdgeInsets.symmetric(horizontal: 4, vertical: 8),
-            padding: const EdgeInsets.symmetric(vertical: 6),
-            decoration: BoxDecoration(
-              color: isSelected
-                  ? theme.colorScheme.primary.withOpacity(0)
-                  : Colors.transparent,
-              borderRadius: BorderRadius.circular(20),
-            ),
+          borderRadius: BorderRadius.circular(16),
+          child: Container(
+            padding: const EdgeInsets.symmetric(vertical: 10),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               mainAxisSize: MainAxisSize.min,
@@ -190,13 +163,15 @@ class BottomNavBar extends StatelessWidget {
                 Text(
                   label,
                   textAlign: TextAlign.center,
-                  style: theme.textTheme.labelSmall?.copyWith(
-                      color: isSelected
-                          ? theme.colorScheme.primary
-                          : theme.colorScheme.onSurface.withOpacity(0.6),
-                      fontWeight:
-                          isSelected ? FontWeight.bold : FontWeight.w500,
-                      fontSize: 9),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                    color: isSelected
+                        ? theme.colorScheme.primary
+                        : theme.colorScheme.onSurface.withOpacity(0.6),
+                    fontWeight: isSelected ? FontWeight.w600 : FontWeight.w500,
+                    fontSize: 10,
+                  ),
                 ),
               ],
             ),
@@ -204,5 +179,28 @@ class BottomNavBar extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  void _navigateToPage(int index) {
+    // Prevent navigation if already on the current page
+    if (currentIndex == index) return;
+
+    switch (index) {
+      case 0:
+        Get.offAllNamed('/home');
+        break;
+      case 1:
+        Get.offAllNamed('/my-cooperatives');
+        break;
+      case 2:
+        Get.offAllNamed('/chatbot');
+        break;
+      case 3:
+        Get.offAllNamed('/agri-mart');
+        break;
+      case 4:
+        Get.offAllNamed('/agri-help');
+        break;
+    }
   }
 }

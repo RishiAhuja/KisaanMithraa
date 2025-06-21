@@ -1,3 +1,4 @@
+import 'package:cropconnect/core/theme/app_colors.dart';
 import 'package:cropconnect/features/mandi_prices/presentation/controllers/mandi_price_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:cropconnect/features/mandi_prices/data/models/crop_price_model.dart';
@@ -48,7 +49,7 @@ class PriceCard extends StatelessWidget {
                         width: 56,
                         height: 56,
                         decoration: BoxDecoration(
-                          color: theme.colorScheme.primary.withOpacity(0.1),
+                          color: AppColors.primaryLight.withOpacity(0.1),
                           borderRadius: BorderRadius.circular(12),
                         ),
                         child: Center(
@@ -68,9 +69,9 @@ class PriceCard extends StatelessWidget {
                             // Crop name
                             Text(
                               cropPrice.commodity,
-                              style: const TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 16,
+                              style: theme.textTheme.titleSmall?.copyWith(
+                                fontWeight: FontWeight.w600,
+                                color: AppColors.textPrimary,
                               ),
                             ),
                             const SizedBox(height: 4),
@@ -81,15 +82,14 @@ class PriceCard extends StatelessWidget {
                                 Icon(
                                   Icons.store_rounded,
                                   size: 12,
-                                  color: Colors.grey[600],
+                                  color: AppColors.textSecondary,
                                 ),
                                 const SizedBox(width: 4),
                                 Expanded(
                                   child: Text(
                                     cropPrice.market,
-                                    style: TextStyle(
-                                      fontSize: 13,
-                                      color: Colors.grey[700],
+                                    style: theme.textTheme.labelSmall?.copyWith(
+                                      color: AppColors.textSecondary,
                                       fontWeight: FontWeight.w500,
                                     ),
                                     maxLines: 1,
@@ -105,9 +105,8 @@ class PriceCard extends StatelessWidget {
                               cropPrice.variety == 'Other'
                                   ? 'General Variety'
                                   : cropPrice.variety,
-                              style: TextStyle(
-                                fontSize: 12,
-                                color: Colors.grey[600],
+                              style: theme.textTheme.labelSmall?.copyWith(
+                                color: AppColors.textSecondary,
                               ),
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
@@ -121,10 +120,9 @@ class PriceCard extends StatelessWidget {
                               children: [
                                 Text(
                                   '₹${cropPrice.modalPrice.toStringAsFixed(0)}',
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 20,
-                                    color: theme.colorScheme.primary,
+                                  style: theme.textTheme.titleMedium?.copyWith(
+                                    fontWeight: FontWeight.w600,
+                                    color: AppColors.primary,
                                   ),
                                 ),
                                 const SizedBox(width: 4),
@@ -132,9 +130,8 @@ class PriceCard extends StatelessWidget {
                                   padding: const EdgeInsets.only(bottom: 2),
                                   child: Text(
                                     '/qtl',
-                                    style: TextStyle(
-                                      color: Colors.grey[600],
-                                      fontSize: 12,
+                                    style: theme.textTheme.labelSmall?.copyWith(
+                                      color: AppColors.textSecondary,
                                     ),
                                   ),
                                 ),
@@ -147,14 +144,13 @@ class PriceCard extends StatelessWidget {
                                     vertical: 2,
                                   ),
                                   decoration: BoxDecoration(
-                                    color: Colors.grey[100],
+                                    color: AppColors.backgroundSecondary,
                                     borderRadius: BorderRadius.circular(6),
                                   ),
                                   child: Text(
                                     '₹${cropPrice.minPrice.toStringAsFixed(0)} - ₹${cropPrice.maxPrice.toStringAsFixed(0)}',
-                                    style: TextStyle(
-                                      fontSize: 11,
-                                      color: Colors.grey[700],
+                                    style: theme.textTheme.labelSmall?.copyWith(
+                                      color: AppColors.textSecondary,
                                       fontWeight: FontWeight.w500,
                                     ),
                                   ),
@@ -186,8 +182,8 @@ class PriceCard extends StatelessWidget {
                           padding: const EdgeInsets.all(10),
                           decoration: BoxDecoration(
                             color: isInWatchlist
-                                ? Colors.amber.withOpacity(0.1)
-                                : Colors.grey[50],
+                                ? AppColors.secondary.withOpacity(0.1)
+                                : AppColors.backgroundSecondary,
                             borderRadius: const BorderRadius.only(
                               bottomLeft: Radius.circular(12),
                               topRight: Radius.circular(16),
@@ -198,8 +194,8 @@ class PriceCard extends StatelessWidget {
                                 ? Icons.star_rounded
                                 : Icons.star_border_rounded,
                             color: isInWatchlist
-                                ? Colors.amber[700]
-                                : Colors.grey[400],
+                                ? AppColors.secondary
+                                : AppColors.textSecondary,
                             size: 20,
                           ),
                         ),
@@ -278,7 +274,7 @@ class PriceCard extends StatelessWidget {
                   Container(
                     padding: const EdgeInsets.all(16),
                     decoration: BoxDecoration(
-                      color: theme.colorScheme.primary.withOpacity(0.1),
+                      color: AppColors.primaryLight.withOpacity(0.1),
                       shape: BoxShape.circle,
                     ),
                     child: Text(
@@ -293,9 +289,9 @@ class PriceCard extends StatelessWidget {
                       children: [
                         Text(
                           cropPrice.commodity,
-                          style: const TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 22,
+                          style: theme.textTheme.headlineSmall?.copyWith(
+                            fontWeight: FontWeight.w600,
+                            color: AppColors.textPrimary,
                           ),
                         ),
                         const SizedBox(height: 4),
@@ -304,7 +300,7 @@ class PriceCard extends StatelessWidget {
                             Icon(
                               Icons.store_rounded,
                               size: 16,
-                              color: Colors.grey[600],
+                              color: AppColors.textSecondary,
                             ),
                             const SizedBox(width: 6),
                             Expanded(
@@ -334,8 +330,8 @@ class PriceCard extends StatelessWidget {
                           padding: const EdgeInsets.all(12),
                           decoration: BoxDecoration(
                             color: isInWatchlist
-                                ? Colors.amber.withOpacity(0.1)
-                                : Colors.grey[100],
+                                ? AppColors.secondary.withOpacity(0.1)
+                                : AppColors.backgroundSecondary,
                             shape: BoxShape.circle,
                           ),
                           child: Icon(
@@ -343,8 +339,8 @@ class PriceCard extends StatelessWidget {
                                 ? Icons.star_rounded
                                 : Icons.star_border_rounded,
                             color: isInWatchlist
-                                ? Colors.amber[700]
-                                : Colors.grey[500],
+                                ? AppColors.secondary
+                                : AppColors.textSecondary,
                             size: 26,
                           ),
                         ),

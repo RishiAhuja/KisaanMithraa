@@ -5,11 +5,10 @@ import 'package:cropconnect/features/cooperative/domain/models/cooperative_model
 // import 'package:cropconnect/features/cooperative/presentation/screens/cooperative_map_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import '../../../../core/presentation/widgets/bottom_nav_bar.dart';
 import '../../../../core/presentation/widgets/common_app_bar.dart';
 import '../controllers/community_controller.dart';
 import 'package:get/get.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:cropconnect/core/constants/localization_standards.dart';
 
 class CommunityScreen extends GetView<CommunityController> {
   const CommunityScreen({Key? key}) : super(key: key);
@@ -17,11 +16,11 @@ class CommunityScreen extends GetView<CommunityController> {
   @override
   Widget build(BuildContext context) {
     // final theme = Theme.of(context);
-    final appLocalizations = AppLocalizations.of(context);
+    final appLocalizations = LocalizationStandards.getLocalizations(context);
 
     return Scaffold(
       appBar: CommonAppBar(
-        title: appLocalizations?.community ?? 'Community',
+        title: appLocalizations.community,
         showBottomBorder: false,
       ),
       body: Column(
@@ -72,7 +71,7 @@ class CommunityScreen extends GetView<CommunityController> {
                           ButtonSegment<SearchType>(
                             value: SearchType.farmers,
                             label: Text(
-                              appLocalizations?.farmers ?? 'Farmers',
+                              appLocalizations.farmers,
                               style: TextStyle(
                                 fontWeight: FontWeight.w600,
                                 fontSize: 15,
@@ -83,7 +82,7 @@ class CommunityScreen extends GetView<CommunityController> {
                           ButtonSegment<SearchType>(
                             value: SearchType.cooperatives,
                             label: Text(
-                              appLocalizations?.cooperatives ?? 'Cooperatives',
+                              appLocalizations.cooperatives,
                               style: TextStyle(
                                 fontWeight: FontWeight.w600,
                                 fontSize: 15,
@@ -105,7 +104,7 @@ class CommunityScreen extends GetView<CommunityController> {
                   child: TextField(
                     onChanged: controller.updateSearchQuery,
                     decoration: InputDecoration(
-                      hintText: appLocalizations?.search ?? 'Search...',
+                      hintText: appLocalizations.search,
                       prefixIcon: const Icon(Icons.search),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),
@@ -129,7 +128,6 @@ class CommunityScreen extends GetView<CommunityController> {
           ),
         ],
       ),
-      bottomNavigationBar: const BottomNavBar(currentIndex: 1),
     );
   }
 
@@ -258,7 +256,7 @@ class CommunityScreen extends GetView<CommunityController> {
 
   void _showFarmerDetails(BuildContext context, UserModel farmer) {
     final theme = Theme.of(context);
-    final appLocalizations = AppLocalizations.of(context);
+    final appLocalizations = LocalizationStandards.getLocalizations(context);
 
     Get.bottomSheet(
       Container(
@@ -297,7 +295,7 @@ class CommunityScreen extends GetView<CommunityController> {
                           ),
                         ),
                         Text(
-                          '${appLocalizations?.memberSince ?? 'Member since'} ${_formatDate(farmer.createdAt)}',
+                          '${appLocalizations.memberSince} ${_formatDate(farmer.createdAt)}',
                           style: theme.textTheme.bodySmall?.copyWith(
                             color: theme.colorScheme.onSurfaceVariant,
                           ),
@@ -310,29 +308,25 @@ class CommunityScreen extends GetView<CommunityController> {
               const SizedBox(height: 24),
 
               // Contact Information
-              _buildSectionTitle(
-                  theme,
-                  appLocalizations?.contactInformation ??
-                      'Contact Information'),
+              _buildSectionTitle(theme, appLocalizations.contactInformation),
               const SizedBox(height: 8),
               _buildDetailItem(
                 theme,
                 Icons.phone,
-                appLocalizations?.phone ?? 'Phone',
+                appLocalizations.phone,
                 farmer.phoneNumber,
               ),
               const SizedBox(height: 24),
 
               // Location Information
               if (farmer.state != null || farmer.city != null) ...[
-                _buildSectionTitle(
-                    theme, appLocalizations?.location ?? 'Location'),
+                _buildSectionTitle(theme, appLocalizations.location),
                 const SizedBox(height: 8),
                 if (farmer.city != null)
                   _buildDetailItem(
                     theme,
                     Icons.location_city,
-                    appLocalizations?.city ?? 'City',
+                    appLocalizations.city,
                     farmer.city!,
                   ),
                 if (farmer.state != null) ...[
@@ -340,7 +334,7 @@ class CommunityScreen extends GetView<CommunityController> {
                   _buildDetailItem(
                     theme,
                     Icons.map,
-                    appLocalizations?.state ?? 'State',
+                    appLocalizations.state,
                     farmer.state!,
                   ),
                 ],
@@ -348,21 +342,20 @@ class CommunityScreen extends GetView<CommunityController> {
               ],
 
               // Farming Details
-              _buildSectionTitle(
-                  theme, appLocalizations?.farmingDetails ?? 'Farming Details'),
+              _buildSectionTitle(theme, appLocalizations.farmingDetails),
               const SizedBox(height: 8),
               if (farmer.soilType != null)
                 _buildDetailItem(
                   theme,
                   Icons.landscape,
-                  appLocalizations?.soilType ?? 'Soil Type',
+                  appLocalizations.soilType,
                   farmer.soilType!,
                 ),
 
               // Crops Section
               if (farmer.crops != null && farmer.crops!.isNotEmpty) ...[
                 const SizedBox(height: 16),
-                _buildSectionTitle(theme, appLocalizations?.crops ?? 'Crops'),
+                _buildSectionTitle(theme, appLocalizations.crops),
                 const SizedBox(height: 8),
                 Wrap(
                   spacing: 8,
@@ -390,15 +383,13 @@ class CommunityScreen extends GetView<CommunityController> {
                   onPressed: () {
                     // TODO: Implement messaging functionality
                     Get.snackbar(
-                      appLocalizations?.comingSoon ?? 'Coming Soon',
-                      appLocalizations?.messagingFeature ??
-                          'Messaging feature will be available soon!',
+                      appLocalizations.comingSoon,
+                      appLocalizations.messagingFeature,
                       snackPosition: SnackPosition.BOTTOM,
                     );
                   },
                   icon: const Icon(Icons.message_rounded),
-                  label:
-                      Text(appLocalizations?.messageUser ?? 'Message Farmer'),
+                  label: Text(appLocalizations.messageUser),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: theme.colorScheme.primary,
                     foregroundColor: Colors.white,
@@ -423,7 +414,7 @@ class CommunityScreen extends GetView<CommunityController> {
   void _showCooperativeDetails(
       BuildContext context, CooperativeModel cooperative) {
     final theme = Theme.of(context);
-    final appLocalizations = AppLocalizations.of(context);
+    final appLocalizations = LocalizationStandards.getLocalizations(context);
 
     Get.bottomSheet(
       Container(
@@ -462,7 +453,7 @@ class CommunityScreen extends GetView<CommunityController> {
                           ),
                         ),
                         Text(
-                          '${appLocalizations?.memberSince ?? 'Created'} ${_formatDate(cooperative.createdAt)}',
+                          '${appLocalizations.memberSince} ${_formatDate(cooperative.createdAt)}',
                           style: theme.textTheme.bodySmall?.copyWith(
                             color: theme.colorScheme.onSurfaceVariant,
                           ),
@@ -476,7 +467,7 @@ class CommunityScreen extends GetView<CommunityController> {
 
               // Description section
               if (cooperative.description?.isNotEmpty ?? false) ...[
-                _buildSectionTitle(theme, appLocalizations?.about ?? 'About'),
+                _buildSectionTitle(theme, appLocalizations.about),
                 const SizedBox(height: 8),
                 Text(
                   cooperative.description!,
@@ -486,32 +477,30 @@ class CommunityScreen extends GetView<CommunityController> {
               ],
 
               // Location section
-              _buildSectionTitle(
-                  theme, appLocalizations?.location ?? 'Location'),
+              _buildSectionTitle(theme, appLocalizations.location),
               const SizedBox(height: 8),
               _buildDetailItem(
                 theme,
                 Icons.location_on,
-                appLocalizations?.location ?? 'Address',
+                appLocalizations.location,
                 cooperative.location,
               ),
               const SizedBox(height: 8),
 
               // Members section
-              _buildSectionTitle(
-                  theme, appLocalizations?.memberSince ?? 'Membership'),
+              _buildSectionTitle(theme, appLocalizations.memberSince),
               const SizedBox(height: 8),
               _buildDetailItem(
                 theme,
                 Icons.group,
-                appLocalizations?.totalMembers ?? 'Total Members',
+                appLocalizations.totalMembers,
                 cooperative.members.length.toString(),
               ),
               const SizedBox(height: 8),
               _buildDetailItem(
                 theme,
                 Icons.admin_panel_settings,
-                appLocalizations?.admin ?? 'Admin',
+                appLocalizations.admin,
                 cooperative.createdBy,
               ),
               const SizedBox(height: 32),
@@ -543,8 +532,7 @@ class CommunityScreen extends GetView<CommunityController> {
                                 ),
                               )
                             : Text(
-                                appLocalizations?.joinCooperative ??
-                                    'Join Cooperative',
+                                appLocalizations.joinCooperative,
                                 style: theme.textTheme.labelLarge?.copyWith(
                                   color: Colors.white,
                                   fontWeight: FontWeight.bold,

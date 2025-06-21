@@ -81,7 +81,7 @@ class MyCooperativesScreen extends GetView<MyCooperativesController> {
                     children: [
                       _buildMyCooperativesTab(
                           theme, context, tabController, appLocalizations),
-                      _buildSuggestedCooperativesTab(theme),
+                      _buildSuggestedCooperativesTab(theme, appLocalizations),
                     ],
                   ),
                 ),
@@ -134,7 +134,7 @@ class MyCooperativesScreen extends GetView<MyCooperativesController> {
                     tabController.animateTo(1);
                   },
                   icon: const Icon(Icons.explore, size: 18),
-                  label: const Text('Explore Nearby Cooperatives'),
+                  label: Text(appLocalizations.exploreNearbyCooperatives),
                   style: OutlinedButton.styleFrom(
                     foregroundColor: theme.colorScheme.primary,
                     padding: const EdgeInsets.symmetric(
@@ -177,7 +177,8 @@ class MyCooperativesScreen extends GetView<MyCooperativesController> {
     });
   }
 
-  Widget _buildSuggestedCooperativesTab(ThemeData theme) {
+  Widget _buildSuggestedCooperativesTab(
+      ThemeData theme, AppLocalizations appLocalizations) {
     final searchCtrl = Get.put(CooperativeSearchController());
 
     return LayoutBuilder(
@@ -280,7 +281,7 @@ class MyCooperativesScreen extends GetView<MyCooperativesController> {
                                   ),
                                 ),
                                 child: Text(
-                                  'Tap on markers to see cooperative details',
+                                  appLocalizations.tapOnMarkers,
                                   style: theme.textTheme.bodySmall?.copyWith(
                                     color: Colors.white,
                                     fontWeight: FontWeight.w500,
@@ -311,7 +312,7 @@ class MyCooperativesScreen extends GetView<MyCooperativesController> {
                                       MainAxisAlignment.spaceBetween,
                                   children: [
                                     Text(
-                                      'Cooperatives Near You',
+                                      appLocalizations.cooperativesNearYou,
                                       style:
                                           theme.textTheme.titleSmall?.copyWith(
                                         color: Colors.white,
@@ -353,7 +354,8 @@ class MyCooperativesScreen extends GetView<MyCooperativesController> {
                       child: TextField(
                         controller: searchCtrl.searchController,
                         decoration: InputDecoration(
-                          hintText: 'Search cooperatives by name or location',
+                          hintText:
+                              appLocalizations.searchCooperativesByLocation,
                           hintStyle: TextStyle(color: Colors.grey.shade400),
                           prefixIcon: Icon(Icons.search,
                               color: theme.colorScheme.primary),
@@ -468,8 +470,9 @@ class MyCooperativesScreen extends GetView<MyCooperativesController> {
                               const SizedBox(height: 16),
                               Text(
                                 searchCtrl.hasSearched.value
-                                    ? 'No cooperatives found'
-                                    : 'No nearby cooperatives found',
+                                    ? appLocalizations.noCooperativesFound
+                                    : appLocalizations
+                                        .noNearbyCooperativesFound,
                                 style: theme.textTheme.titleMedium,
                               ),
                               const SizedBox(height: 8),
@@ -478,8 +481,8 @@ class MyCooperativesScreen extends GetView<MyCooperativesController> {
                                     const EdgeInsets.symmetric(horizontal: 32),
                                 child: Text(
                                   searchCtrl.hasSearched.value
-                                      ? 'Try a different search term'
-                                      : 'There are no cooperatives within 5km of your current location',
+                                      ? appLocalizations.tryDifferentSearchTerm
+                                      : appLocalizations.noCooperativesInRange,
                                   textAlign: TextAlign.center,
                                   style: theme.textTheme.bodyMedium?.copyWith(
                                     color: Colors.grey[600],
@@ -500,7 +503,8 @@ class MyCooperativesScreen extends GetView<MyCooperativesController> {
                                         borderRadius: BorderRadius.circular(8),
                                       ),
                                     ),
-                                    child: Text('Show Nearby Cooperatives'),
+                                    child: Text(appLocalizations
+                                        .showNearbyCooperatives),
                                   ),
                                 ),
                             ],

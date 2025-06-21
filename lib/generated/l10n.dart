@@ -60,6 +60,36 @@ class S {
     return Intl.message('Kisan Mitra', name: 'appTitle', desc: '', args: []);
   }
 
+  /// `Home`
+  String get home {
+    return Intl.message('Home', name: 'home', desc: '', args: []);
+  }
+
+  /// `Community`
+  String get community {
+    return Intl.message('Community', name: 'community', desc: '', args: []);
+  }
+
+  /// `AI Mitra`
+  String get aiMitra {
+    return Intl.message('AI Mitra', name: 'aiMitra', desc: '', args: []);
+  }
+
+  /// `Mandi Prices`
+  String get mandiPrices {
+    return Intl.message(
+      'Mandi Prices',
+      name: 'mandiPrices',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `AgriHelp`
+  String get agriHelp {
+    return Intl.message('AgriHelp', name: 'agriHelp', desc: '', args: []);
+  }
+
   /// `Welcome back,`
   String get welcome {
     return Intl.message('Welcome back,', name: 'welcome', desc: '', args: []);
@@ -348,11 +378,6 @@ class S {
       desc: '',
       args: [],
     );
-  }
-
-  /// `Community`
-  String get community {
-    return Intl.message('Community', name: 'community', desc: '', args: []);
   }
 
   /// `Farmers`
@@ -1600,11 +1625,6 @@ class S {
     );
   }
 
-  /// `Agri Help`
-  String get agriHelp {
-    return Intl.message('Agri Help', name: 'agriHelp', desc: '', args: []);
-  }
-
   /// `Emergency Contacts`
   String get emergencyContacts {
     return Intl.message(
@@ -2608,6 +2628,151 @@ class S {
   /// `Share`
   String get share {
     return Intl.message('Share', name: 'share', desc: '', args: []);
+  }
+
+  /// `Refresh Prices`
+  String get refreshPrices {
+    return Intl.message(
+      'Refresh Prices',
+      name: 'refreshPrices',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `All Prices`
+  String get allPrices {
+    return Intl.message('All Prices', name: 'allPrices', desc: '', args: []);
+  }
+
+  /// `Watchlist`
+  String get watchlist {
+    return Intl.message('Watchlist', name: 'watchlist', desc: '', args: []);
+  }
+
+  /// `Your watchlist is empty`
+  String get yourWatchlistIsEmpty {
+    return Intl.message(
+      'Your watchlist is empty',
+      name: 'yourWatchlistIsEmpty',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Star your favorite crops to add them here`
+  String get starYourFavoriteCrops {
+    return Intl.message(
+      'Star your favorite crops to add them here',
+      name: 'starYourFavoriteCrops',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Go to All Prices`
+  String get goToAllPrices {
+    return Intl.message(
+      'Go to All Prices',
+      name: 'goToAllPrices',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Using cached data`
+  String get usingCachedData {
+    return Intl.message(
+      'Using cached data',
+      name: 'usingCachedData',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Prices as of today`
+  String get pricesAsOfToday {
+    return Intl.message(
+      'Prices as of today',
+      name: 'pricesAsOfToday',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Prices in ₹/Quintal`
+  String get pricesInRupees {
+    return Intl.message(
+      'Prices in ₹/Quintal',
+      name: 'pricesInRupees',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No price data available for {district} in {state}`
+  String noPriceDataAvailable(String district, String state) {
+    return Intl.message(
+      'No price data available for $district in $state',
+      name: 'noPriceDataAvailable',
+      desc: '',
+      args: [district, state],
+    );
+  }
+
+  /// `Your watchlist shows prices for your starred items from all markets`
+  String get watchlistShowsPrices {
+    return Intl.message(
+      'Your watchlist shows prices for your starred items from all markets',
+      name: 'watchlistShowsPrices',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Loading prices...`
+  String get loadingPrices {
+    return Intl.message(
+      'Loading prices...',
+      name: 'loadingPrices',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Select Market`
+  String get selectMarket {
+    return Intl.message(
+      'Select Market',
+      name: 'selectMarket',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Last updated`
+  String get lastUpdated {
+    return Intl.message(
+      'Last updated',
+      name: 'lastUpdated',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Price Range`
+  String get priceRange {
+    return Intl.message('Price Range', name: 'priceRange', desc: '', args: []);
+  }
+
+  /// `Average Price`
+  String get averagePrice {
+    return Intl.message(
+      'Average Price',
+      name: 'averagePrice',
+      desc: '',
+      args: [],
+    );
   }
 }
 

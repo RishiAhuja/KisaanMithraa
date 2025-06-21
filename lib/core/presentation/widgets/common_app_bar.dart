@@ -86,7 +86,7 @@ class CommonAppBar extends StatelessWidget implements PreferredSizeWidget {
       elevation: elevation,
       shadowColor: Colors.black.withOpacity(0.08),
       centerTitle: centerTitle,
-      titleSpacing: showBackButton || leading != null ? 12 : 16,
+      titleSpacing: showBackButton || leading != null ? 24 : 32,
       toolbarHeight: customHeight ?? kToolbarHeight,
 
       // Leading widget
@@ -329,7 +329,7 @@ class FormAppBar extends CommonAppBar {
 
     return Container(
       height: 36,
-      padding: const EdgeInsets.symmetric(horizontal: 16),
+      padding: const EdgeInsets.symmetric(horizontal: 24),
       decoration: BoxDecoration(
         color: theme.colorScheme.primary,
         borderRadius: BorderRadius.circular(18),

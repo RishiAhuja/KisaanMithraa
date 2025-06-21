@@ -6,6 +6,7 @@ import 'package:cropconnect/features/agrihelp/presentation/widgets/emergency_con
 import 'package:cropconnect/features/agrihelp/presentation/widgets/faq_item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:cropconnect/core/constants/localization_standards.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class AgriHelpScreen extends StatelessWidget {
@@ -13,29 +14,31 @@ class AgriHelpScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final localizations = AppLocalizations.of(context)!;
+    final appLocalizations = LocalizationStandards.getLocalizations(context);
 
     return Scaffold(
       appBar: CommonAppBar(
-        title: localizations.agriHelp,
+        title: appLocalizations.agriHelp,
         showBackButton: false,
       ),
       body: ListView(
         padding: const EdgeInsets.all(16),
         children: [
           // Emergency Section
-          _buildSectionHeader(context, localizations.emergencyContacts,
+          _buildSectionHeader(context, appLocalizations.emergencyContacts,
               Icons.emergency_outlined),
           const SizedBox(height: 12),
-          _buildEmergencyContactsList(context, localizations),
+          _buildEmergencyContactsList(context, appLocalizations),
 
           const SizedBox(height: 24),
 
           // FAQ Section
-          _buildSectionHeader(context, localizations.frequentlyAskedQuestions,
+          _buildSectionHeader(
+              context,
+              appLocalizations.frequentlyAskedQuestions,
               Icons.question_answer_outlined),
           const SizedBox(height: 12),
-          _buildFAQList(context, localizations),
+          _buildFAQList(context, appLocalizations),
         ],
       ),
       bottomNavigationBar: const BottomNavBar(currentIndex: 4),
@@ -72,9 +75,9 @@ class AgriHelpScreen extends StatelessWidget {
   }
 
   Widget _buildEmergencyContactsList(
-      BuildContext context, AppLocalizations localizations) {
+      BuildContext context, AppLocalizations appLocalizations) {
     // Get localized emergency contacts
-    final contacts = _getEmergencyContacts(localizations);
+    final contacts = _getEmergencyContacts(appLocalizations);
 
     return ListView.builder(
       shrinkWrap: true,
@@ -89,9 +92,10 @@ class AgriHelpScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildFAQList(BuildContext context, AppLocalizations localizations) {
+  Widget _buildFAQList(
+      BuildContext context, AppLocalizations appLocalizations) {
     // Get localized FAQs
-    final faqs = _getFAQs(localizations);
+    final faqs = _getFAQs(appLocalizations);
 
     return ListView.builder(
       shrinkWrap: true,
@@ -104,69 +108,69 @@ class AgriHelpScreen extends StatelessWidget {
   }
 
   List<EmergencyContactModel> _getEmergencyContacts(
-      AppLocalizations localizations) {
+      AppLocalizations appLocalizations) {
     return [
       EmergencyContactModel(
         id: 'kisan-call-center',
-        name: localizations.kisanCallCenter,
+        name: appLocalizations.kisanCallCenter,
         phoneNumber: '1800-180-1551',
-        description: localizations.kisanCallCenterDesc,
+        description: appLocalizations.kisanCallCenterDesc,
         iconName: 'phone',
       ),
       EmergencyContactModel(
         id: 'agri-insurance',
-        name: localizations.agriInsuranceHelpline,
+        name: appLocalizations.agriInsuranceHelpline,
         phoneNumber: '1800-11-6666',
-        description: localizations.agriInsuranceDesc,
+        description: appLocalizations.agriInsuranceDesc,
         iconName: 'insurance',
       ),
       EmergencyContactModel(
         id: 'plant-protection',
-        name: localizations.plantProtectionHelpline,
+        name: appLocalizations.plantProtectionHelpline,
         phoneNumber: '1800-425-1429',
-        description: localizations.plantProtectionDesc,
+        description: appLocalizations.plantProtectionDesc,
         iconName: 'plant',
       ),
       EmergencyContactModel(
         id: 'seed-helpline',
-        name: localizations.seedHelpline,
+        name: appLocalizations.seedHelpline,
         phoneNumber: '1800-11-1128',
-        description: localizations.seedHelplineDesc,
+        description: appLocalizations.seedHelplineDesc,
         iconName: 'seed',
       ),
     ];
   }
 
-  List<FAQModel> _getFAQs(AppLocalizations localizations) {
+  List<FAQModel> _getFAQs(AppLocalizations appLocalizations) {
     return [
       FAQModel(
         id: 'faq1',
-        question: localizations.faqSubsidyQuestion,
-        answer: localizations.faqSubsidyAnswer,
+        question: appLocalizations.faqSubsidyQuestion,
+        answer: appLocalizations.faqSubsidyAnswer,
         category: 'finance',
       ),
       FAQModel(
         id: 'faq2',
-        question: localizations.faqPestControlQuestion,
-        answer: localizations.faqPestControlAnswer,
+        question: appLocalizations.faqPestControlQuestion,
+        answer: appLocalizations.faqPestControlAnswer,
         category: 'pest',
       ),
       FAQModel(
         id: 'faq3',
-        question: localizations.faqSoilHealthQuestion,
-        answer: localizations.faqSoilHealthAnswer,
+        question: appLocalizations.faqSoilHealthQuestion,
+        answer: appLocalizations.faqSoilHealthAnswer,
         category: 'soil',
       ),
       FAQModel(
         id: 'faq4',
-        question: localizations.faqWeatherImpactQuestion,
-        answer: localizations.faqWeatherImpactAnswer,
+        question: appLocalizations.faqWeatherImpactQuestion,
+        answer: appLocalizations.faqWeatherImpactAnswer,
         category: 'weather',
       ),
       FAQModel(
         id: 'faq5',
-        question: localizations.faqCropInsuranceQuestion,
-        answer: localizations.faqCropInsuranceAnswer,
+        question: appLocalizations.faqCropInsuranceQuestion,
+        answer: appLocalizations.faqCropInsuranceAnswer,
         category: 'finance',
       ),
     ];
