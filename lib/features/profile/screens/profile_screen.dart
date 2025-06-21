@@ -1,5 +1,6 @@
 // profile_screen.dart
 import 'package:cropconnect/core/presentation/widgets/bottom_nav_bar.dart';
+import 'package:cropconnect/core/presentation/widgets/common_app_bar.dart';
 import 'package:cropconnect/features/auth/domain/model/user/user_model.dart';
 import 'package:cropconnect/features/profile/controller/profile_controller.dart';
 import 'package:flutter/material.dart';
@@ -15,14 +16,10 @@ class ProfileScreen extends GetView<ProfileController> {
     final localeService = Get.find<LocaleService>();
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Profile',
-            style: theme.textTheme.titleLarge
-                ?.copyWith(fontWeight: FontWeight.bold)),
-        centerTitle: true,
-        elevation: 0,
-        backgroundColor: theme.colorScheme.surface,
-        actions: [
+      appBar: CommonAppBar(
+        title: 'Profile',
+        showProfileIcon: false, // Don't show profile icon on profile screen
+        customActions: [
           Obx(() => IconButton(
                 icon: Icon(
                     controller.isEditMode.value ? Icons.close : Icons.edit),

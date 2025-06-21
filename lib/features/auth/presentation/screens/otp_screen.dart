@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pinput/pinput.dart';
+import 'package:cropconnect/core/presentation/widgets/common_app_bar.dart';
 import '../controllers/auth_controller.dart';
 
 class OTPScreen extends GetView<AuthController> {
@@ -11,13 +12,10 @@ class OTPScreen extends GetView<AuthController> {
   Widget build(BuildContext context) {
     final TextEditingController pinController = TextEditingController();
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.black),
-          onPressed: () => Get.back(),
-        ),
+      appBar: CommonAppBar(
+        title: 'Verify Phone',
+        showNotificationIcon: false,
+        showProfileIcon: false,
       ),
       body: SafeArea(
         child: Padding(
@@ -25,11 +23,6 @@ class OTPScreen extends GetView<AuthController> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              Text(
-                'Verify Phone',
-                style: Theme.of(context).textTheme.headlineMedium,
-              ),
-              const SizedBox(height: 8),
               Text(
                 'Enter the code sent to ${controller.phoneNumber.value}',
                 style: Theme.of(context).textTheme.bodyLarge?.copyWith(

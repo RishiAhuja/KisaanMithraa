@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cropconnect/core/theme/app_colors.dart';
+import 'package:cropconnect/core/presentation/widgets/common_app_bar.dart';
 import 'package:cropconnect/features/podcasts/domain/model/podcast_model.dart';
 import 'package:cropconnect/features/podcasts/presentation/controllers/podcast_controller.dart';
 import 'package:audio_video_progress_bar/audio_video_progress_bar.dart';
@@ -22,11 +23,13 @@ class PodcastPlayerScreen extends GetView<PodcastController> {
 
     return Scaffold(
       backgroundColor: theme.colorScheme.background,
+      appBar: CommonAppBar(
+        title: "Now Playing",
+      ),
       body: SafeArea(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            _buildAppBar(context),
             Expanded(
               child: SingleChildScrollView(
                 physics: const BouncingScrollPhysics(),
@@ -60,92 +63,6 @@ class PodcastPlayerScreen extends GetView<PodcastController> {
             ),
           ],
         ),
-      ),
-    );
-  }
-
-  Widget _buildAppBar(BuildContext context) {
-    final theme = Theme.of(context);
-
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(8, 8, 16, 8),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          IconButton(
-            onPressed: () => Get.back(),
-            icon: Container(
-              padding: const EdgeInsets.all(8),
-              decoration: BoxDecoration(
-                color: theme.colorScheme.background,
-                borderRadius: BorderRadius.circular(12),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withOpacity(0.1),
-                    blurRadius: 8,
-                    offset: const Offset(0, 2),
-                  ),
-                ],
-              ),
-              child: Icon(
-                Icons.arrow_back_rounded,
-                color: theme.colorScheme.onBackground,
-              ),
-            ),
-          ),
-          Text(
-            "Now Playing",
-            style: theme.textTheme.titleMedium?.copyWith(
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          IconButton(
-            onPressed: () {
-              // Show options menu
-              Get.bottomSheet(
-                Container(
-                  padding: const EdgeInsets.all(24),
-                  decoration: BoxDecoration(
-                    color: theme.colorScheme.surface,
-                    borderRadius: const BorderRadius.vertical(
-                      top: Radius.circular(24),
-                    ),
-                  ),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      ListTile(
-                        leading: Icon(Icons.share_rounded),
-                        title: Text('Share'),
-                        onTap: () {
-                          Get.back();
-                          // Share functionality
-                        },
-                      ),
-                      ListTile(
-                        leading: Icon(Icons.download_rounded),
-                        title: Text('Download'),
-                        onTap: () {
-                          Get.back();
-                          // Download functionality
-                        },
-                      ),
-                      ListTile(
-                        leading: Icon(Icons.report_problem_rounded),
-                        title: Text('Report issue'),
-                        onTap: () {
-                          Get.back();
-                          // Report functionality
-                        },
-                      ),
-                    ],
-                  ),
-                ),
-              );
-            },
-            icon: Icon(Icons.more_vert_rounded),
-          ),
-        ],
       ),
     );
   }
@@ -193,7 +110,6 @@ class PodcastPlayerScreen extends GetView<PodcastController> {
                   ),
                 ),
               ),
-
               if (isCurrentlyPlaying)
                 Container(
                   decoration: BoxDecoration(
@@ -337,8 +253,8 @@ class PodcastPlayerScreen extends GetView<PodcastController> {
           ),
 
           Container(
-            width: 64, 
-            height: 64, 
+            width: 64,
+            height: 64,
             decoration: BoxDecoration(
               gradient: LinearGradient(
                 begin: Alignment.topLeft,
@@ -373,7 +289,7 @@ class PodcastPlayerScreen extends GetView<PodcastController> {
           IconButton(
             icon: const Icon(Icons.skip_next_rounded, size: 32),
             padding: EdgeInsets.zero,
-            constraints: const BoxConstraints(), 
+            constraints: const BoxConstraints(),
             onPressed: controller.playNextPodcast,
           ),
 
@@ -381,7 +297,7 @@ class PodcastPlayerScreen extends GetView<PodcastController> {
           IconButton(
             icon: const Icon(Icons.forward_30_rounded, size: 30),
             padding: EdgeInsets.zero,
-            constraints: const BoxConstraints(), 
+            constraints: const BoxConstraints(),
             onPressed: () {
               controller.seekTo(
                 Duration(

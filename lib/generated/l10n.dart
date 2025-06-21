@@ -980,10 +980,10 @@ class S {
     );
   }
 
-  /// `Cannot accept offer: Invalid offer ID`
+  /// `Cannot accept offer`
   String get cannotAcceptOffer {
     return Intl.message(
-      'Cannot accept offer: Invalid offer ID',
+      'Cannot accept offer',
       name: 'cannotAcceptOffer',
       desc: '',
       args: [],
@@ -1815,6 +1815,471 @@ class S {
     return Intl.message(
       'The Pradhan Mantri Fasal Bima Yojana (PMFBY) provides financial support to farmers suffering crop loss. Premium rates are 2% for kharif crops, 1.5% for rabi crops, and 5% for commercial crops. Register at your bank or Common Service Centre with land records and premium payment. Claims are assessed based on crop cutting experiments.',
       name: 'faqCropInsuranceAnswer',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Loading your profile...`
+  String get loadingProfile {
+    return Intl.message(
+      'Loading your profile...',
+      name: 'loadingProfile',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Could not load profile`
+  String get couldNotLoadProfile {
+    return Intl.message(
+      'Could not load profile',
+      name: 'couldNotLoadProfile',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Please try again`
+  String get pleaseRetryAgain {
+    return Intl.message(
+      'Please try again',
+      name: 'pleaseRetryAgain',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Apply Now`
+  String get applyNow {
+    return Intl.message('Apply Now', name: 'applyNow', desc: '', args: []);
+  }
+
+  /// `No podcasts available`
+  String get noPodcastsAvailable {
+    return Intl.message(
+      'No podcasts available',
+      name: 'noPodcastsAvailable',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Check back later for new farming podcasts`
+  String get checkBackLater {
+    return Intl.message(
+      'Check back later for new farming podcasts',
+      name: 'checkBackLater',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Popular Podcasts`
+  String get popularPodcasts {
+    return Intl.message(
+      'Popular Podcasts',
+      name: 'popularPodcasts',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `New Releases`
+  String get newReleases {
+    return Intl.message(
+      'New Releases',
+      name: 'newReleases',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Featured`
+  String get featured {
+    return Intl.message('Featured', name: 'featured', desc: '', args: []);
+  }
+
+  /// `Debug Mode`
+  String get debugMode {
+    return Intl.message('Debug Mode', name: 'debugMode', desc: '', args: []);
+  }
+
+  /// `My Cooperatives`
+  String get myCooperatives {
+    return Intl.message(
+      'My Cooperatives',
+      name: 'myCooperatives',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Suggested Nearby`
+  String get suggestedNearby {
+    return Intl.message(
+      'Suggested Nearby',
+      name: 'suggestedNearby',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Create New`
+  String get createNew {
+    return Intl.message('Create New', name: 'createNew', desc: '', args: []);
+  }
+
+  /// `Search Cooperatives`
+  String get searchCooperatives {
+    return Intl.message(
+      'Search Cooperatives',
+      name: 'searchCooperatives',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Loading your cooperatives...`
+  String get loadingCooperatives {
+    return Intl.message(
+      'Loading your cooperatives...',
+      name: 'loadingCooperatives',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `You haven't joined any cooperatives yet`
+  String get noCooperativesJoined {
+    return Intl.message(
+      'You haven\'t joined any cooperatives yet',
+      name: 'noCooperativesJoined',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Check out suggested cooperatives near you`
+  String get checkOutSuggested {
+    return Intl.message(
+      'Check out suggested cooperatives near you',
+      name: 'checkOutSuggested',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Show Nearby Cooperatives`
+  String get showNearbyCooperatives {
+    return Intl.message(
+      'Show Nearby Cooperatives',
+      name: 'showNearbyCooperatives',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Explore Nearby Cooperatives`
+  String get exploreNearbyCooperatives {
+    return Intl.message(
+      'Explore Nearby Cooperatives',
+      name: 'exploreNearbyCooperatives',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Tap on markers to see cooperative details`
+  String get tapOnMarkers {
+    return Intl.message(
+      'Tap on markers to see cooperative details',
+      name: 'tapOnMarkers',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Cooperatives Near You`
+  String get cooperativesNearYou {
+    return Intl.message(
+      'Cooperatives Near You',
+      name: 'cooperativesNearYou',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No cooperatives found`
+  String get noCooperativesFound {
+    return Intl.message(
+      'No cooperatives found',
+      name: 'noCooperativesFound',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No nearby cooperatives found`
+  String get noNearbyCooperativesFound {
+    return Intl.message(
+      'No nearby cooperatives found',
+      name: 'noNearbyCooperativesFound',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Try a different search term`
+  String get tryDifferentSearchTerm {
+    return Intl.message(
+      'Try a different search term',
+      name: 'tryDifferentSearchTerm',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `There are no cooperatives within 5km of your current location`
+  String get noCooperativesInRange {
+    return Intl.message(
+      'There are no cooperatives within 5km of your current location',
+      name: 'noCooperativesInRange',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Name is required`
+  String get nameIsRequired {
+    return Intl.message(
+      'Name is required',
+      name: 'nameIsRequired',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Description is required`
+  String get descriptionIsRequired {
+    return Intl.message(
+      'Description is required',
+      name: 'descriptionIsRequired',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Create Cooperative`
+  String get createCooperativeAction {
+    return Intl.message(
+      'Create Cooperative',
+      name: 'createCooperativeAction',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Upload a banner for your cooperative`
+  String get uploadBannerDescription {
+    return Intl.message(
+      'Upload a banner for your cooperative',
+      name: 'uploadBannerDescription',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Create a community of farmers working together`
+  String get createCommunityDescription {
+    return Intl.message(
+      'Create a community of farmers working together',
+      name: 'createCommunityDescription',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Search cooperatives by name or location`
+  String get searchCooperativesByLocation {
+    return Intl.message(
+      'Search cooperatives by name or location',
+      name: 'searchCooperativesByLocation',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Searching...`
+  String get searching {
+    return Intl.message('Searching...', name: 'searching', desc: '', args: []);
+  }
+
+  /// `Found {count} cooperatives`
+  String foundCooperatives(Object count) {
+    return Intl.message(
+      'Found $count cooperatives',
+      name: 'foundCooperatives',
+      desc: '',
+      args: [count],
+    );
+  }
+
+  /// `{count} Nearby Cooperatives`
+  String nearbyCooperatives(Object count) {
+    return Intl.message(
+      '$count Nearby Cooperatives',
+      name: 'nearbyCooperatives',
+      desc: '',
+      args: [count],
+    );
+  }
+
+  /// `5 km radius`
+  String get fiveKmRadius {
+    return Intl.message(
+      '5 km radius',
+      name: 'fiveKmRadius',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Getting location...`
+  String get gettingLocation {
+    return Intl.message(
+      'Getting location...',
+      name: 'gettingLocation',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Manage`
+  String get manage {
+    return Intl.message('Manage', name: 'manage', desc: '', args: []);
+  }
+
+  /// `Details`
+  String get details {
+    return Intl.message('Details', name: 'details', desc: '', args: []);
+  }
+
+  /// `Join`
+  String get join {
+    return Intl.message('Join', name: 'join', desc: '', args: []);
+  }
+
+  /// `Found {count} cooperatives`
+  String foundCount(Object count) {
+    return Intl.message(
+      'Found $count cooperatives',
+      name: 'foundCount',
+      desc: '',
+      args: [count],
+    );
+  }
+
+  /// `{distance} km`
+  String kmAway(Object distance) {
+    return Intl.message(
+      '$distance km',
+      name: 'kmAway',
+      desc: '',
+      args: [distance],
+    );
+  }
+
+  /// `members`
+  String get members {
+    return Intl.message('members', name: 'members', desc: '', args: []);
+  }
+
+  /// `member`
+  String get member {
+    return Intl.message('member', name: 'member', desc: '', args: []);
+  }
+
+  /// `Unverified`
+  String get unverified {
+    return Intl.message('Unverified', name: 'unverified', desc: '', args: []);
+  }
+
+  /// `Sorry, I encountered an error. Please try again.`
+  String get genericError {
+    return Intl.message(
+      'Sorry, I encountered an error. Please try again.',
+      name: 'genericError',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Speech recognition error`
+  String get speechRecognitionError {
+    return Intl.message(
+      'Speech recognition error',
+      name: 'speechRecognitionError',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `User not found`
+  String get userNotFound {
+    return Intl.message(
+      'User not found',
+      name: 'userNotFound',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Network connection error`
+  String get networkError {
+    return Intl.message(
+      'Network connection error',
+      name: 'networkError',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Request timed out`
+  String get timeoutError {
+    return Intl.message(
+      'Request timed out',
+      name: 'timeoutError',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `An unknown error occurred`
+  String get unknownError {
+    return Intl.message(
+      'An unknown error occurred',
+      name: 'unknownError',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Permission denied`
+  String get permissionDenied {
+    return Intl.message(
+      'Permission denied',
+      name: 'permissionDenied',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Service temporarily unavailable`
+  String get serviceUnavailable {
+    return Intl.message(
+      'Service temporarily unavailable',
+      name: 'serviceUnavailable',
       desc: '',
       args: [],
     );

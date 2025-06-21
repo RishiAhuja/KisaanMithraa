@@ -1,4 +1,4 @@
-import 'package:cropconnect/core/theme/app_colors.dart';
+import 'package:cropconnect/core/presentation/widgets/common_app_bar.dart';
 import 'package:cropconnect/features/chatbot/data/service/speech_service.dart';
 import 'package:cropconnect/features/chatbot/presentation/controllers/chatbot_controller.dart';
 import 'package:cropconnect/features/chatbot/presentation/widgets/chat_bubble.dart';
@@ -73,7 +73,11 @@ class ChatbotScreen extends GetView<ChatbotController> {
     return Scaffold(
       extendBody: true,
       backgroundColor: theme.colorScheme.background,
-      appBar: _buildAppBar(context, appLocalizations, theme),
+      appBar: ChatAppBar(
+        title: appLocalizations?.chatbotTitle ?? 'Kisaan Mithraa',
+        isOnline: _isServiceReady.value,
+        onResetPressed: () => controller.resetConversation(),
+      ),
       body: SafeArea(
         bottom: false,
         child: Stack(
@@ -89,62 +93,6 @@ class ChatbotScreen extends GetView<ChatbotController> {
             _buildSpeechRecognitionOverlay(),
           ],
         ),
-      ),
-    );
-  }
-
-  PreferredSizeWidget _buildAppBar(BuildContext context,
-      AppLocalizations? appLocalizations, ThemeData theme) {
-    return AppBar(
-      title: Row(
-        children: [
-          Icon(
-            Icons.agriculture_rounded,
-            size: 20,
-            color: theme.colorScheme.onPrimary.withOpacity(0.9),
-          ),
-          const SizedBox(width: 8),
-          Text(
-            appLocalizations?.chatbotTitle ?? 'Kisaan Mithraa',
-            style: TextStyle(
-              fontWeight: FontWeight.w600,
-              fontSize: 16,
-            ),
-          ),
-        ],
-      ),
-      elevation: 1,
-      shadowColor: Colors.black.withOpacity(0.1),
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(
-          bottom: Radius.circular(16),
-        ),
-      ),
-      actions: [
-        _buildResetButton(appLocalizations, theme),
-      ],
-    );
-  }
-
-  Widget _buildResetButton(
-      AppLocalizations? appLocalizations, ThemeData theme) {
-    return Container(
-      margin: const EdgeInsets.only(right: 8),
-      child: IconButton(
-        icon: const Icon(
-          Icons.refresh_rounded,
-          size: 18,
-        ),
-        tooltip: appLocalizations?.resetConversation ?? 'Reset Conversation',
-        style: IconButton.styleFrom(
-          backgroundColor: theme.colorScheme.primaryFixed,
-          foregroundColor: AppColors.backgroundLight,
-          padding: const EdgeInsets.all(8),
-        ),
-        onPressed: () {
-          controller.resetConversation();
-          HapticFeedback.mediumImpact();
-        },
       ),
     );
   }

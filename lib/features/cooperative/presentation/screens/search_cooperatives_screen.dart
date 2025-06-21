@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cropconnect/utils/app_logger.dart';
+import '../../../../core/presentation/widgets/common_app_bar.dart';
 import '../../domain/models/cooperative_model.dart';
 import '../controllers/my_cooperatives_controller.dart';
 
@@ -84,121 +85,154 @@ class _SearchCooperativesScreenState extends State<SearchCooperativesScreen> {
     final theme = Theme.of(context);
 
     return Scaffold(
-      appBar: AppBar(
-        title: TextField(
-          controller: _searchController,
-          decoration: InputDecoration(
-            hintText: 'Search cooperatives...',
-            border: InputBorder.none,
-            hintStyle: TextStyle(color: Colors.grey),
-          ),
-          style: TextStyle(color: theme.colorScheme.onSurface),
-          autofocus: true,
-          onChanged: (value) {
-            // Debounce search for better performance
-            Future.delayed(Duration(milliseconds: 300), () {
-              if (_searchController.text == value) {
-                _searchCooperatives(value);
-              }
-            });
-          },
-        ),
-        actions: [
-          IconButton(
-            icon: Icon(Icons.clear),
-            onPressed: () {
-              _searchController.clear();
-              setState(() {
-                _searchResults = [];
-                _hasSearched = false;
-              });
-            },
-          ),
-        ],
+      appBar: CommonAppBar(
+        title: 'Search Cooperatives',
+        showBottomBorder: false,
       ),
       body: Column(
         children: [
-          if (_isSearching)
-            LinearProgressIndicator(
-              backgroundColor: theme.colorScheme.surfaceVariant,
-              color: theme.colorScheme.primary,
+          Container(
+            decoration: BoxDecoration(
+              color: Colors.white,
+              border: Border(
+                bottom: BorderSide(
+                  color: Colors.grey.shade200,
+                  width: 1,
+                ),
+              ),
             ),
-          Expanded(
-            child: _hasSearched
-                ? _searchResults.isEmpty && !_isSearching
-                    ? Center(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Icon(
-                              Icons.search_off,
-                              size: 64,
-                              color: theme.colorScheme.primary.withOpacity(0.5),
-                            ),
-                            SizedBox(height: 16),
-                            Text(
-                              'No cooperatives found',
-                              style: theme.textTheme.titleMedium,
-                            ),
-                            SizedBox(height: 8),
-                            Padding(
-                              padding: EdgeInsets.symmetric(horizontal: 32),
-                              child: Text(
-                                'Try a different search term',
-                                textAlign: TextAlign.center,
-                                style: theme.textTheme.bodyMedium?.copyWith(
-                                  color: Colors.grey[600],
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      )
-                    : ListView.builder(
-                        padding: EdgeInsets.all(16),
-                        itemCount: _searchResults.length,
-                        itemBuilder: (context, index) {
-                          final coop = _searchResults[index];
-                          return _CooperativeSearchResult(
-                            cooperative: coop,
-                            onTap: () => Get.toNamed(
-                              '/cooperative-details',
-                              arguments: CooperativeWithRole(
-                                cooperative: coop,
-                                role: 'viewer',
-                              ),
-                            ),
-                          );
+            padding: const EdgeInsets.fromLTRB(16, 8, 16, 16),
+            child: TextField(
+              controller: _searchController,
+              decoration: InputDecoration(
+                hintText: 'Search cooperatives...',
+                prefixIcon:
+                    Icon(Icons.search, color: theme.colorScheme.primary),
+                suffixIcon: _searchController.text.isNotEmpty
+                    ? IconButton(
+                        icon: Icon(Icons.clear, color: Colors.grey),
+                        onPressed: () {
+                          _searchController.clear();
+                          setState(() {
+                            _searchResults.clear();
+                          });
                         },
                       )
-                : Center(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(
-                          Icons.search,
-                          size: 64,
-                          color: theme.colorScheme.primary.withOpacity(0.5),
-                        ),
-                        SizedBox(height: 16),
-                        Text(
-                          'Search for cooperatives',
-                          style: theme.textTheme.titleMedium,
-                        ),
-                        SizedBox(height: 8),
-                        Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 32),
-                          child: Text(
-                            'Find cooperatives by name or location',
-                            textAlign: TextAlign.center,
-                            style: theme.textTheme.bodyMedium?.copyWith(
-                              color: Colors.grey[600],
-                            ),
+                    : null,
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                  borderSide: BorderSide(color: Colors.grey.shade300),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                  borderSide: BorderSide(color: theme.colorScheme.primary),
+                ),
+                filled: true,
+                fillColor: Colors.grey.shade50,
+              ),
+              style: TextStyle(color: theme.colorScheme.onSurface),
+              autofocus: true,
+              onChanged: (value) {
+                // Debounce search for better performance
+                Future.delayed(const Duration(milliseconds: 300), () {
+                  if (_searchController.text == value) {
+                    _searchCooperatives(value);
+                  }
+                });
+              },
+            ),
+          ),
+          Expanded(
+            child: Column(
+              children: [
+                if (_isSearching)
+                  LinearProgressIndicator(
+                    backgroundColor: theme.colorScheme.surfaceVariant,
+                    color: theme.colorScheme.primary,
+                  ),
+                Expanded(
+                  child: _hasSearched
+                      ? _searchResults.isEmpty && !_isSearching
+                          ? Center(
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Icon(
+                                    Icons.search_off,
+                                    size: 64,
+                                    color: theme.colorScheme.primary
+                                        .withOpacity(0.5),
+                                  ),
+                                  SizedBox(height: 16),
+                                  Text(
+                                    'No cooperatives found',
+                                    style: theme.textTheme.titleMedium,
+                                  ),
+                                  SizedBox(height: 8),
+                                  Padding(
+                                    padding:
+                                        EdgeInsets.symmetric(horizontal: 32),
+                                    child: Text(
+                                      'Try a different search term',
+                                      textAlign: TextAlign.center,
+                                      style:
+                                          theme.textTheme.bodyMedium?.copyWith(
+                                        color: Colors.grey[600],
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            )
+                          : ListView.builder(
+                              padding: EdgeInsets.all(16),
+                              itemCount: _searchResults.length,
+                              itemBuilder: (context, index) {
+                                final coop = _searchResults[index];
+                                return _CooperativeSearchResult(
+                                  cooperative: coop,
+                                  onTap: () => Get.toNamed(
+                                    '/cooperative-details',
+                                    arguments: CooperativeWithRole(
+                                      cooperative: coop,
+                                      role: 'viewer',
+                                    ),
+                                  ),
+                                );
+                              },
+                            )
+                      : Center(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(
+                                Icons.search,
+                                size: 64,
+                                color:
+                                    theme.colorScheme.primary.withOpacity(0.5),
+                              ),
+                              SizedBox(height: 16),
+                              Text(
+                                'Search for cooperatives',
+                                style: theme.textTheme.titleMedium,
+                              ),
+                              SizedBox(height: 8),
+                              Padding(
+                                padding: EdgeInsets.symmetric(horizontal: 32),
+                                child: Text(
+                                  'Find cooperatives by name or location',
+                                  textAlign: TextAlign.center,
+                                  style: theme.textTheme.bodyMedium?.copyWith(
+                                    color: Colors.grey[600],
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
                         ),
-                      ],
-                    ),
-                  ),
+                ),
+              ],
+            ),
           ),
         ],
       ),

@@ -1,4 +1,5 @@
 import 'package:cropconnect/core/services/hive/hive_storage_service.dart';
+import 'package:cropconnect/core/presentation/widgets/common_app_bar.dart';
 import 'package:cropconnect/features/resource_pooling/domain/resouce_listing_model.dart';
 import 'package:cropconnect/features/resource_pooling/presentation/controller/resource_pooling_controller.dart';
 import 'package:flutter/material.dart';
@@ -15,8 +16,10 @@ class CreateListingScreen extends GetView<ResourcePoolingController> {
     final appLocalizations = AppLocalizations.of(context);
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text(appLocalizations?.createListing ?? 'Create Listing'),
+      appBar: FormAppBar(
+        title: appLocalizations?.createListing ?? 'Create Listing',
+        onSavePressed: _handleSave,
+        isSaving: controller.isLoading.value,
       ),
       body: SafeArea(
         child: Column(
@@ -227,62 +230,56 @@ class CreateListingScreen extends GetView<ResourcePoolingController> {
                 ),
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.all(16),
-              child: ElevatedButton(
-                onPressed: () async {
-                  if (!controller.formKey.currentState!.validate()) {
-                    return;
-                  }
-
-                  final args = Get.arguments as Map<String, dynamic>?;
-                  final cooperativeId = args?['cooperativeId'] as String?;
-
-                  if (cooperativeId == null) {
-                    Get.snackbar('Error', 'Cooperative ID not found');
-                    return;
-                  }
-
-                  final user = await Get.find<UserStorageService>().getUser();
-                  if (user == null) {
-                    Get.snackbar('Error', 'User not found');
-                    return;
-                  }
-
-                  final listing = ResourceListing(
-                    id: '',
-                    cooperativeId: cooperativeId,
-                    userId: user.id,
-                    title: controller.titleController.text,
-                    description: controller.descriptionController.text,
-                    listingType: controller.listingType.value!,
-                    transactionType: controller.transactionType.value!,
-                    pricePerUnit: double.parse(controller.priceController.text),
-                    quantityRequired:
-                        int.parse(controller.quantityController.text),
-                    unit: controller.unitController.text,
-                    createdAt: DateTime.now(),
-                    availableFrom: DateTime.now(),
-                    availableTo: controller.availableTo.value,
-                    status: 'active',
-                    offers: [],
-                  );
-
-                  try {
-                    await controller.createListing(listing);
-                    Get.back();
-                    Get.snackbar('Success', 'Listing created successfully');
-                  } catch (e) {
-                    Get.snackbar('Error', 'Failed to create listing');
-                  }
-                },
-                child:
-                    Text(appLocalizations?.createListing ?? 'Create Listing'),
-              ),
-            ),
           ],
         ),
       ),
     );
+  }
+
+  // Helper method for FormAppBar save functionality
+  void _handleSave() async {
+    if (!controller.formKey.currentState!.validate()) {
+      return;
+    }
+
+    final args = Get.arguments as Map<String, dynamic>?;
+    final cooperativeId = args?['cooperativeId'] as String?;
+
+    if (cooperativeId == null) {
+      Get.snackbar('Error', 'Cooperative ID not found');
+      return;
+    }
+
+    final user = await Get.find<UserStorageService>().getUser();
+    if (user == null) {
+      Get.snackbar('Error', 'User not found');
+      return;
+    }
+
+    final listing = ResourceListing(
+      id: '',
+      cooperativeId: cooperativeId,
+      userId: user.id,
+      title: controller.titleController.text,
+      description: controller.descriptionController.text,
+      listingType: controller.listingType.value!,
+      transactionType: controller.transactionType.value!,
+      pricePerUnit: double.parse(controller.priceController.text),
+      quantityRequired: int.parse(controller.quantityController.text),
+      unit: controller.unitController.text,
+      createdAt: DateTime.now(),
+      availableFrom: DateTime.now(),
+      availableTo: controller.availableTo.value,
+      status: 'active',
+      offers: [],
+    );
+
+    try {
+      await controller.createListing(listing);
+      Get.back();
+      Get.snackbar('Success', 'Listing created successfully');
+    } catch (e) {
+      Get.snackbar('Error', 'Failed to create listing');
+    }
   }
 }

@@ -1,4 +1,5 @@
 import 'package:cropconnect/core/theme/app_colors.dart';
+import 'package:cropconnect/core/presentation/widgets/common_app_bar.dart';
 import 'package:cropconnect/features/cooperative/presentation/widgets/member_search_dialog.dart';
 import 'package:cropconnect/features/cooperative/presentation/widgets/member_selection_widget.dart';
 import 'package:flutter/material.dart';
@@ -16,25 +17,12 @@ class CreateCooperativeScreen extends GetView<CreateCooperativeController> {
     final appLocalizations = AppLocalizations.of(context);
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          appLocalizations?.createCooperative ?? 'Create Cooperative',
-          style: theme.textTheme.titleMedium?.copyWith(
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        centerTitle: false,
-        elevation: 0,
-        backgroundColor: theme.colorScheme.surface,
-        leading: IconButton(
-          icon: Icon(
-            Icons.arrow_back_ios_new_rounded,
-            size: 20, // Reduced icon size
-            color: theme.colorScheme.primary,
-          ),
-          onPressed: () => Get.back(),
-        ),
-        toolbarHeight: 56,
+      appBar: FormAppBar(
+        title: appLocalizations?.createCooperative ?? 'Create Cooperative',
+        onSavePressed: controller.isLoading.value
+            ? null
+            : () => controller.createCooperative(),
+        isSaving: controller.isLoading.value,
       ),
       body: SingleChildScrollView(
         child: Column(

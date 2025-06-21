@@ -20,19 +20,27 @@ typedef String MessageIfAbsent(String messageStr, List<dynamic> args);
 class MessageLookup extends MessageLookupByLibrary {
   String get localeName => 'en';
 
-  static String m0(count) => "Offers (${count})";
+  static String m0(count) => "Found ${count} cooperatives";
 
-  static String m1(name) => "Posted by ${name}";
+  static String m1(count) => "Found ${count} cooperatives";
 
-  static String m2(date) => "Posted on ${date}";
+  static String m2(distance) => "${distance} km";
 
-  static String m3(price, unit) => "₹${price}/${unit}";
+  static String m3(count) => "${count} Nearby Cooperatives";
 
-  static String m4(price, unit) => "₹${price} per ${unit}";
+  static String m4(count) => "Offers (${count})";
 
-  static String m5(quantity, unit) => "${quantity} ${unit}";
+  static String m5(name) => "Posted by ${name}";
 
-  static String m6(quantity, unit) => "Quantity: ${quantity} ${unit}";
+  static String m6(date) => "Posted on ${date}";
+
+  static String m7(price, unit) => "₹${price}/${unit}";
+
+  static String m8(price, unit) => "₹${price} per ${unit}";
+
+  static String m9(quantity, unit) => "${quantity} ${unit}";
+
+  static String m10(quantity, unit) => "Quantity: ${quantity} ${unit}";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
@@ -54,6 +62,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "aiFarmingTips": MessageLookupByLibrary.simpleMessage("AI Farming Tips"),
     "allServices": MessageLookupByLibrary.simpleMessage("All Services"),
     "appTitle": MessageLookupByLibrary.simpleMessage("Kisan Mitra"),
+    "applyNow": MessageLookupByLibrary.simpleMessage("Apply Now"),
     "askAnything": MessageLookupByLibrary.simpleMessage(
       "Ask me anything about farming",
     ),
@@ -75,13 +84,19 @@ class MessageLookup extends MessageLookupByLibrary {
     "cancel": MessageLookupByLibrary.simpleMessage("Cancel"),
     "cancelListing": MessageLookupByLibrary.simpleMessage("Cancel Listing"),
     "cannotAcceptOffer": MessageLookupByLibrary.simpleMessage(
-      "Cannot accept offer: Invalid offer ID",
+      "Cannot accept offer",
     ),
     "cannotExceedQuantity": MessageLookupByLibrary.simpleMessage(
       "Cannot exceed required quantity",
     ),
     "chat": MessageLookupByLibrary.simpleMessage("Chat"),
     "chatbotTitle": MessageLookupByLibrary.simpleMessage("Kisaan Assistant"),
+    "checkBackLater": MessageLookupByLibrary.simpleMessage(
+      "Check back later for new farming podcasts",
+    ),
+    "checkOutSuggested": MessageLookupByLibrary.simpleMessage(
+      "Check out suggested cooperatives near you",
+    ),
     "checkWeather": MessageLookupByLibrary.simpleMessage("Check Weather"),
     "chooseLanguage": MessageLookupByLibrary.simpleMessage(
       "Choose Your Language",
@@ -100,21 +115,39 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "cooperativeName": MessageLookupByLibrary.simpleMessage("Cooperative Name"),
     "cooperatives": MessageLookupByLibrary.simpleMessage("Cooperatives"),
+    "cooperativesNearYou": MessageLookupByLibrary.simpleMessage(
+      "Cooperatives Near You",
+    ),
+    "couldNotLoadProfile": MessageLookupByLibrary.simpleMessage(
+      "Could not load profile",
+    ),
     "create": MessageLookupByLibrary.simpleMessage("Create"),
     "createCommunity": MessageLookupByLibrary.simpleMessage(
+      "Create a community of farmers working together",
+    ),
+    "createCommunityDescription": MessageLookupByLibrary.simpleMessage(
       "Create a community of farmers working together",
     ),
     "createCooperative": MessageLookupByLibrary.simpleMessage(
       "Create Cooperative",
     ),
+    "createCooperativeAction": MessageLookupByLibrary.simpleMessage(
+      "Create Cooperative",
+    ),
     "createListing": MessageLookupByLibrary.simpleMessage("Create Listing"),
+    "createNew": MessageLookupByLibrary.simpleMessage("Create New"),
     "creating": MessageLookupByLibrary.simpleMessage("Creating..."),
     "crops": MessageLookupByLibrary.simpleMessage("Crops"),
+    "debugMode": MessageLookupByLibrary.simpleMessage("Debug Mode"),
     "deleteListing": MessageLookupByLibrary.simpleMessage("Delete Listing"),
     "describeCooperative": MessageLookupByLibrary.simpleMessage(
       "Describe your cooperative\'s mission and goals",
     ),
     "description": MessageLookupByLibrary.simpleMessage("Description"),
+    "descriptionIsRequired": MessageLookupByLibrary.simpleMessage(
+      "Description is required",
+    ),
+    "details": MessageLookupByLibrary.simpleMessage("Details"),
     "emergencyContacts": MessageLookupByLibrary.simpleMessage(
       "Emergency Contacts",
     ),
@@ -130,6 +163,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "error": MessageLookupByLibrary.simpleMessage("Error"),
     "errorLoadingOffers": MessageLookupByLibrary.simpleMessage(
       "Error loading offers",
+    ),
+    "exploreNearbyCooperatives": MessageLookupByLibrary.simpleMessage(
+      "Explore Nearby Cooperatives",
     ),
     "exploreResources": MessageLookupByLibrary.simpleMessage(
       "Explore Resources",
@@ -177,11 +213,21 @@ class MessageLookup extends MessageLookupByLibrary {
       "Your Farming Assistant",
     ),
     "farmingDetails": MessageLookupByLibrary.simpleMessage("Farming Details"),
+    "featured": MessageLookupByLibrary.simpleMessage("Featured"),
+    "fiveKmRadius": MessageLookupByLibrary.simpleMessage("5 km radius"),
+    "foundCooperatives": m0,
+    "foundCount": m1,
     "frequentlyAskedQuestions": MessageLookupByLibrary.simpleMessage(
       "Frequently Asked Questions",
     ),
     "from": MessageLookupByLibrary.simpleMessage("From"),
     "gallery": MessageLookupByLibrary.simpleMessage("Gallery"),
+    "genericError": MessageLookupByLibrary.simpleMessage(
+      "Sorry, I encountered an error. Please try again.",
+    ),
+    "gettingLocation": MessageLookupByLibrary.simpleMessage(
+      "Getting location...",
+    ),
     "gettingTips": MessageLookupByLibrary.simpleMessage(
       "Getting farming tips...",
     ),
@@ -198,6 +244,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "initializing": MessageLookupByLibrary.simpleMessage("Initializing..."),
     "invalidNumber": MessageLookupByLibrary.simpleMessage("Invalid number"),
     "invalidPrice": MessageLookupByLibrary.simpleMessage("Invalid price"),
+    "join": MessageLookupByLibrary.simpleMessage("Join"),
     "joinCooperative": MessageLookupByLibrary.simpleMessage("Join Cooperative"),
     "joinDiscussion": MessageLookupByLibrary.simpleMessage("Join Discussion"),
     "kisanCallCenter": MessageLookupByLibrary.simpleMessage(
@@ -206,39 +253,71 @@ class MessageLookup extends MessageLookupByLibrary {
     "kisanCallCenterDesc": MessageLookupByLibrary.simpleMessage(
       "24x7 helpline for farmers\' queries on agriculture and allied sectors",
     ),
+    "kmAway": m2,
     "learnMore": MessageLookupByLibrary.simpleMessage("Learn More"),
     "listenPodcast": MessageLookupByLibrary.simpleMessage(
       "Listen to our Podcast",
     ),
     "listingDetails": MessageLookupByLibrary.simpleMessage("Listing Details"),
     "listingType": MessageLookupByLibrary.simpleMessage("Listing Type"),
+    "loadingCooperatives": MessageLookupByLibrary.simpleMessage(
+      "Loading your cooperatives...",
+    ),
+    "loadingProfile": MessageLookupByLibrary.simpleMessage(
+      "Loading your profile...",
+    ),
     "loans": MessageLookupByLibrary.simpleMessage("Loans"),
     "location": MessageLookupByLibrary.simpleMessage("Location"),
     "locationNotSet": MessageLookupByLibrary.simpleMessage("Location not set"),
     "makeOffer": MessageLookupByLibrary.simpleMessage("Make Offer"),
+    "manage": MessageLookupByLibrary.simpleMessage("Manage"),
     "marketPrices": MessageLookupByLibrary.simpleMessage("Market Prices"),
     "marketplaceDesc": MessageLookupByLibrary.simpleMessage(
       "Buy and sell farm products",
     ),
+    "member": MessageLookupByLibrary.simpleMessage("member"),
     "memberSince": MessageLookupByLibrary.simpleMessage("Member since"),
+    "members": MessageLookupByLibrary.simpleMessage("members"),
     "messageUser": MessageLookupByLibrary.simpleMessage("Message Farmer"),
     "messagingFeature": MessageLookupByLibrary.simpleMessage(
       "Messaging feature will be available soon!",
     ),
+    "myCooperatives": MessageLookupByLibrary.simpleMessage("My Cooperatives"),
     "myListingDetails": MessageLookupByLibrary.simpleMessage(
       "My Listing Details",
     ),
+    "nameIsRequired": MessageLookupByLibrary.simpleMessage("Name is required"),
+    "nearbyCooperatives": m3,
+    "networkError": MessageLookupByLibrary.simpleMessage(
+      "Network connection error",
+    ),
+    "newReleases": MessageLookupByLibrary.simpleMessage("New Releases"),
+    "noCooperativesFound": MessageLookupByLibrary.simpleMessage(
+      "No cooperatives found",
+    ),
+    "noCooperativesInRange": MessageLookupByLibrary.simpleMessage(
+      "There are no cooperatives within 5km of your current location",
+    ),
+    "noCooperativesJoined": MessageLookupByLibrary.simpleMessage(
+      "You haven\'t joined any cooperatives yet",
+    ),
     "noCrops": MessageLookupByLibrary.simpleMessage("No crops specified"),
+    "noNearbyCooperativesFound": MessageLookupByLibrary.simpleMessage(
+      "No nearby cooperatives found",
+    ),
     "noNotificationsYet": MessageLookupByLibrary.simpleMessage(
       "No notifications yet",
     ),
     "noOffersYet": MessageLookupByLibrary.simpleMessage("No offers yet"),
+    "noPodcastsAvailable": MessageLookupByLibrary.simpleMessage(
+      "No podcasts available",
+    ),
     "noTipsAvailable": MessageLookupByLibrary.simpleMessage(
       "No tips available. Tap refresh to try again.",
     ),
     "notSpecified": MessageLookupByLibrary.simpleMessage("Not specified"),
     "notifications": MessageLookupByLibrary.simpleMessage("Notifications"),
-    "offerCount": m0,
+    "offerCount": m4,
     "offerStatus": MessageLookupByLibrary.simpleMessage("Offer Status"),
     "offerSubmittedSuccess": MessageLookupByLibrary.simpleMessage(
       "Offer submitted successfully",
@@ -248,6 +327,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "organicFarming": MessageLookupByLibrary.simpleMessage("Organic farming"),
     "organicFarmingQuestion": MessageLookupByLibrary.simpleMessage(
       "Tips for organic farming?",
+    ),
+    "permissionDenied": MessageLookupByLibrary.simpleMessage(
+      "Permission denied",
     ),
     "personalInfo": MessageLookupByLibrary.simpleMessage(
       "Personal Information",
@@ -275,19 +357,23 @@ class MessageLookup extends MessageLookupByLibrary {
     "pleaseEnterValidQuantity": MessageLookupByLibrary.simpleMessage(
       "Please enter valid quantity",
     ),
+    "pleaseRetryAgain": MessageLookupByLibrary.simpleMessage(
+      "Please try again",
+    ),
     "podcasts": MessageLookupByLibrary.simpleMessage("Podcasts"),
     "podcastsDesc": MessageLookupByLibrary.simpleMessage(
       "Listen to farming tips and news",
     ),
-    "postedBy": m1,
-    "postedOn": m2,
+    "popularPodcasts": MessageLookupByLibrary.simpleMessage("Popular Podcasts"),
+    "postedBy": m5,
+    "postedOn": m6,
     "pricePerUnit": MessageLookupByLibrary.simpleMessage("Price per unit (₹)"),
-    "pricePerUnitWithUnit": m3,
-    "priceValue": m4,
+    "pricePerUnitWithUnit": m7,
+    "priceValue": m8,
     "priorityAlerts": MessageLookupByLibrary.simpleMessage("Priority Alerts"),
     "quantity": MessageLookupByLibrary.simpleMessage("Quantity"),
-    "quantityValue": m5,
-    "quantityWithUnit": m6,
+    "quantityValue": m9,
+    "quantityWithUnit": m10,
     "quickAccess": MessageLookupByLibrary.simpleMessage("Quick Access"),
     "recognized": MessageLookupByLibrary.simpleMessage("Recognized: \""),
     "refresh": MessageLookupByLibrary.simpleMessage("Refresh"),
@@ -305,6 +391,13 @@ class MessageLookup extends MessageLookupByLibrary {
     "retry": MessageLookupByLibrary.simpleMessage("Retry"),
     "scrollToBottom": MessageLookupByLibrary.simpleMessage("Scroll to bottom"),
     "search": MessageLookupByLibrary.simpleMessage("Search..."),
+    "searchCooperatives": MessageLookupByLibrary.simpleMessage(
+      "Search Cooperatives",
+    ),
+    "searchCooperativesByLocation": MessageLookupByLibrary.simpleMessage(
+      "Search cooperatives by name or location",
+    ),
+    "searching": MessageLookupByLibrary.simpleMessage("Searching..."),
     "seeAll": MessageLookupByLibrary.simpleMessage("See all"),
     "seedHelpline": MessageLookupByLibrary.simpleMessage("Seed Helpline"),
     "seedHelplineDesc": MessageLookupByLibrary.simpleMessage(
@@ -315,6 +408,12 @@ class MessageLookup extends MessageLookupByLibrary {
       "Select Image Source",
     ),
     "selectMembers": MessageLookupByLibrary.simpleMessage("Select Members"),
+    "serviceUnavailable": MessageLookupByLibrary.simpleMessage(
+      "Service temporarily unavailable",
+    ),
+    "showNearbyCooperatives": MessageLookupByLibrary.simpleMessage(
+      "Show Nearby Cooperatives",
+    ),
     "showingCachedPrices": MessageLookupByLibrary.simpleMessage(
       "Showing cached prices",
     ),
@@ -325,6 +424,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "speechInitializing": MessageLookupByLibrary.simpleMessage(
       "Speech recognition is initializing. Please wait...",
     ),
+    "speechRecognitionError": MessageLookupByLibrary.simpleMessage(
+      "Speech recognition error",
+    ),
     "startSpeaking": MessageLookupByLibrary.simpleMessage("Start Speaking"),
     "startYourCooperative": MessageLookupByLibrary.simpleMessage(
       "Start Your Cooperative",
@@ -334,7 +436,12 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "state": MessageLookupByLibrary.simpleMessage("State"),
     "submit": MessageLookupByLibrary.simpleMessage("Submit"),
+    "suggestedNearby": MessageLookupByLibrary.simpleMessage("Suggested Nearby"),
     "suggestedQuestions": MessageLookupByLibrary.simpleMessage("Try asking:"),
+    "tapOnMarkers": MessageLookupByLibrary.simpleMessage(
+      "Tap on markers to see cooperative details",
+    ),
+    "timeoutError": MessageLookupByLibrary.simpleMessage("Request timed out"),
     "title": MessageLookupByLibrary.simpleMessage("Title"),
     "to": MessageLookupByLibrary.simpleMessage("To"),
     "totalMembers": MessageLookupByLibrary.simpleMessage("Total Members"),
@@ -346,13 +453,24 @@ class MessageLookup extends MessageLookupByLibrary {
     "transportServices": MessageLookupByLibrary.simpleMessage(
       "Transport Services",
     ),
+    "tryDifferentSearchTerm": MessageLookupByLibrary.simpleMessage(
+      "Try a different search term",
+    ),
     "unableToLoadPrices": MessageLookupByLibrary.simpleMessage(
       "Unable to load market prices",
     ),
     "unit": MessageLookupByLibrary.simpleMessage("Unit"),
+    "unknownError": MessageLookupByLibrary.simpleMessage(
+      "An unknown error occurred",
+    ),
+    "unverified": MessageLookupByLibrary.simpleMessage("Unverified"),
     "uploadBanner": MessageLookupByLibrary.simpleMessage(
       "Upload a banner for your cooperative",
     ),
+    "uploadBannerDescription": MessageLookupByLibrary.simpleMessage(
+      "Upload a banner for your cooperative",
+    ),
+    "userNotFound": MessageLookupByLibrary.simpleMessage("User not found"),
     "viewAll": MessageLookupByLibrary.simpleMessage("View all"),
     "viewOnMap": MessageLookupByLibrary.simpleMessage("View on Map"),
     "viewTips": MessageLookupByLibrary.simpleMessage("View Tips"),

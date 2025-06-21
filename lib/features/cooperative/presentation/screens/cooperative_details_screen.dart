@@ -4,6 +4,7 @@ import 'package:cropconnect/features/auth/domain/model/user/user_model.dart';
 import 'package:cropconnect/features/cooperative/domain/models/cooperative_model.dart';
 import 'package:cropconnect/features/cooperative/presentation/controllers/cooperative_details_controller.dart';
 import 'package:cropconnect/features/cooperative/presentation/widgets/crop_marque.dart';
+import 'package:cropconnect/core/presentation/widgets/common_app_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -17,8 +18,8 @@ class CooperativeDetailsScreen extends GetView<CooperativeDetailsController> {
     final theme = Theme.of(context);
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Details'),
+      appBar: CommonAppBar(
+        title: controller.cooperative.value?.name ?? 'Details',
       ),
       body: Obx(() {
         if (controller.isLoading.value) {

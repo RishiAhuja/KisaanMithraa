@@ -1,4 +1,5 @@
 import 'package:cropconnect/core/theme/app_colors.dart';
+import 'package:cropconnect/core/presentation/widgets/common_app_bar.dart';
 import 'package:cropconnect/features/cooperative/presentation/controllers/cooperative_management_controller.dart';
 import 'package:cropconnect/features/cooperative/presentation/widgets/member_details_dialog.dart';
 import 'package:cropconnect/features/cooperative/presentation/widgets/member_search_dialog.dart';
@@ -15,8 +16,8 @@ class CooperativeManagementScreen
     final theme = Theme.of(context);
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Manage ${controller.cooperative.value?.name}'),
+      appBar: CommonAppBar(
+        title: 'Manage ${controller.cooperative.value?.name ?? 'Cooperative'}',
       ),
       body: Obx(() {
         if (controller.isLoading.value) {

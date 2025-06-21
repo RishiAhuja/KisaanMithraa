@@ -1,4 +1,5 @@
 import 'package:cropconnect/core/theme/app_colors.dart';
+import 'package:cropconnect/core/presentation/widgets/common_app_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:get/get.dart';
@@ -153,9 +154,9 @@ class _CooperativeMapScreenState extends State<CooperativeMapScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.cooperative.name),
-        actions: [
+      appBar: CommonAppBar(
+        title: widget.cooperative.name,
+        customActions: [
           IconButton(
             icon: const Icon(Icons.layers),
             onPressed: () {

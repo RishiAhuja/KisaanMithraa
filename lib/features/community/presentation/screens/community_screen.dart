@@ -6,6 +6,7 @@ import 'package:cropconnect/features/cooperative/domain/models/cooperative_model
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../../../core/presentation/widgets/bottom_nav_bar.dart';
+import '../../../../core/presentation/widgets/common_app_bar.dart';
 import '../controllers/community_controller.dart';
 import 'package:get/get.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -19,12 +20,22 @@ class CommunityScreen extends GetView<CommunityController> {
     final appLocalizations = AppLocalizations.of(context);
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text(appLocalizations?.community ?? 'Community'),
-        backgroundColor: Colors.white,
-        bottom: PreferredSize(
-          preferredSize: const Size.fromHeight(72),
-          child: Padding(
+      appBar: CommonAppBar(
+        title: appLocalizations?.community ?? 'Community',
+        showBottomBorder: false,
+      ),
+      body: Column(
+        children: [
+          Container(
+            decoration: BoxDecoration(
+              color: Colors.white,
+              border: Border(
+                bottom: BorderSide(
+                  color: Colors.grey.shade200,
+                  width: 1,
+                ),
+              ),
+            ),
             padding: const EdgeInsets.fromLTRB(16, 8, 16, 16),
             child: Row(
               children: [
@@ -86,32 +97,35 @@ class CommunityScreen extends GetView<CommunityController> {
               ],
             ),
           ),
-        ),
-      ),
-      body: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: TextField(
-              onChanged: controller.updateSearchQuery,
-              decoration: InputDecoration(
-                hintText: appLocalizations?.search ?? 'Search...',
-                prefixIcon: const Icon(Icons.search),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12),
-                ),
-              ),
-            ),
-          ),
           Expanded(
-            child: Obx(() {
-              return AnimatedSwitcher(
-                duration: const Duration(milliseconds: 300),
-                child: controller.currentSearchType.value == SearchType.farmers
-                    ? _buildFarmersList(context)
-                    : _buildCooperativesList(context),
-              );
-            }),
+            child: Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: TextField(
+                    onChanged: controller.updateSearchQuery,
+                    decoration: InputDecoration(
+                      hintText: appLocalizations?.search ?? 'Search...',
+                      prefixIcon: const Icon(Icons.search),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                    ),
+                  ),
+                ),
+                Expanded(
+                  child: Obx(() {
+                    return AnimatedSwitcher(
+                      duration: const Duration(milliseconds: 300),
+                      child: controller.currentSearchType.value ==
+                              SearchType.farmers
+                          ? _buildFarmersList(context)
+                          : _buildCooperativesList(context),
+                    );
+                  }),
+                ),
+              ],
+            ),
           ),
         ],
       ),

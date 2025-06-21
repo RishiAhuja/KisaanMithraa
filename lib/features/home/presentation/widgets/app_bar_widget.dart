@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:cropconnect/core/services/debug/debug_service.dart';
+import 'package:cropconnect/core/presentation/widgets/rounded_icon_button.dart';
 
 class HomeAppBar extends StatelessWidget {
   final String userName;
@@ -70,72 +71,16 @@ class HomeAppBar extends StatelessWidget {
                           ),
                         ),
                       )),
-                Material(
-                  color: Colors.transparent,
-                  child: InkWell(
-                    onTap: () {
-                      Get.toNamed('/notifications');
-                    },
-                    borderRadius: BorderRadius.circular(14),
-                    child: Container(
-                      padding: const EdgeInsets.all(10),
-                      decoration: BoxDecoration(
-                        color: theme.colorScheme.background,
-                        borderRadius: BorderRadius.circular(14),
-                        border: Border.all(
-                          color:
-                              theme.colorScheme.onBackground.withOpacity(0.1),
-                          width: 1.5,
-                        ),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withOpacity(0.03),
-                            blurRadius: 8,
-                            offset: const Offset(0, 2),
-                          ),
-                        ],
-                      ),
-                      child: Icon(
-                        Icons.notifications_outlined,
-                        color: theme.colorScheme.onBackground,
-                        size: 22,
-                      ),
-                    ),
-                  ),
+                RoundedIconButton(
+                  icon: Icons.notifications_outlined,
+                  onTap: () => Get.toNamed('/notifications'),
+                  tooltip: 'Notifications',
                 ),
                 const SizedBox(width: 12),
-                Material(
-                  color: Colors.transparent,
-                  child: InkWell(
-                    onTap: () {
-                      Get.toNamed('/profile');
-                    },
-                    borderRadius: BorderRadius.circular(14),
-                    child: Container(
-                      padding: const EdgeInsets.all(10),
-                      decoration: BoxDecoration(
-                        color: theme.colorScheme.background,
-                        borderRadius: BorderRadius.circular(14),
-                        border: Border.all(
-                          color:
-                              theme.colorScheme.onBackground.withOpacity(0.1),
-                          width: 1.5,
-                        ),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withOpacity(0.03),
-                            blurRadius: 8,
-                            offset: const Offset(0, 2),
-                          ),
-                        ],
-                      ),
-                      child: Icon(
-                        Icons.person_rounded,
-                        color: theme.colorScheme.onBackground,
-                        size: 22,
-                      ),
-                    ),
-                  ),
+                RoundedIconButton(
+                  icon: Icons.person_rounded,
+                  onTap: () => Get.toNamed('/profile'),
+                  tooltip: 'Profile',
                 ),
               ],
             ),

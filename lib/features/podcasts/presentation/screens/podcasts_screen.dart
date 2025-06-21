@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cropconnect/core/presentation/widgets/bottom_nav_bar.dart';
+import 'package:cropconnect/core/presentation/widgets/common_app_bar.dart';
 import 'package:cropconnect/features/podcasts/domain/model/podcast_model.dart';
 import 'package:cropconnect/features/podcasts/presentation/controllers/podcast_controller.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -20,7 +21,11 @@ class PodcastsScreen extends GetView<PodcastController> {
       body: SafeArea(
         child: Column(
           children: [
-            _buildAppBar(context, loc),
+            CommonAppBar(
+              title: "Farmer's Podcasts",
+              subtitle: "Listen and learn about farming",
+              showBackButton: false,
+            ),
             _buildTagsRow(context, loc),
             Expanded(
               child: Obx(() {
@@ -170,46 +175,6 @@ class PodcastsScreen extends GetView<PodcastController> {
           ),
         ),
       ],
-    );
-  }
-
-  Widget _buildAppBar(BuildContext context, AppLocalizations loc) {
-    final theme = Theme.of(context);
-
-    return Container(
-      padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
-      decoration: BoxDecoration(
-        color: theme.colorScheme.background,
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.015),
-            blurRadius: 8,
-            offset: const Offset(0, 2),
-          ),
-        ],
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                "Farmer's Podcasts",
-                style: theme.textTheme.headlineSmall?.copyWith(
-                  fontWeight: FontWeight.w800,
-                ),
-              ),
-              Text(
-                "Listen and learn about farming",
-                style: theme.textTheme.bodyMedium?.copyWith(
-                  color: theme.colorScheme.onBackground.withOpacity(0.7),
-                ),
-              ),
-            ],
-          ),
-        ],
-      ),
     );
   }
 

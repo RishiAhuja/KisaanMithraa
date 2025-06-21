@@ -1,4 +1,5 @@
 import 'package:cropconnect/core/presentation/widgets/bottom_nav_bar.dart';
+import 'package:cropconnect/core/presentation/widgets/common_app_bar.dart';
 import 'package:cropconnect/features/agrihelp/domain/models/emergency_contact_model.dart';
 import 'package:cropconnect/features/agrihelp/domain/models/faq_model.dart';
 import 'package:cropconnect/features/agrihelp/presentation/widgets/emergency_contact_card.dart';
@@ -15,9 +16,9 @@ class AgriHelpScreen extends StatelessWidget {
     final localizations = AppLocalizations.of(context)!;
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text(localizations.agriHelp),
-        elevation: 0,
+      appBar: CommonAppBar(
+        title: localizations.agriHelp,
+        showBackButton: false,
       ),
       body: ListView(
         padding: const EdgeInsets.all(16),

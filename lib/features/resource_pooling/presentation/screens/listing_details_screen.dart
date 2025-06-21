@@ -3,6 +3,7 @@ import 'package:cropconnect/features/auth/domain/model/user/user_model.dart';
 import 'package:cropconnect/features/resource_pooling/domain/resouce_listing_model.dart';
 import 'package:cropconnect/features/resource_pooling/domain/resource_offer_model.dart';
 import 'package:cropconnect/features/resource_pooling/presentation/controller/resource_pooling_controller.dart';
+import 'package:cropconnect/core/presentation/widgets/common_app_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -19,8 +20,8 @@ class ListingDetailsScreen extends GetView<ResourcePoolingController> {
     final appLocalizations = AppLocalizations.of(context);
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text(appLocalizations?.listingDetails ?? 'Listing Details'),
+      appBar: CommonAppBar(
+        title: listing.title,
       ),
       body: SafeArea(
         bottom: false,

@@ -1,4 +1,5 @@
 import 'package:cropconnect/features/notification/presentation/controller/notification_controller.dart';
+import 'package:cropconnect/core/presentation/widgets/common_app_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../domain/model/notifications_model.dart';
@@ -14,8 +15,10 @@ class NotificationsScreen extends GetView<NotificationsController> {
     final appLocalizations = AppLocalizations.of(context);
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text(appLocalizations?.notifications ?? 'Notifications'),
+      appBar: CommonAppBar(
+        title: appLocalizations?.notifications ?? 'Notifications',
+        showNotificationIcon:
+            false, // Don't show notification icon on notifications screen
       ),
       body: Obx(() {
         if (controller.isLoading.value) {

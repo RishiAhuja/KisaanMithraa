@@ -20,19 +20,19 @@ typedef String MessageIfAbsent(String messageStr, List<dynamic> args);
 class MessageLookup extends MessageLookupByLibrary {
   String get localeName => 'hi';
 
-  static String m0(count) => "प्रस्ताव (${count})";
+  static String m4(count) => "प्रस्ताव (${count})";
 
-  static String m1(name) => "${name} द्वारा पोस्ट किया गया";
+  static String m5(name) => "${name} द्वारा पोस्ट किया गया";
 
-  static String m2(date) => "${date} को पोस्ट किया गया";
+  static String m6(date) => "${date} को पोस्ट किया गया";
 
-  static String m3(price, unit) => "₹${price}/${unit}";
+  static String m7(price, unit) => "₹${price}/${unit}";
 
-  static String m4(price, unit) => "₹${price} प्रति ${unit}";
+  static String m8(price, unit) => "₹${price} प्रति ${unit}";
 
-  static String m5(quantity, unit) => "${quantity} ${unit}";
+  static String m9(quantity, unit) => "${quantity} ${unit}";
 
-  static String m6(quantity, unit) => "मात्रा: ${quantity} ${unit}";
+  static String m10(quantity, unit) => "मात्रा: ${quantity} ${unit}";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
@@ -234,7 +234,7 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "notSpecified": MessageLookupByLibrary.simpleMessage("निर्दिष्ट नहीं"),
     "notifications": MessageLookupByLibrary.simpleMessage("सूचनाएं"),
-    "offerCount": m0,
+    "offerCount": m4,
     "offerStatus": MessageLookupByLibrary.simpleMessage("प्रस्ताव स्थिति"),
     "offerSubmittedSuccess": MessageLookupByLibrary.simpleMessage(
       "प्रस्ताव सफलतापूर्वक जमा किया गया",
@@ -273,17 +273,17 @@ class MessageLookup extends MessageLookupByLibrary {
     "podcastsDesc": MessageLookupByLibrary.simpleMessage(
       "खेती के टिप्स और समाचार सुनें",
     ),
-    "postedBy": m1,
-    "postedOn": m2,
+    "postedBy": m5,
+    "postedOn": m6,
     "pricePerUnit": MessageLookupByLibrary.simpleMessage(
       "प्रति इकाई मूल्य (₹)",
     ),
-    "pricePerUnitWithUnit": m3,
-    "priceValue": m4,
+    "pricePerUnitWithUnit": m7,
+    "priceValue": m8,
     "priorityAlerts": MessageLookupByLibrary.simpleMessage("प्राथमिकता अलर्ट"),
     "quantity": MessageLookupByLibrary.simpleMessage("मात्रा"),
-    "quantityValue": m5,
-    "quantityWithUnit": m6,
+    "quantityValue": m9,
+    "quantityWithUnit": m10,
     "quickAccess": MessageLookupByLibrary.simpleMessage("त्वरित पहुंच"),
     "recognized": MessageLookupByLibrary.simpleMessage("पहचाना गया: \""),
     "refresh": MessageLookupByLibrary.simpleMessage("रीफ्रेश"),

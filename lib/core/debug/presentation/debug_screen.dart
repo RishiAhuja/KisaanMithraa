@@ -1,4 +1,5 @@
 import 'package:cropconnect/core/services/debug/debug_service.dart';
+import 'package:cropconnect/core/presentation/widgets/common_app_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:get/get.dart';
@@ -15,20 +16,11 @@ class DebugScreen extends GetView<DebugService> {
     final theme = Theme.of(context);
 
     return Scaffold(
-      appBar: AppBar(
-        title: Row(
-          children: [
-            Icon(Icons.bug_report, color: Colors.amber[700]),
-            const SizedBox(width: 8),
-            Text(
-              'Debug Tools',
-              style: theme.textTheme.titleMedium?.copyWith(
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ],
-        ),
-        actions: [
+      appBar: CommonAppBar(
+        title: 'Debug Tools',
+        showNotificationIcon: false,
+        showProfileIcon: false,
+        customActions: [
           IconButton(
             icon: const Icon(Icons.delete_forever),
             tooltip: 'Clear Debug Data',

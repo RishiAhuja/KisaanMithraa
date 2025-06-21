@@ -1,6 +1,7 @@
 import 'package:cropconnect/features/auth/domain/model/user/user_model.dart';
 import 'package:cropconnect/features/resource_pooling/domain/resource_offer_model.dart';
 import 'package:cropconnect/utils/app_logger.dart';
+import 'package:cropconnect/core/presentation/widgets/common_app_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:cropconnect/features/resource_pooling/domain/resouce_listing_model.dart';
@@ -17,9 +18,9 @@ class MyListingDetailsScreen extends GetView<ResourcePoolingController> {
     final l10n = AppLocalizations.of(context)!;
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text(l10n.myListingDetails),
-        actions: [
+      appBar: CommonAppBar(
+        title: l10n.myListingDetails,
+        customActions: [
           PopupMenuButton<String>(
             onSelected: (value) {
               switch (value) {

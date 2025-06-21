@@ -1,5 +1,7 @@
 import 'package:cropconnect/features/cooperative/domain/models/cooperative_model.dart';
 import 'package:cropconnect/features/cooperative/presentation/controllers/cooperative_search_controller.dart';
+import 'package:cropconnect/core/presentation/widgets/common_app_bar.dart';
+import 'package:cropconnect/core/presentation/widgets/rounded_icon_button.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -22,49 +24,70 @@ class MyCooperativesScreen extends GetView<MyCooperativesController> {
         initialIndex: 0,
         builder: (context, tabController) {
           return Scaffold(
-            appBar: AppBar(
-              title: Text(
-                'Cooperatives',
-                style: theme.textTheme.bodyLarge?.copyWith(color: Colors.black),
-              ),
-              backgroundColor: Colors.white,
-              actions: [
-                IconButton(
-                  icon: const Icon(Icons.search),
-                  onPressed: () {
-                    Get.toNamed('/search-cooperatives');
-                  },
+            appBar: CommonAppBar(
+              title: 'Cooperatives',
+              showBottomBorder: false,
+              customActions: [
+                RoundedIconButton(
+                  icon: Icons.search,
+                  onTap: () => Get.toNamed('/search-cooperatives'),
+                  tooltip: 'Search Cooperatives',
+                  margin: const EdgeInsets.only(right: 16),
                 ),
               ],
-              bottom: TabBar(
-                controller: tabController,
-                onTap: (index) {
-                  if (index == 0) {
-                    controller.refreshMyCooperatives();
-                  }
-                },
-                labelColor: theme.colorScheme.primary,
-                unselectedLabelColor:
-                    theme.colorScheme.onSurface.withOpacity(0.7),
-                indicatorColor: theme.colorScheme.primary,
-                tabs: const [
-                  Tab(text: 'My Cooperatives'),
-                  Tab(text: 'Suggested Nearby'),
-                ],
-              ),
             ),
-            body: TabBarView(
-              controller: tabController,
-              physics: const NeverScrollableScrollPhysics(),
+            body: Column(
               children: [
-                _buildMyCooperativesTab(theme, context, tabController),
-                _buildSuggestedCooperativesTab(theme),
+                Container(
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    border: Border(
+                      bottom: BorderSide(
+                        color: Colors.grey.shade200,
+                        width: 1,
+                      ),
+                    ),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    child: TabBar(
+                      controller: tabController,
+                      onTap: (index) {
+                        if (index == 0) {
+                          controller.refreshMyCooperatives();
+                        }
+                      },
+                      labelColor: theme.colorScheme.primary,
+                      unselectedLabelColor:
+                          theme.colorScheme.onSurface.withOpacity(0.7),
+                      indicatorColor: theme.colorScheme.primary,
+                      indicatorWeight: 3,
+                      indicatorPadding: EdgeInsets.zero,
+                      dividerColor: Colors.transparent,
+                      tabs: const [
+                        Tab(text: 'My Cooperatives'),
+                        Tab(text: 'Suggested Nearby'),
+                      ],
+                    ),
+                  ),
+                ),
+                Expanded(
+                  child: TabBarView(
+                    controller: tabController,
+                    physics: const NeverScrollableScrollPhysics(),
+                    children: [
+                      _buildMyCooperativesTab(theme, context, tabController),
+                      _buildSuggestedCooperativesTab(theme),
+                    ],
+                  ),
+                ),
               ],
             ),
             floatingActionButton: FloatingActionButton.extended(
               onPressed: () => Get.toNamed('/create-cooperative'),
-              icon: Icon(Icons.add, color: Colors.white),
-              label: Text('Create New', style: TextStyle(color: Colors.white)),
+              icon: const Icon(Icons.add, color: Colors.white),
+              label: const Text('Create New',
+                  style: TextStyle(color: Colors.white)),
               backgroundColor: theme.colorScheme.primary,
             ),
             bottomNavigationBar: const BottomNavBar(currentIndex: 1),
