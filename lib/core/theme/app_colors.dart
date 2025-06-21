@@ -62,6 +62,36 @@ class AppColors {
   static const surfaceVariant =
       Color(0xFFF5F5F5); // Light gray for alternative surfaces
 
+  // Semantic gray colors (replace hardcoded Colors.grey usage)
+  static const grey50 = Color(0xFFFAFAFA); // Very light gray
+  static const grey100 = Color(0xFFF5F5F5); // Light gray
+  static const grey200 = Color(0xFFEEEEEE); // Lighter gray
+  static const grey300 = Color(0xFFE0E0E0); // Light medium gray
+  static const grey400 = Color(0xFFBDBDBD); // Medium gray
+  static const grey500 = Color(0xFF9E9E9E); // Medium dark gray
+  static const grey600 = Color(0xFF757575); // Dark gray
+  static const grey700 = Color(0xFF616161); // Darker gray
+  static const grey800 = Color(0xFF424242); // Very dark gray
+  static const grey900 = Color(0xFF212121); // Nearly black gray
+
+  // Status colors with variations
+  static const successLight =
+      Color(0xFF81C784); // Light green for success backgrounds
+  static const warningLight =
+      Color(0xFFFFB74D); // Light orange for warning backgrounds
+  static const errorLight =
+      Color(0xFFE57373); // Light red for error backgrounds
+  static const infoLight = Color(0xFF64B5F6); // Light blue for info backgrounds
+
+  // Semantic colors for components
+  static const cardBackground = backgroundCard;
+  static const inputBackground = Colors.white;
+  static const skeletonBase = grey200;
+  static const skeletonHighlight = grey100;
+  static const borderLight = grey200;
+  static const borderMedium = grey300;
+  static const borderDark = grey400;
+
   static Color getColorFromKeyForQuickAccess(String colorKey) {
     switch (colorKey) {
       case 'purple':

@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:cropconnect/core/services/debug/debug_service.dart';
 import 'package:cropconnect/core/presentation/widgets/rounded_icon_button.dart';
+import 'package:cropconnect/core/constants/localization_standards.dart';
+import 'package:cropconnect/core/constants/app_spacing.dart';
 
 class HomeAppBar extends StatelessWidget {
   final String userName;
@@ -14,6 +16,7 @@ class HomeAppBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final appLocalizations = LocalizationStandards.getLocalizations(context);
     final debugService = Get.find<DebugService>();
     int debugTapCount = 0;
 
@@ -26,15 +29,16 @@ class HomeAppBar extends StatelessWidget {
       automaticallyImplyLeading: false,
       titleSpacing: 0,
       title: Padding(
-        padding: const EdgeInsets.fromLTRB(16, 16, 16, 4),
+        padding: EdgeInsets.fromLTRB(
+            AppSpacing.lg, AppSpacing.lg, AppSpacing.lg, AppSpacing.xs),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Row(
               children: [
-                const SizedBox(width: 12),
+                SizedBox(width: AppSpacing.md),
                 Text(
-                  "KisaanMithraa",
+                  appLocalizations.appTitle,
                   style: theme.textTheme.titleLarge?.copyWith(
                     fontWeight: FontWeight.w800,
                     fontSize: 20,
@@ -64,7 +68,7 @@ class HomeAppBar extends StatelessWidget {
                           }
                         },
                         child: const Padding(
-                          padding: EdgeInsets.all(8.0),
+                          padding: EdgeInsets.all(AppSpacing.sm),
                           child: Icon(
                             Icons.more_vert,
                             color: Colors.transparent,

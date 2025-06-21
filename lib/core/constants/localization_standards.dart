@@ -40,7 +40,7 @@ class LocalizationStandards {
   static bool validateLocalizations(BuildContext context) {
     try {
       final localizations = getLocalizations(context);
-      
+
       // Test access to critical keys
       final criticalKeys = [
         () => localizations.appTitle,

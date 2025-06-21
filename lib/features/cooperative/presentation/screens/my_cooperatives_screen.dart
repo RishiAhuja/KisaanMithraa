@@ -2,6 +2,8 @@ import 'package:cropconnect/features/cooperative/domain/models/cooperative_model
 import 'package:cropconnect/features/cooperative/presentation/controllers/cooperative_search_controller.dart';
 import 'package:cropconnect/core/presentation/widgets/common_app_bar.dart';
 import 'package:cropconnect/core/presentation/widgets/rounded_icon_button.dart';
+import 'package:cropconnect/core/constants/localization_standards.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -18,6 +20,7 @@ class MyCooperativesScreen extends GetView<MyCooperativesController> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final appLocalizations = LocalizationStandards.getLocalizations(context);
 
     return TabControllerScope(
         length: 2,
@@ -25,13 +28,13 @@ class MyCooperativesScreen extends GetView<MyCooperativesController> {
         builder: (context, tabController) {
           return Scaffold(
             appBar: CommonAppBar(
-              title: 'Cooperatives',
+              title: appLocalizations.cooperatives,
               showBottomBorder: false,
               customActions: [
                 RoundedIconButton(
                   icon: Icons.search,
                   onTap: () => Get.toNamed('/search-cooperatives'),
-                  tooltip: 'Search Cooperatives',
+                  tooltip: appLocalizations.searchCooperatives,
                   margin: const EdgeInsets.only(right: 16),
                 ),
               ],
@@ -64,9 +67,9 @@ class MyCooperativesScreen extends GetView<MyCooperativesController> {
                       indicatorWeight: 3,
                       indicatorPadding: EdgeInsets.zero,
                       dividerColor: Colors.transparent,
-                      tabs: const [
-                        Tab(text: 'My Cooperatives'),
-                        Tab(text: 'Suggested Nearby'),
+                      tabs: [
+                        Tab(text: appLocalizations.myCooperatives),
+                        Tab(text: appLocalizations.suggestedNearby),
                       ],
                     ),
                   ),
@@ -76,7 +79,8 @@ class MyCooperativesScreen extends GetView<MyCooperativesController> {
                     controller: tabController,
                     physics: const NeverScrollableScrollPhysics(),
                     children: [
-                      _buildMyCooperativesTab(theme, context, tabController),
+                      _buildMyCooperativesTab(
+                          theme, context, tabController, appLocalizations),
                       _buildSuggestedCooperativesTab(theme),
                     ],
                   ),
@@ -86,7 +90,7 @@ class MyCooperativesScreen extends GetView<MyCooperativesController> {
             floatingActionButton: FloatingActionButton.extended(
               onPressed: () => Get.toNamed('/create-cooperative'),
               icon: const Icon(Icons.add, color: Colors.white),
-              label: const Text('Create New',
+              label: Text(appLocalizations.createNew,
                   style: TextStyle(color: Colors.white)),
               backgroundColor: theme.colorScheme.primary,
             ),
@@ -95,8 +99,8 @@ class MyCooperativesScreen extends GetView<MyCooperativesController> {
         });
   }
 
-  Widget _buildMyCooperativesTab(
-      ThemeData theme, BuildContext context, TabController tabController) {
+  Widget _buildMyCooperativesTab(ThemeData theme, BuildContext context,
+      TabController tabController, AppLocalizations appLocalizations) {
     return Obx(() {
       if (controller.dataLoaded.value && !controller.isLoading.value) {
         final cooperatives = controller.cooperatives;
@@ -112,13 +116,13 @@ class MyCooperativesScreen extends GetView<MyCooperativesController> {
                 ),
                 const SizedBox(height: 16),
                 Text(
-                  'You haven\'t joined any cooperatives yet',
+                  appLocalizations.noCooperativesJoined,
                   style: theme.textTheme.titleMedium,
                   textAlign: TextAlign.center,
                 ),
                 const SizedBox(height: 8),
                 Text(
-                  'Check out suggested cooperatives near you',
+                  appLocalizations.checkOutSuggested,
                   style: theme.textTheme.bodyMedium?.copyWith(
                     color: Colors.grey[600],
                   ),

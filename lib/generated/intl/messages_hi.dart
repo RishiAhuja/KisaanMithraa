@@ -64,6 +64,9 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "askMitra": MessageLookupByLibrary.simpleMessage("मित्र से पूछें"),
     "availability": MessageLookupByLibrary.simpleMessage("उपलब्धता"),
+    "availableCooperatives": MessageLookupByLibrary.simpleMessage(
+      "उपलब्ध सहकारी",
+    ),
     "availableFrom": MessageLookupByLibrary.simpleMessage("उपलब्ध से"),
     "availableUntil": MessageLookupByLibrary.simpleMessage("उपलब्ध तक"),
     "bestCrops": MessageLookupByLibrary.simpleMessage(
@@ -104,6 +107,7 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "createCooperative": MessageLookupByLibrary.simpleMessage("सहकारी बनाएं"),
     "createListing": MessageLookupByLibrary.simpleMessage("लिस्टिंग बनाएं"),
+    "createNew": MessageLookupByLibrary.simpleMessage("नया बनाएं"),
     "creating": MessageLookupByLibrary.simpleMessage("बना रहे हैं..."),
     "crops": MessageLookupByLibrary.simpleMessage("फसलें"),
     "deleteListing": MessageLookupByLibrary.simpleMessage("लिस्टिंग हटाएं"),
@@ -111,6 +115,9 @@ class MessageLookup extends MessageLookupByLibrary {
       "अपनी सहकारी के मिशन और लक्ष्यों का वर्णन करें",
     ),
     "description": MessageLookupByLibrary.simpleMessage("विवरण"),
+    "emailAlreadyInUse": MessageLookupByLibrary.simpleMessage(
+      "ईमेल पहले से उपयोग में है",
+    ),
     "emergencyContacts": MessageLookupByLibrary.simpleMessage(
       "आपातकालीन संपर्क",
     ),
@@ -167,6 +174,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "अपने क्षेत्र के किसानों से जुड़ें",
     ),
     "farmers": MessageLookupByLibrary.simpleMessage("किसान"),
+    "farmersPodcasts": MessageLookupByLibrary.simpleMessage("किसान पॉडकास्ट"),
     "farmingAssistant": MessageLookupByLibrary.simpleMessage("आपका कृषि सहायक"),
     "farmingDetails": MessageLookupByLibrary.simpleMessage("खेती की जानकारी"),
     "frequentlyAskedQuestions": MessageLookupByLibrary.simpleMessage(
@@ -187,7 +195,12 @@ class MessageLookup extends MessageLookupByLibrary {
       "अगले 3 दिनों में भारी बारिश की उम्मीद है, अपनी गेहूं की फसल को सुरक्षित करें",
     ),
     "helpDesk": MessageLookupByLibrary.simpleMessage("सहायता केंद्र"),
+    "info": MessageLookupByLibrary.simpleMessage("जानकारी"),
     "initializing": MessageLookupByLibrary.simpleMessage("आरंभ हो रहा है..."),
+    "invalidDataFormat": MessageLookupByLibrary.simpleMessage(
+      "अमान्य डेटा फॉर्मेट",
+    ),
+    "invalidEmail": MessageLookupByLibrary.simpleMessage("अमान्य ईमेल पता"),
     "invalidNumber": MessageLookupByLibrary.simpleMessage("अमान्य संख्या"),
     "invalidPrice": MessageLookupByLibrary.simpleMessage("अमान्य मूल्य"),
     "joinCooperative": MessageLookupByLibrary.simpleMessage(
@@ -201,11 +214,15 @@ class MessageLookup extends MessageLookupByLibrary {
       "कृषि और संबद्ध क्षेत्रों पर किसानों के प्रश्नों के लिए 24x7 हेल्पलाइन",
     ),
     "learnMore": MessageLookupByLibrary.simpleMessage("और जानें"),
+    "listenAndLearn": MessageLookupByLibrary.simpleMessage(
+      "सुनें और सीखें खेती के बारे में",
+    ),
     "listenPodcast": MessageLookupByLibrary.simpleMessage(
       "हमारा पॉडकास्ट सुनें",
     ),
     "listingDetails": MessageLookupByLibrary.simpleMessage("लिस्टिंग विवरण"),
     "listingType": MessageLookupByLibrary.simpleMessage("लिस्टिंग प्रकार"),
+    "loading": MessageLookupByLibrary.simpleMessage("लोड हो रहा है..."),
     "loans": MessageLookupByLibrary.simpleMessage("ऋण"),
     "location": MessageLookupByLibrary.simpleMessage("स्थान"),
     "locationNotSet": MessageLookupByLibrary.simpleMessage("स्थान सेट नहीं है"),
@@ -219,10 +236,20 @@ class MessageLookup extends MessageLookupByLibrary {
     "messagingFeature": MessageLookupByLibrary.simpleMessage(
       "संदेश सुविधा जल्द ही उपलब्ध होगी!",
     ),
+    "myCooperatives": MessageLookupByLibrary.simpleMessage("मेरी सहकारी"),
     "myListingDetails": MessageLookupByLibrary.simpleMessage(
       "मेरी लिस्टिंग विवरण",
     ),
+    "newMemberJoined": MessageLookupByLibrary.simpleMessage(
+      "नया सदस्य शामिल हुआ",
+    ),
     "noCrops": MessageLookupByLibrary.simpleMessage("कोई फसल निर्दिष्ट नहीं"),
+    "noDataAvailable": MessageLookupByLibrary.simpleMessage(
+      "कोई डेटा उपलब्ध नहीं",
+    ),
+    "noInternetConnection": MessageLookupByLibrary.simpleMessage(
+      "इंटरनेट कनेक्शन नहीं है",
+    ),
     "noNotificationsYet": MessageLookupByLibrary.simpleMessage(
       "अभी तक कोई सूचना नहीं",
     ),
@@ -234,12 +261,17 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "notSpecified": MessageLookupByLibrary.simpleMessage("निर्दिष्ट नहीं"),
     "notifications": MessageLookupByLibrary.simpleMessage("सूचनाएं"),
+    "nowPlaying": MessageLookupByLibrary.simpleMessage("अब चल रहा है"),
     "offerCount": m4,
     "offerStatus": MessageLookupByLibrary.simpleMessage("प्रस्ताव स्थिति"),
     "offerSubmittedSuccess": MessageLookupByLibrary.simpleMessage(
       "प्रस्ताव सफलतापूर्वक जमा किया गया",
     ),
     "offers": MessageLookupByLibrary.simpleMessage("प्रस्ताव"),
+    "ok": MessageLookupByLibrary.simpleMessage("ठीक है"),
+    "operationNotAllowed": MessageLookupByLibrary.simpleMessage(
+      "ऑपरेशन की अनुमति नहीं है",
+    ),
     "optional": MessageLookupByLibrary.simpleMessage("वैकल्पिक"),
     "organicFarming": MessageLookupByLibrary.simpleMessage("जैविक खेती"),
     "organicFarmingQuestion": MessageLookupByLibrary.simpleMessage(
@@ -313,6 +345,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "कैश्ड कीमतें दिखा रहे हैं",
     ),
     "soilType": MessageLookupByLibrary.simpleMessage("मिट्टी का प्रकार"),
+    "somethingWentWrong": MessageLookupByLibrary.simpleMessage("कुछ गलत हुआ"),
     "speechError": MessageLookupByLibrary.simpleMessage("भाषण पहचान त्रुटि: "),
     "speechInitializing": MessageLookupByLibrary.simpleMessage(
       "भाषण पहचान आरंभ हो रही है। कृपया प्रतीक्षा करें...",
@@ -326,11 +359,16 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "state": MessageLookupByLibrary.simpleMessage("राज्य"),
     "submit": MessageLookupByLibrary.simpleMessage("जमा करें"),
+    "success": MessageLookupByLibrary.simpleMessage("सफल"),
+    "suggestedNearby": MessageLookupByLibrary.simpleMessage("नजदीकी सुझाव"),
     "suggestedQuestions": MessageLookupByLibrary.simpleMessage(
       "यह पूछकर देखें:",
     ),
     "title": MessageLookupByLibrary.simpleMessage("शीर्षक"),
     "to": MessageLookupByLibrary.simpleMessage("तक"),
+    "tooManyRequests": MessageLookupByLibrary.simpleMessage(
+      "बहुत से अनुरोध, कृपया बाद में कोशिश करें",
+    ),
     "totalMembers": MessageLookupByLibrary.simpleMessage("कुल सदस्य"),
     "transactionType": MessageLookupByLibrary.simpleMessage("लेनदेन प्रकार"),
     "transport": MessageLookupByLibrary.simpleMessage("परिवहन"),
@@ -345,14 +383,24 @@ class MessageLookup extends MessageLookupByLibrary {
     "uploadBanner": MessageLookupByLibrary.simpleMessage(
       "अपनी सहकारी के लिए एक बैनर अपलोड करें",
     ),
+    "userDisabled": MessageLookupByLibrary.simpleMessage(
+      "उपयोगकर्ता खाता निष्क्रिय है",
+    ),
+    "userNotFound": MessageLookupByLibrary.simpleMessage(
+      "उपयोगकर्ता नहीं मिला",
+    ),
     "viewAll": MessageLookupByLibrary.simpleMessage("सभी देखें"),
     "viewOnMap": MessageLookupByLibrary.simpleMessage("नक्शे पर देखें"),
     "viewTips": MessageLookupByLibrary.simpleMessage("सुझाव देखें"),
+    "warning": MessageLookupByLibrary.simpleMessage("चेतावनी"),
     "waterConservation": MessageLookupByLibrary.simpleMessage(
       "पानी का संरक्षण",
     ),
     "waterConservationQuestion": MessageLookupByLibrary.simpleMessage(
       "पानी कैसे बचाएं?",
+    ),
+    "weakPassword": MessageLookupByLibrary.simpleMessage(
+      "पासवर्ड बहुत कमजोर है",
     ),
     "weather": MessageLookupByLibrary.simpleMessage("मौसम"),
     "weatherCheckManually": MessageLookupByLibrary.simpleMessage(
@@ -407,6 +455,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "welcomeBack": MessageLookupByLibrary.simpleMessage(
       "अपने खेत पर आपका स्वागत है",
     ),
+    "wrongPassword": MessageLookupByLibrary.simpleMessage("गलत पासवर्ड"),
     "yourWatchlist": MessageLookupByLibrary.simpleMessage("आपकी वॉचलिस्ट"),
   };
 }

@@ -6,6 +6,7 @@ import 'package:cropconnect/core/presentation/widgets/common_app_bar.dart';
 import 'package:cropconnect/features/podcasts/domain/model/podcast_model.dart';
 import 'package:cropconnect/features/podcasts/presentation/controllers/podcast_controller.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:cropconnect/core/constants/localization_standards.dart';
 
 class PodcastsScreen extends GetView<PodcastController> {
   const PodcastsScreen({super.key});
@@ -13,7 +14,7 @@ class PodcastsScreen extends GetView<PodcastController> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final loc = AppLocalizations.of(context)!;
+    final appLocalizations = LocalizationStandards.getLocalizations(context);
 
     return Scaffold(
       backgroundColor: theme.colorScheme.background,
@@ -22,11 +23,11 @@ class PodcastsScreen extends GetView<PodcastController> {
         child: Column(
           children: [
             CommonAppBar(
-              title: "Farmer's Podcasts",
-              subtitle: "Listen and learn about farming",
+              title: appLocalizations.farmersPodcasts,
+              subtitle: appLocalizations.listenAndLearn,
               showBackButton: false,
             ),
-            _buildTagsRow(context, loc),
+            _buildTagsRow(context, appLocalizations),
             Expanded(
               child: Obx(() {
                 if (controller.isLoading.value) {
@@ -34,10 +35,9 @@ class PodcastsScreen extends GetView<PodcastController> {
                 }
 
                 if (controller.podcasts.isEmpty) {
-                  return _buildEmptyState(context, loc);
+                  return _buildEmptyState(context, appLocalizations);
                 }
-
-                return _buildPodcastContent(context, loc);
+                return _buildPodcastContent(context, appLocalizations);
               }),
             ),
             Obx(() {
@@ -79,7 +79,8 @@ class PodcastsScreen extends GetView<PodcastController> {
     );
   }
 
-  Widget _buildEmptyState(BuildContext context, AppLocalizations loc) {
+  Widget _buildEmptyState(
+      BuildContext context, AppLocalizations appLocalizations) {
     final theme = Theme.of(context);
 
     return Center(
@@ -116,7 +117,7 @@ class PodcastsScreen extends GetView<PodcastController> {
             ),
             const SizedBox(height: 24),
             Text(
-              'No podcasts available',
+              appLocalizations.noPodcastsAvailable,
               style: theme.textTheme.titleMedium?.copyWith(
                 fontWeight: FontWeight.bold,
                 color: theme.colorScheme.onSurface,
@@ -125,7 +126,7 @@ class PodcastsScreen extends GetView<PodcastController> {
             ),
             const SizedBox(height: 8),
             Text(
-              'Check back later for new farming podcasts',
+              appLocalizations.checkBackLater,
               style: theme.textTheme.bodyMedium?.copyWith(
                 color: theme.colorScheme.onSurface.withOpacity(0.7),
               ),
@@ -137,7 +138,8 @@ class PodcastsScreen extends GetView<PodcastController> {
     );
   }
 
-  Widget _buildPodcastContent(BuildContext context, AppLocalizations loc) {
+  Widget _buildPodcastContent(
+      BuildContext context, AppLocalizations appLocalizations) {
     final featuredPodcast = controller.podcasts.first;
     final popularPodcasts =
         controller.podcasts.where((p) => p.plays > 0).take(5).toList();
@@ -178,7 +180,8 @@ class PodcastsScreen extends GetView<PodcastController> {
     );
   }
 
-  Widget _buildTagsRow(BuildContext context, AppLocalizations loc) {
+  Widget _buildTagsRow(
+      BuildContext context, AppLocalizations appLocalizations) {
     final theme = Theme.of(context);
     final tags = [
       'All',

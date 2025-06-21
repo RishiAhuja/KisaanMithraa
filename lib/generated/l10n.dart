@@ -57,12 +57,7 @@ class S {
 
   /// `Kisan Mitra`
   String get appTitle {
-    return Intl.message(
-      'Kisan Mitra',
-      name: 'appTitle',
-      desc: 'The title of the app',
-      args: [],
-    );
+    return Intl.message('Kisan Mitra', name: 'appTitle', desc: '', args: []);
   }
 
   /// `Welcome back,`
@@ -980,10 +975,10 @@ class S {
     );
   }
 
-  /// `Cannot accept offer`
+  /// `Cannot accept offer: Invalid offer ID`
   String get cannotAcceptOffer {
     return Intl.message(
-      'Cannot accept offer',
+      'Cannot accept offer: Invalid offer ID',
       name: 'cannotAcceptOffer',
       desc: '',
       args: [],
@@ -1425,7 +1420,7 @@ class S {
     return Intl.message(
       'Kisaan Assistant',
       name: 'chatbotTitle',
-      desc: 'The title of the chatbot screen',
+      desc: '',
       args: [],
     );
   }
@@ -1435,7 +1430,7 @@ class S {
     return Intl.message(
       'Your Farming Assistant',
       name: 'farmingAssistant',
-      desc: 'Title shown on the empty chat screen',
+      desc: '',
       args: [],
     );
   }
@@ -1445,7 +1440,7 @@ class S {
     return Intl.message(
       'Reset Conversation',
       name: 'resetConversation',
-      desc: 'Button tooltip to reset the conversation',
+      desc: '',
       args: [],
     );
   }
@@ -1455,7 +1450,7 @@ class S {
     return Intl.message(
       'Scroll to bottom',
       name: 'scrollToBottom',
-      desc: 'Tooltip for the scroll to bottom button',
+      desc: '',
       args: [],
     );
   }
@@ -1465,7 +1460,7 @@ class S {
     return Intl.message(
       'Try asking:',
       name: 'suggestedQuestions',
-      desc: 'Header for suggested questions section',
+      desc: '',
       args: [],
     );
   }
@@ -1475,7 +1470,7 @@ class S {
     return Intl.message(
       'Transport Services',
       name: 'transportServices',
-      desc: 'Label for transport services in navigation',
+      desc: '',
       args: [],
     );
   }
@@ -1485,7 +1480,7 @@ class S {
     return Intl.message(
       'Weather Details',
       name: 'weatherDetails',
-      desc: 'Label for detailed weather in navigation',
+      desc: '',
       args: [],
     );
   }
@@ -1495,7 +1490,7 @@ class S {
     return Intl.message(
       'Detailed weather information',
       name: 'weatherDetailsDesc',
-      desc: 'Description for weather details',
+      desc: '',
       args: [],
     );
   }
@@ -1505,7 +1500,7 @@ class S {
     return Intl.message(
       'Related Content:',
       name: 'relatedContent',
-      desc: 'Header for related content section',
+      desc: '',
       args: [],
     );
   }
@@ -1515,7 +1510,7 @@ class S {
     return Intl.message(
       'Listen to our Podcast',
       name: 'listenPodcast',
-      desc: 'Label for podcast navigation',
+      desc: '',
       args: [],
     );
   }
@@ -1525,7 +1520,7 @@ class S {
     return Intl.message(
       'Join Discussion',
       name: 'joinDiscussion',
-      desc: 'Label for community discussion navigation',
+      desc: '',
       args: [],
     );
   }
@@ -1535,7 +1530,7 @@ class S {
     return Intl.message(
       'Go to Marketplace',
       name: 'goToMarketplace',
-      desc: 'Label for marketplace navigation',
+      desc: '',
       args: [],
     );
   }
@@ -1545,7 +1540,7 @@ class S {
     return Intl.message(
       'Explore Resources',
       name: 'exploreResources',
-      desc: 'Label for resources navigation',
+      desc: '',
       args: [],
     );
   }
@@ -1555,19 +1550,14 @@ class S {
     return Intl.message(
       'Check Weather',
       name: 'checkWeather',
-      desc: 'Label for weather navigation',
+      desc: '',
       args: [],
     );
   }
 
   /// `Learn More`
   String get learnMore {
-    return Intl.message(
-      'Learn More',
-      name: 'learnMore',
-      desc: 'Default label for navigation',
-      args: [],
-    );
+    return Intl.message('Learn More', name: 'learnMore', desc: '', args: []);
   }
 
   /// `Connect with other farmers`
@@ -1575,7 +1565,7 @@ class S {
     return Intl.message(
       'Connect with other farmers',
       name: 'communityDesc',
-      desc: 'Description for community feature',
+      desc: '',
       args: [],
     );
   }
@@ -1585,7 +1575,7 @@ class S {
     return Intl.message(
       'Buy and sell farm products',
       name: 'marketplaceDesc',
-      desc: 'Description for marketplace feature',
+      desc: '',
       args: [],
     );
   }
@@ -1595,7 +1585,7 @@ class S {
     return Intl.message(
       'Farming guides and resources',
       name: 'resourcesDesc',
-      desc: 'Description for resources feature',
+      desc: '',
       args: [],
     );
   }
@@ -1605,7 +1595,7 @@ class S {
     return Intl.message(
       'Related information',
       name: 'relatedInfoDesc',
-      desc: 'Description for general related information',
+      desc: '',
       args: [],
     );
   }
@@ -1895,49 +1885,9 @@ class S {
     );
   }
 
-  /// `Featured`
-  String get featured {
-    return Intl.message('Featured', name: 'featured', desc: '', args: []);
-  }
-
   /// `Debug Mode`
   String get debugMode {
     return Intl.message('Debug Mode', name: 'debugMode', desc: '', args: []);
-  }
-
-  /// `My Cooperatives`
-  String get myCooperatives {
-    return Intl.message(
-      'My Cooperatives',
-      name: 'myCooperatives',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Suggested Nearby`
-  String get suggestedNearby {
-    return Intl.message(
-      'Suggested Nearby',
-      name: 'suggestedNearby',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Create New`
-  String get createNew {
-    return Intl.message('Create New', name: 'createNew', desc: '', args: []);
-  }
-
-  /// `Search Cooperatives`
-  String get searchCooperatives {
-    return Intl.message(
-      'Search Cooperatives',
-      name: 'searchCooperatives',
-      desc: '',
-      args: [],
-    );
   }
 
   /// `Loading your cooperatives...`
@@ -2190,16 +2140,6 @@ class S {
     );
   }
 
-  /// `members`
-  String get members {
-    return Intl.message('members', name: 'members', desc: '', args: []);
-  }
-
-  /// `member`
-  String get member {
-    return Intl.message('member', name: 'member', desc: '', args: []);
-  }
-
   /// `Unverified`
   String get unverified {
     return Intl.message('Unverified', name: 'unverified', desc: '', args: []);
@@ -2220,16 +2160,6 @@ class S {
     return Intl.message(
       'Speech recognition error',
       name: 'speechRecognitionError',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `User not found`
-  String get userNotFound {
-    return Intl.message(
-      'User not found',
-      name: 'userNotFound',
       desc: '',
       args: [],
     );
@@ -2283,6 +2213,401 @@ class S {
       desc: '',
       args: [],
     );
+  }
+
+  /// `OK`
+  String get ok {
+    return Intl.message('OK', name: 'ok', desc: '', args: []);
+  }
+
+  /// `Success`
+  String get success {
+    return Intl.message('Success', name: 'success', desc: '', args: []);
+  }
+
+  /// `Warning`
+  String get warning {
+    return Intl.message('Warning', name: 'warning', desc: '', args: []);
+  }
+
+  /// `Info`
+  String get info {
+    return Intl.message('Info', name: 'info', desc: '', args: []);
+  }
+
+  /// `Something went wrong`
+  String get somethingWentWrong {
+    return Intl.message(
+      'Something went wrong',
+      name: 'somethingWentWrong',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Invalid data format`
+  String get invalidDataFormat {
+    return Intl.message(
+      'Invalid data format',
+      name: 'invalidDataFormat',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `User not found`
+  String get userNotFound {
+    return Intl.message(
+      'User not found',
+      name: 'userNotFound',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Wrong password`
+  String get wrongPassword {
+    return Intl.message(
+      'Wrong password',
+      name: 'wrongPassword',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Email already in use`
+  String get emailAlreadyInUse {
+    return Intl.message(
+      'Email already in use',
+      name: 'emailAlreadyInUse',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Password is too weak`
+  String get weakPassword {
+    return Intl.message(
+      'Password is too weak',
+      name: 'weakPassword',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Invalid email address`
+  String get invalidEmail {
+    return Intl.message(
+      'Invalid email address',
+      name: 'invalidEmail',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `User account is disabled`
+  String get userDisabled {
+    return Intl.message(
+      'User account is disabled',
+      name: 'userDisabled',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Too many requests, please try again later`
+  String get tooManyRequests {
+    return Intl.message(
+      'Too many requests, please try again later',
+      name: 'tooManyRequests',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Operation not allowed`
+  String get operationNotAllowed {
+    return Intl.message(
+      'Operation not allowed',
+      name: 'operationNotAllowed',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No internet connection`
+  String get noInternetConnection {
+    return Intl.message(
+      'No internet connection',
+      name: 'noInternetConnection',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Now Playing`
+  String get nowPlaying {
+    return Intl.message('Now Playing', name: 'nowPlaying', desc: '', args: []);
+  }
+
+  /// `Available Cooperatives`
+  String get availableCooperatives {
+    return Intl.message(
+      'Available Cooperatives',
+      name: 'availableCooperatives',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `New Member Joined`
+  String get newMemberJoined {
+    return Intl.message(
+      'New Member Joined',
+      name: 'newMemberJoined',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Listen and learn about farming`
+  String get listenAndLearn {
+    return Intl.message(
+      'Listen and learn about farming',
+      name: 'listenAndLearn',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `My Cooperatives`
+  String get myCooperatives {
+    return Intl.message(
+      'My Cooperatives',
+      name: 'myCooperatives',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Suggested Nearby`
+  String get suggestedNearby {
+    return Intl.message(
+      'Suggested Nearby',
+      name: 'suggestedNearby',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Create New`
+  String get createNew {
+    return Intl.message('Create New', name: 'createNew', desc: '', args: []);
+  }
+
+  /// `No data available`
+  String get noDataAvailable {
+    return Intl.message(
+      'No data available',
+      name: 'noDataAvailable',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Loading...`
+  String get loading {
+    return Intl.message('Loading...', name: 'loading', desc: '', args: []);
+  }
+
+  /// `Farmer's Podcasts`
+  String get farmersPodcasts {
+    return Intl.message(
+      'Farmer\'s Podcasts',
+      name: 'farmersPodcasts',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `PM Kisan Scheme last date March 15th!`
+  String get pmKisanSchemeAlert {
+    return Intl.message(
+      'PM Kisan Scheme last date March 15th!',
+      name: 'pmKisanSchemeAlert',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Search Cooperatives`
+  String get searchCooperatives {
+    return Intl.message(
+      'Search Cooperatives',
+      name: 'searchCooperatives',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Cooperative ID not found`
+  String get cooperativeIdNotFound {
+    return Intl.message(
+      'Cooperative ID not found',
+      name: 'cooperativeIdNotFound',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Unknown user`
+  String get unknownUser {
+    return Intl.message(
+      'Unknown user',
+      name: 'unknownUser',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Try Again`
+  String get tryAgain {
+    return Intl.message('Try Again', name: 'tryAgain', desc: '', args: []);
+  }
+
+  /// `Verify`
+  String get verify {
+    return Intl.message('Verify', name: 'verify', desc: '', args: []);
+  }
+
+  /// `Updating...`
+  String get updating {
+    return Intl.message('Updating...', name: 'updating', desc: '', args: []);
+  }
+
+  /// `Save Changes`
+  String get saveChanges {
+    return Intl.message(
+      'Save Changes',
+      name: 'saveChanges',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Generate`
+  String get generate {
+    return Intl.message('Generate', name: 'generate', desc: '', args: []);
+  }
+
+  /// `Clear Selection`
+  String get clearSelection {
+    return Intl.message(
+      'Clear Selection',
+      name: 'clearSelection',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Generate Cooperative`
+  String get generateCooperative {
+    return Intl.message(
+      'Generate Cooperative',
+      name: 'generateCooperative',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Upload Podcast`
+  String get uploadPodcast {
+    return Intl.message(
+      'Upload Podcast',
+      name: 'uploadPodcast',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Confirm Delete`
+  String get confirmDelete {
+    return Intl.message(
+      'Confirm Delete',
+      name: 'confirmDelete',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Delete All`
+  String get deleteAll {
+    return Intl.message('Delete All', name: 'deleteAll', desc: '', args: []);
+  }
+
+  /// `Go to Home`
+  String get goToHome {
+    return Intl.message('Go to Home', name: 'goToHome', desc: '', args: []);
+  }
+
+  /// `Members`
+  String get members {
+    return Intl.message('Members', name: 'members', desc: '', args: []);
+  }
+
+  /// `Distance`
+  String get distance {
+    return Intl.message('Distance', name: 'distance', desc: '', args: []);
+  }
+
+  /// `No commodities available`
+  String get noCommoditiesAvailable {
+    return Intl.message(
+      'No commodities available',
+      name: 'noCommoditiesAvailable',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Close`
+  String get close {
+    return Intl.message('Close', name: 'close', desc: '', args: []);
+  }
+
+  /// `Remove Member`
+  String get removeMember {
+    return Intl.message(
+      'Remove Member',
+      name: 'removeMember',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No results found`
+  String get noResultsFound {
+    return Intl.message(
+      'No results found',
+      name: 'noResultsFound',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `View All Prices`
+  String get viewAllPrices {
+    return Intl.message(
+      'View All Prices',
+      name: 'viewAllPrices',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Share`
+  String get share {
+    return Intl.message('Share', name: 'share', desc: '', args: []);
   }
 }
 

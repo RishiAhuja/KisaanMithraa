@@ -1,5 +1,6 @@
 import 'package:cropconnect/core/presentation/widgets/bottom_nav_bar.dart';
 import 'package:cropconnect/core/theme/app_colors.dart';
+import 'package:cropconnect/core/constants/localization_standards.dart';
 import 'package:cropconnect/features/home/presentation/controller/home_controller.dart';
 import 'package:cropconnect/features/home/presentation/widgets/ai_tip_widget.dart';
 import 'package:cropconnect/features/home/presentation/widgets/app_bar_widget.dart';
@@ -8,7 +9,6 @@ import 'package:cropconnect/features/home/presentation/widgets/market_prices/mar
 import 'package:cropconnect/features/home/presentation/widgets/weather_hero_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class HomeScreen extends GetView<HomeController> {
   // ignore: use_super_parameters
@@ -17,6 +17,7 @@ class HomeScreen extends GetView<HomeController> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final appLocalizations = LocalizationStandards.getLocalizations(context);
 
     return Scaffold(
       backgroundColor: theme.colorScheme.background,
@@ -40,7 +41,7 @@ class HomeScreen extends GetView<HomeController> {
                         ),
                         const SizedBox(height: 16),
                         Text(
-                          'Loading your profile...',
+                          appLocalizations.loadingProfile,
                           style: theme.textTheme.bodyMedium,
                         ),
                       ],
@@ -57,12 +58,12 @@ class HomeScreen extends GetView<HomeController> {
                             size: 64, color: theme.colorScheme.error),
                         const SizedBox(height: 16),
                         Text(
-                          'Could not load profile',
+                          appLocalizations.couldNotLoadProfile,
                           style: theme.textTheme.titleMedium,
                         ),
                         const SizedBox(height: 8),
                         Text(
-                          'Please try again',
+                          appLocalizations.pleaseRetryAgain,
                           style: theme.textTheme.bodyMedium,
                         ),
                         const SizedBox(height: 24),
@@ -70,7 +71,7 @@ class HomeScreen extends GetView<HomeController> {
                           onPressed: () {
                             controller.user.refresh();
                           },
-                          child: const Text('Retry'),
+                          child: Text(appLocalizations.retry),
                         ),
                       ],
                     ),
@@ -124,7 +125,7 @@ class HomeScreen extends GetView<HomeController> {
   // ignore: unused_element
   Widget _buildPriorityAlerts(BuildContext context) {
     final theme = Theme.of(context);
-    final appLocalizations = AppLocalizations.of(context);
+    final appLocalizations = LocalizationStandards.getLocalizations(context);
 
     return Container(
       margin: const EdgeInsets.fromLTRB(16, 0, 16, 20),
@@ -152,7 +153,7 @@ class HomeScreen extends GetView<HomeController> {
                     ),
                     const SizedBox(width: 12),
                     Text(
-                      appLocalizations?.priorityAlerts ?? 'Priority Alerts',
+                      appLocalizations.priorityAlerts,
                       style: theme.textTheme.titleMedium?.copyWith(
                         fontWeight: FontWeight.bold,
                         fontSize: 18,
@@ -173,7 +174,7 @@ class HomeScreen extends GetView<HomeController> {
                   child: Row(
                     children: [
                       Text(
-                        appLocalizations?.viewAll ?? 'View all',
+                        appLocalizations.viewAll,
                         style: TextStyle(
                           fontSize: 13,
                           fontWeight: FontWeight.w600,
@@ -234,8 +235,7 @@ class HomeScreen extends GetView<HomeController> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                appLocalizations?.heavyRainAlert ??
-                                    'Heavy rain expected in next 3 days, secure your wheat crop',
+                                appLocalizations.heavyRainAlert,
                                 style: TextStyle(
                                   fontWeight: FontWeight.w700,
                                   fontSize: 15,
@@ -250,7 +250,7 @@ class HomeScreen extends GetView<HomeController> {
                                   borderRadius: BorderRadius.circular(20),
                                 ),
                                 child: Text(
-                                  appLocalizations?.viewTips ?? 'View Tips',
+                                  appLocalizations.viewTips,
                                   style: TextStyle(
                                     color: Colors.blue[800],
                                     fontWeight: FontWeight.w600,
@@ -312,8 +312,8 @@ class HomeScreen extends GetView<HomeController> {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              const Text(
-                                'PM Kisan Scheme last date March 15th!',
+                              Text(
+                                appLocalizations.pmKisanSchemeAlert,
                                 style: TextStyle(
                                   fontWeight: FontWeight.w700,
                                   fontSize: 15,
@@ -328,7 +328,7 @@ class HomeScreen extends GetView<HomeController> {
                                   borderRadius: BorderRadius.circular(20),
                                 ),
                                 child: Text(
-                                  'Apply Now',
+                                  appLocalizations.applyNow,
                                   style: TextStyle(
                                     color: Colors.green[800],
                                     fontWeight: FontWeight.w600,

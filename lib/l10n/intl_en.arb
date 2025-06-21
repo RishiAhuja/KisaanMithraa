@@ -172,109 +172,26 @@
     "weatherPhraseHot": "Watch for heat stress on crops",
     "weatherPhraseDefault": "Good conditions for farming",
 
-  "@appTitle": {
-    "description": "The title of the app"
-  },
-  
-  "chatbotTitle": "Kisaan Assistant",
-  "@chatbotTitle": {
-    "description": "The title of the chatbot screen"
-  },
-  
-  "farmingAssistant": "Your Farming Assistant",
-  "@farmingAssistant": {
-    "description": "Title shown on the empty chat screen"
-  },
-  
-
-
-  "resetConversation": "Reset Conversation",
-  "@resetConversation": {
-    "description": "Button tooltip to reset the conversation"
-  },
-  
-  "scrollToBottom": "Scroll to bottom",
-  "@scrollToBottom": {
-    "description": "Tooltip for the scroll to bottom button"
-  },
-  
-  "suggestedQuestions": "Try asking:",
-  "@suggestedQuestions": {
-    "description": "Header for suggested questions section"
-  },
- 
-  "transportServices": "Transport Services",
-  "@transportServices": {
-    "description": "Label for transport services in navigation"
-  },
-  
- 
-  "weatherDetails": "Weather Details",
-  "@weatherDetails": {
-    "description": "Label for detailed weather in navigation"
-  },
-  
-  "weatherDetailsDesc": "Detailed weather information",
-  "@weatherDetailsDesc": {
-    "description": "Description for weather details"
-  },
-  
-  "relatedContent": "Related Content:",
-  "@relatedContent": {
-    "description": "Header for related content section"
-  },
-  
-  "listenPodcast": "Listen to our Podcast",
-  "@listenPodcast": {
-    "description": "Label for podcast navigation"
-  },
-  
-  "joinDiscussion": "Join Discussion",
-  "@joinDiscussion": {
-    "description": "Label for community discussion navigation"
-  },
-  
-  "goToMarketplace": "Go to Marketplace",
-  "@goToMarketplace": {
-    "description": "Label for marketplace navigation"
-  },
-  
-  "exploreResources": "Explore Resources",
-  "@exploreResources": {
-    "description": "Label for resources navigation"
-  },
-  
-  "checkWeather": "Check Weather",
-  "@checkWeather": {
-    "description": "Label for weather navigation"
-  },
-  
-  "learnMore": "Learn More",
-  "@learnMore": {
-    "description": "Default label for navigation"
-  },
-  
-  "communityDesc": "Connect with other farmers",
-  "@communityDesc": {
-    "description": "Description for community feature"
-  },
-  
-  "marketplaceDesc": "Buy and sell farm products",
-  "@marketplaceDesc": {
-    "description": "Description for marketplace feature"
-  },
-  
-  "resourcesDesc": "Farming guides and resources",
-  "@resourcesDesc": {
-    "description": "Description for resources feature"
-  },
-  
-  "relatedInfoDesc": "Related information",
-  "@relatedInfoDesc": {
-    "description": "Description for general related information"
-  },
-
-  
+    "chatbotTitle": "Kisaan Assistant",
+    "farmingAssistant": "Your Farming Assistant",
+    "resetConversation": "Reset Conversation",
+    "scrollToBottom": "Scroll to bottom",
+    "suggestedQuestions": "Try asking:",
+    "transportServices": "Transport Services",
+    "weatherDetails": "Weather Details",
+    "weatherDetailsDesc": "Detailed weather information",
+    "relatedContent": "Related Content:",
+    "listenPodcast": "Listen to our Podcast",
+    "joinDiscussion": "Join Discussion",
+    "goToMarketplace": "Go to Marketplace",
+    "exploreResources": "Explore Resources",
+    "checkWeather": "Check Weather",
+    "learnMore": "Learn More",
+    "communityDesc": "Connect with other farmers",
+    "marketplaceDesc": "Buy and sell farm products",
+    "resourcesDesc": "Farming guides and resources",
+    "relatedInfoDesc": "Related information",
+    
     "agriHelp": "Agri Help",
     "emergencyContacts": "Emergency Contacts",
     "frequentlyAskedQuestions": "Frequently Asked Questions",
@@ -312,17 +229,7 @@
     "checkBackLater": "Check back later for new farming podcasts",
     "popularPodcasts": "Popular Podcasts",
     "newReleases": "New Releases",
-    "featured": "Featured",
-    "viewAll": "View all",
     "debugMode": "Debug Mode",
-    "selectImageSource": "Select Image Source",
-    "camera": "Camera",
-    "gallery": "Gallery",
-    "cooperatives": "Cooperatives",
-    "myCooperatives": "My Cooperatives",
-    "suggestedNearby": "Suggested Nearby",
-    "createNew": "Create New",
-    "searchCooperatives": "Search Cooperatives",
     "loadingCooperatives": "Loading your cooperatives...",
     "noCooperativesJoined": "You haven't joined any cooperatives yet",
     "checkOutSuggested": "Check out suggested cooperatives near you",
@@ -334,17 +241,10 @@
     "noNearbyCooperativesFound": "No nearby cooperatives found",
     "tryDifferentSearchTerm": "Try a different search term",
     "noCooperativesInRange": "There are no cooperatives within 5km of your current location",
-    "cooperativeName": "Cooperative Name",
-    "enterCooperativeName": "Enter cooperative name",
     "nameIsRequired": "Name is required",
     "descriptionIsRequired": "Description is required",
-    "selectMembers": "Select Members",
     "createCooperativeAction": "Create Cooperative",
-    "cooperativeBanner": "Cooperative Banner",
-    "optional": "Optional",
-    "addBanner": "Add Banner",
     "uploadBannerDescription": "Upload a banner for your cooperative",
-    "startYourCooperative": "Start Your Cooperative",
     "createCommunityDescription": "Create a community of farmers working together",
     "searchCooperativesByLocation": "Search cooperatives by name or location",
     "searching": "Searching...",
@@ -357,19 +257,64 @@
     "join": "Join",
     "foundCount": "Found {count} cooperatives",
     "kmAway": "{distance} km",
-    "members": "members",
-    "member": "member",
     "unverified": "Unverified",
     
     "genericError": "Sorry, I encountered an error. Please try again.",
     "speechRecognitionError": "Speech recognition error",
-    "errorLoadingOffers": "Error loading offers",
-    "cannotAcceptOffer": "Cannot accept offer",
-    "userNotFound": "User not found",
     "networkError": "Network connection error",
     "timeoutError": "Request timed out",
     "unknownError": "An unknown error occurred",
     "permissionDenied": "Permission denied",
-    "serviceUnavailable": "Service temporarily unavailable"
-
-  }
+    "serviceUnavailable": "Service temporarily unavailable",
+    
+    "ok": "OK",
+    "success": "Success",
+    "warning": "Warning",
+    "info": "Info",
+    "somethingWentWrong": "Something went wrong",
+    "invalidDataFormat": "Invalid data format",
+    "userNotFound": "User not found",
+    "wrongPassword": "Wrong password",
+    "emailAlreadyInUse": "Email already in use",
+    "weakPassword": "Password is too weak",
+    "invalidEmail": "Invalid email address",
+    "userDisabled": "User account is disabled",
+    "tooManyRequests": "Too many requests, please try again later",
+    "operationNotAllowed": "Operation not allowed",
+    "noInternetConnection": "No internet connection",
+    
+    "nowPlaying": "Now Playing",
+    "availableCooperatives": "Available Cooperatives",
+    "newMemberJoined": "New Member Joined",
+    "listenAndLearn": "Listen and learn about farming",
+    "myCooperatives": "My Cooperatives",
+    "suggestedNearby": "Suggested Nearby",
+    "createNew": "Create New",
+    "noDataAvailable": "No data available",
+    "loading": "Loading...",
+    "farmersPodcasts": "Farmer's Podcasts",
+    "pmKisanSchemeAlert": "PM Kisan Scheme last date March 15th!",
+    "searchCooperatives": "Search Cooperatives",
+    
+    "cooperativeIdNotFound": "Cooperative ID not found",
+    "unknownUser": "Unknown user",
+    "tryAgain": "Try Again",
+    "verify": "Verify",
+    "updating": "Updating...",
+    "saveChanges": "Save Changes",
+    "generate": "Generate",
+    "clearSelection": "Clear Selection",
+    "generateCooperative": "Generate Cooperative",
+    "uploadPodcast": "Upload Podcast",
+    "confirmDelete": "Confirm Delete",
+    "deleteAll": "Delete All",
+    "goToHome": "Go to Home",
+    "members": "Members",
+    "distance": "Distance",
+    "noCommoditiesAvailable": "No commodities available",
+    "close": "Close",
+    "removeMember": "Remove Member",
+    "noResultsFound": "No results found",
+    "viewAllPrices": "View All Prices",
+    "share": "Share"
+}
